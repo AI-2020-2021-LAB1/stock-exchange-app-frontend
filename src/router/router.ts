@@ -10,6 +10,11 @@ export default new Router({
       name: 'home',
       component: () => import(/* webpackChunkName: "index" */ '../views/Index.vue'),
     },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
