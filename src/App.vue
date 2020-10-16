@@ -7,17 +7,14 @@
   </v-app>
 </template>
 
-<script>
-import Navbar from '@/components/Navbar.vue';
+<script lang="ts">
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
 
-export default {
-  name: 'App',
-  components: {
-    Navbar
-  },
+import Navbar from "./components/Navbar.vue";
 
-  data: () => ({
-    //
-  }),
-};
+@Component({
+  components: { Navbar },
+})
+export default class App extends Vue {}
 </script>
