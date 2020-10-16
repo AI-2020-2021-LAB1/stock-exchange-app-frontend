@@ -6,6 +6,8 @@ import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import store from './store';
 
+const PasswordValidator = () => import(/* webpackChunkName: "ComponentPasswordValidator" */ '@/components/PasswordValidator.vue');
+
 Vue.config.productionTip = false;
 
 new Vue({
@@ -14,3 +16,5 @@ new Vue({
   store,
   render: (h) => h(App),
 }).$mount('#app');
+
+Vue.component('password-validator', PasswordValidator);
