@@ -36,6 +36,7 @@ import Vue from "vue";
 export default class Navbar extends Vue {
   private toolbarItems = [
     { link: "/", title: "Strona główna", icon: "mdi-home" },
+    { link: "/wykres", title: "Druga strona", icon: "mdi-home" },
   ];
 
   get drawer(): boolean {
