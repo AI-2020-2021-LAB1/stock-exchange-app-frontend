@@ -8,7 +8,8 @@
   >
     <v-toolbar text dark class="px-3" height="64px">
       <v-btn large block text outlined @click="drawer = !drawer">
-        Zamknij
+        <v-icon left> mdi-close </v-icon>
+        <span>Zamknij</span>
       </v-btn>
     </v-toolbar>
 

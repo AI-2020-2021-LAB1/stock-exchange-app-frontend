@@ -27,7 +27,7 @@ export default new Router({
       path: "/wykres",
       name: "wykres",
       component: () =>
-        import(/* webpackChunkName: "register" */ "../views/Wykres.vue"),
+        import(/* webpackChunkName: "register" */ "../views/Chart.vue"),
     },
   ],
   scrollBehavior(to, from, savedPosition) {
