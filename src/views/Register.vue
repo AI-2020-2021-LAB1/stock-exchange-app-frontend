@@ -10,32 +10,6 @@
           </v-toolbar>
           <v-form v-model="inputValidated" @submit.prevent="registerUser()">
             <v-card-text class="pb-0">
-              <v-row align="center" justify="center" class="mx-0">
-                <v-col class="pa-0 pr-3">
-                  <v-text-field
-                    label="Imię"
-                    v-model="first_name"
-                    color="primary"
-                    type="text"
-                    :rules="[rules.required, rules.first_name]"
-                    class="my-2"
-                    outlined
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col v-col class="pa-0 pr-0">
-                  <v-text-field
-                    v-model="last_name"
-                    label="Nazwisko"
-                    :rules="[rules.required, rules.last_name]"
-                    color="primary"
-                    type="text"
-                    class="my-2"
-                    outlined
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
               <v-text-field
                 outlined
                 v-model="email"
@@ -56,6 +30,29 @@
                 type="text"
                 class="my-2"
               ></v-text-field>
+              <v-row align="center" justify="center" class="mx-0">
+                <v-col class="pa-0">
+                  <v-text-field
+                    outlined
+                    v-model="first_name"
+                    prepend-icon="mdi-card-account-details"
+                    :rules="[rules.required]"
+                    label="Imię"
+                    color="primary"
+                    type="text"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="py-0 pr-0">
+                  <v-text-field
+                    outlined
+                    v-model="last_name"
+                    :rules="[rules.required]"
+                    label="Nazwisko"
+                    color="primary"
+                    type="text"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
               <v-row align="center" justify="center" class="mx-0">
                 <v-col class="pa-0">
                   <v-text-field
