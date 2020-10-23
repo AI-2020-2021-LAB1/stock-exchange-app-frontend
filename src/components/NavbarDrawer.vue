@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class NavbarDrawer extends Vue {
   @Prop({ type: Array }) public readonly items!: object[];
@@ -46,7 +46,7 @@ export default class NavbarDrawer extends Vue {
   }
 
   set drawer(value: boolean) {
-    this.$store.dispatch("setNavDrawerState", value);
+    this.$store.dispatch('setNavDrawerState', value);
   }
 
   // get user() {

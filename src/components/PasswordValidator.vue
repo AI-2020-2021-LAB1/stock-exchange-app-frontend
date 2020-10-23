@@ -1,40 +1,41 @@
 <template>
   <div>
-    <p class="text-body-1 text-center font-weight-bold mb-0">Wymagania dotyczące hasła</p>
-    <v-alert prominent outlined :type="isPasswordValid === true ? 'success' : 'error'">
+    <p class="text-body-1 text-center font-weight-bold mb-0">
+      Wymagania dotyczące hasła
+    </p>
+    <v-alert
+      prominent
+      outlined
+      :type="isPasswordValid === true ? 'success' : 'error'"
+    >
       <v-row class="ma-0 pa-0" align="center">
-        <v-icon
-          left
-          :color="passwdHas8Chars ? 'success' : 'error'"
-        >{{ passwdHas8Chars ? 'mdi-check-bold' : 'mdi-close-thick' }}</v-icon>
+        <v-icon left :color="passwdHas8Chars ? 'success' : 'error'">{{
+          passwdHas8Chars ? 'mdi-check-bold' : 'mdi-close-thick'
+        }}</v-icon>
         <span class="my-0 black--text">8 znaków</span>
       </v-row>
       <v-row class="ma-0 pa-0" align="center">
-        <v-icon
-          left
-          :color="passwdHasLowercase ? 'success' : 'error'"
-        >{{ passwdHasLowercase ? 'mdi-check-bold' : 'mdi-close-thick' }}</v-icon>
+        <v-icon left :color="passwdHasLowercase ? 'success' : 'error'">{{
+          passwdHasLowercase ? 'mdi-check-bold' : 'mdi-close-thick'
+        }}</v-icon>
         <span class="my-0 black--text">Jedna mała litera</span>
       </v-row>
       <v-row class="ma-0 pa-0" align="center">
-        <v-icon
-          left
-          :color="passwdHasUppercase ? 'success' : 'error'"
-        >{{ passwdHasUppercase ? 'mdi-check-bold' : 'mdi-close-thick' }}</v-icon>
+        <v-icon left :color="passwdHasUppercase ? 'success' : 'error'">{{
+          passwdHasUppercase ? 'mdi-check-bold' : 'mdi-close-thick'
+        }}</v-icon>
         <span class="my-0 black--text">Jedna duża litera</span>
       </v-row>
       <v-row class="ma-0 pa-0" align="center">
-        <v-icon
-          left
-          :color="passwdHasNumber ? 'success' : 'error'"
-        >{{ passwdHasNumber ? 'mdi-check-bold' : 'mdi-close-thick' }}</v-icon>
+        <v-icon left :color="passwdHasNumber ? 'success' : 'error'">{{
+          passwdHasNumber ? 'mdi-check-bold' : 'mdi-close-thick'
+        }}</v-icon>
         <span class="my-0 black--text">Jedna cyfra</span>
       </v-row>
       <v-row class="ma-0 pa-0" align="center">
-        <v-icon
-          left
-          :color="passwdHasSpecialChar ? 'success' : 'error'"
-        >{{ passwdHasSpecialChar ? 'mdi-check-bold' : 'mdi-close-thick' }}</v-icon>
+        <v-icon left :color="passwdHasSpecialChar ? 'success' : 'error'">{{
+          passwdHasSpecialChar ? 'mdi-check-bold' : 'mdi-close-thick'
+        }}</v-icon>
         <span class="my-0 black--text">Jeden znak specjalny</span>
       </v-row>
     </v-alert>

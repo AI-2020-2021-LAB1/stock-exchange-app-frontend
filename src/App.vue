@@ -8,10 +8,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
 
-import Navbar from "./components/Navbar.vue";
+import Navbar from './components/Navbar.vue';
 
 @Component({
   components: { Navbar },

@@ -23,10 +23,10 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import NavDrawer from "./NavbarDrawer.vue";
-import store from "../store";
-import Vue from "vue";
+import { Component } from 'vue-property-decorator';
+import NavDrawer from './NavbarDrawer.vue';
+import store from '../store';
+import Vue from 'vue';
 
 @Component({
   components: {
@@ -35,15 +35,15 @@ import Vue from "vue";
 })
 export default class Navbar extends Vue {
   private toolbarItems = [
-    { link: "/", title: "Strona główna", icon: "mdi-home" },
-    { link: "/wykres", title: "Wykresy", icon: "mdi-home" },
+    { link: '/', title: 'Strona główna', icon: 'mdi-home' },
+    { link: '/wykres', title: 'Wykresy', icon: 'mdi-home' },
   ];
 
   get drawer(): boolean {
     return this.$store.getters.navDrawer;
   }
   set drawer(value: boolean) {
-    this.$store.dispatch("setNavDrawerState", value);
+    this.$store.dispatch('setNavDrawerState', value);
   }
 
   // get auth(): boolean {

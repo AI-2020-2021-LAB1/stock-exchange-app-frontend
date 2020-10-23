@@ -1,33 +1,33 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: "/",
-      name: "home",
+      path: '/',
+      name: 'home',
       component: () =>
-        import(/* webpackChunkName: "index" */ "../views/Index.vue"),
+        import(/* webpackChunkName: "index" */ '../views/Index.vue'),
     },
     {
-      path: "/login",
-      name: "login",
+      path: '/login',
+      name: 'login',
       component: () =>
-        import(/* webpackChunkName: "login" */ "../views/Login.vue"),
+        import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     },
     {
-      path: "/register",
-      name: "register",
+      path: '/register',
+      name: 'register',
       component: () =>
-        import(/* webpackChunkName: "register" */ "../views/Register.vue"),
+        import(/* webpackChunkName: "register" */ '../views/Register.vue'),
     },
     {
-      path: "/wykres",
-      name: "wykres",
+      path: '/trader',
+      name: 'trader',
       component: () =>
-        import(/* webpackChunkName: "register" */ "../views/Chart.vue"),
+        import(/* webpackChunkName: "Trader" */ '../views/Trader.vue'),
     },
   ],
   scrollBehavior(to, from, savedPosition) {
