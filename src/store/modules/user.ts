@@ -67,6 +67,7 @@ const userModule: Module<any, any> = {
         color: 'success',
         timeout: 5000,
       });
+      router.replace('/');
     },
     logout({ dispatch, commit, state }) {
       commit('clearAuthData');
