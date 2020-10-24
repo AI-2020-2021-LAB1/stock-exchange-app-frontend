@@ -120,31 +120,31 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Register extends Vue {
   private data() {
     return {
       inputValidated: false,
-      email: "",
-      login: "",
-      first_name: "",
-      last_name: "",
-      password1: "",
-      password2: "",
+      email: '',
+      login: '',
+      first_name: '',
+      last_name: '',
+      password1: '',
+      password2: '',
       showPass: false,
       passwdFocus: false,
       passwdValid: false,
       rules: {
-        required: (value: string) => !!value || "Pole wymagane",
+        required: (value: string) => !!value || 'Pole wymagane',
         identical: (value1: string, value2: string) =>
-          value1 === value2 || "Hasła nie są identyczne",
+          value1 === value2 || 'Hasła nie są identyczne',
         counter: (value: string, num: number, end: string) =>
-          value.length >= num || "Minimum " + num + " znak" + end,
+          value.length >= num || 'Minimum ' + num + ' znak' + end,
         email: (value: string) => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Adres e-mail nie jest poprawny";
+          return pattern.test(value) || 'Adres e-mail nie jest poprawny';
         },
       },
     };
