@@ -13,9 +13,12 @@
   </v-row>
 </template>
 
-<script>
-export default {
-  data() {
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component
+export default class Trader extends Vue {
+  private data() {
     return {
       options: {
         chart: {
@@ -32,8 +35,8 @@ export default {
         },
       ],
     };
-  },
-};
+  }
+}
 </script>
 
 <style>
