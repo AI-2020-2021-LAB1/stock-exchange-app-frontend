@@ -65,7 +65,12 @@ import Axios from 'axios';
 @Component
 export default class Login extends Vue {
   private async loginUser() {
-    return;
+    if (this.$data.inputValidated) {
+      this.$store.dispatch('login', {
+        login: this.$data.login,
+        password: this.$data.password,
+      });
+    }
   }
 
   private data() {
