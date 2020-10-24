@@ -14,6 +14,24 @@
     </v-toolbar>
 
     <v-list subheader shaped>
+      <v-subheader>Nawigacja</v-subheader>
+      <v-list-item
+        v-for="item in items"
+        :key="item.title"
+        router
+        :to="item.link"
+        @click="drawer = !drawer"
+      >
+        <v-list-item-action>
+          <v-icon large class="primary--text">{{ item.icon }}</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+
+    <v-list subheader shaped>
       <v-subheader>Użytkownik</v-subheader>
       <v-list-item router @click="drawer = !drawer" to="/login" v-if="!auth">
         <v-list-item-action>
@@ -29,6 +47,20 @@
         </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>Rejestracja</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item
+        @click="
+          logout();
+          drawer = !drawer;
+        "
+        v-if="auth"
+      >
+        <v-list-item-action>
+          <v-icon large class="primary--text">mdi-logout</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Wyloguj</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -49,12 +81,12 @@ export default class NavbarDrawer extends Vue {
     this.$store.dispatch('setNavDrawerState', value);
   }
 
-  // get user() {
-  //   return this.$store.getters.user;
-  // }
+  get user() {
+    return this.$store.getters.user;
+  }
 
-  // private logout() {
-  //   this.$emit('logout');
-  // }
+  private logout() {
+    this.$emit('logout');
+  }
 }
 </script>
