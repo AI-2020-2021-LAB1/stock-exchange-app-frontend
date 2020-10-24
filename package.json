@@ -10,7 +10,7 @@
   "dependencies": {
     "@mdi/font": "^5.7.55",
     "apexcharts": "^3.22.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "babel-runtime": "^6.26.0",
     "core-js": "^3.6.5",
     "vue": "^2.6.12",
