@@ -141,7 +141,14 @@ export default class Register extends Vue {
   }
 
   private registerUser() {
-    return;
+    if (this.$data.inputValidated) {
+      this.$store.dispatch('register', {
+        email: this.$data.email,
+        password: this.$data.password1,
+        firstName: this.$data.first_name,
+        lastName: this.$data.last_name,
+      });
+    }
   }
 }
 </script>
