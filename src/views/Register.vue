@@ -20,16 +20,6 @@
                 type="text"
                 class="my-2"
               ></v-text-field>
-              <v-text-field
-                outlined
-                v-model="login"
-                prepend-icon="mdi-account"
-                :rules="[rules.required, rules.counter(login, 3, 'i')]"
-                label="Login"
-                color="primary"
-                type="text"
-                class="my-2"
-              ></v-text-field>
               <v-row align="center" justify="center" class="mx-0">
                 <v-col class="pa-0">
                   <v-text-field
