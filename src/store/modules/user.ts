@@ -29,45 +29,46 @@ const userModule: Module<any, any> = {
   },
 
   actions: {
-    // setRefreshTimer({ commit, dispatch }) {
-    //     const to = setTimeout(() => {
-    //         dispatch('refreshToken');
-    //     }, 3300000);
-    //     commit('setTimeout', to);
-    // },
+    setRefreshTimer({ commit, dispatch }) {
+      const to = setTimeout(() => {
+        dispatch('refreshToken');
+      }, 3300000);
+      commit('setTimeout', to);
+    },
     login({ commit, dispatch }, authData) {
-      // axios.post('login/', {
-      //     username: authData.login,
-      //     password: authData.password,
-      // })
-      //     .then((res) => {
-      //         commit('authUser', {
-      //             token: res.data.access,
-      //             refreshToken: res.data.refresh,
-      //         });
-      //         dispatch('setRefreshTimer');
-      //         dispatch('fetchUserData');
-      //         router.replace('/');
-      //     })
-      //     .catch(() => {
-      //         dispatch('setSnackbarState', {
-      //             state: true,
-      //             msg: 'Nieprawidłowy login lub hasło!',
-      //             color: 'error',
-      //             timeout: 7500,
-      //         });
-      //     });
-      commit('authUser', {
-        token: 'dummyToken',
-        refreshToken: 'fakeRefreshToken',
-      });
-      dispatch('setSnackbarState', {
-        state: true,
-        msg: 'Zalogowano!',
-        color: 'success',
-        timeout: 5000,
-      });
-      router.replace('/');
+      const qs = require('qs');
+      axios
+        .post(
+          'oauth/token',
+          qs.stringify({
+            username: authData.login,
+            password: authData.password,
+            scope: 'any',
+            grant_type: 'password',
+          }),
+          {
+            headers: {
+              'Authorization': 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0',
+              'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+          },
+        )
+        .then((res) => {
+          commit('authUser', {
+            token: res.data.access_token,
+            refreshToken: res.data.refresh_token,
+          });
+          dispatch('setRefreshTimer');
+          router.replace('/');
+        })
+        .catch(() => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Nieprawidłowy login lub hasło!',
+            color: 'error',
+            timeout: 7500,
+          });
+        });
     },
     logout({ dispatch, commit, state }) {
       commit('clearAuthData');
@@ -83,19 +84,54 @@ const userModule: Module<any, any> = {
       clearTimeout(state.timeout);
       commit('setTimeout', null);
     },
-    // refreshToken({ dispatch, commit, state }) {
-    //   axios
-    //     .post('refresh-token/', {
-    //       refresh: state.refreshToken,
-    //     })
-    //     .then((res) => {
-    //       commit('authUser', {
-    //         token: res.data.access,
-    //         refreshToken: res.data.refresh,
-    //       });
-    //       dispatch('setRefreshTimer');
-    //     });
-    // },
+    refreshToken({ dispatch, commit, state }) {
+      const qs = require('qs');
+      axios
+        .post(
+          'oauth/token',
+          qs.stringify({
+            refresh_token: state.refreshToken,
+            scope: 'any',
+            grant_type: 'refresh_token',
+          }),
+          {
+            headers: {
+              'Authorization': 'Basic Y2xpZW50SWQ6Y2xpZW50U2VjcmV0',
+              'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+          },
+        )
+        .then((res) => {
+          commit('authUser', {
+            token: res.data.access_token,
+            refreshToken: res.data.refresh_token,
+          });
+          dispatch('setRefreshTimer');
+        });
+    },
+    register({ dispatch }, data) {
+      axios
+        .post('api/register/', data)
+        .then((res) => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg:
+              'Rejestracja przebiegła pomyslnie. Teraz możesz się zalogować.',
+            color: 'success',
+            timeout: 7500,
+          });
+          router.replace('/login');
+        })
+        .catch((error) => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg:
+              'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.',
+            color: 'error',
+            timeout: 7500,
+          });
+        });
+    },
   },
 
   getters: {
