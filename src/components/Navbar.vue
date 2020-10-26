@@ -16,6 +16,7 @@
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn text to="/login" v-if="!auth">Login</v-btn>
         <v-btn text to="/register" v-if="!auth">Rejestracja</v-btn>
+        <v-btn text @click="logout" v-if="auth">Wyloguj</v-btn>
       </v-toolbar-items>
     </v-app-bar>
     <nav-drawer :items="toolbarItems" :auth="auth" @logout="logout" />
@@ -23,10 +24,10 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
-import NavDrawer from "./NavbarDrawer.vue";
-import store from "../store";
-import Vue from "vue";
+import { Component } from 'vue-property-decorator';
+import NavDrawer from './NavbarDrawer.vue';
+import store from '../store';
+import Vue from 'vue';
 
 @Component({
   components: {
@@ -35,26 +36,27 @@ import Vue from "vue";
 })
 export default class Navbar extends Vue {
   private toolbarItems = [
-    { link: "/", title: "Strona główna", icon: "mdi-home" },
+    { link: '/', title: 'Strona główna', icon: 'mdi-home' },
+    { link: '/trader', title: 'Giełda', icon: 'mdi-finance' },
   ];
 
   get drawer(): boolean {
     return this.$store.getters.navDrawer;
   }
   set drawer(value: boolean) {
-    this.$store.dispatch("setNavDrawerState", value);
+    this.$store.dispatch('setNavDrawerState', value);
   }
 
-  // get auth(): boolean {
-  //   return this.$store.getters.isAuthenticated;
-  // }
+  get auth(): boolean {
+    return this.$store.getters.isAuthenticated;
+  }
 
-  // get user() {
-  //   return this.$store.getters.user;
-  // }
+  get user() {
+    return this.$store.getters.user;
+  }
 
-  // private logout() {
-  //   this.$store.dispatch('logout');
-  // }
+  private logout() {
+    this.$store.dispatch('logout');
+  }
 }
 </script>

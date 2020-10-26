@@ -12,9 +12,9 @@
                 autofocus
                 outlined
                 v-model="login"
-                prepend-icon="mdi-account"
+                prepend-icon="mdi-at"
                 :rules="[rules.required, rules.counter(login, 3, 'i')]"
-                label="Login"
+                label="E-mail"
                 color="primary"
                 type="text"
                 class="my-2"
@@ -65,7 +65,12 @@ import Axios from 'axios';
 @Component
 export default class Login extends Vue {
   private async loginUser() {
-    return;
+    if (this.$data.inputValidated) {
+      this.$store.dispatch('login', {
+        login: this.$data.login,
+        password: this.$data.password,
+      });
+    }
   }
 
   private data() {

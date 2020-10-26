@@ -8,17 +8,26 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: () => import(/* webpackChunkName: "index" */ '../views/Index.vue'),
+      component: () =>
+        import(/* webpackChunkName: "index" */ '../views/Index.vue'),
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
+      component: () =>
+        import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue'),
+      component: () =>
+        import(/* webpackChunkName: "register" */ '../views/Register.vue'),
+    },
+    {
+      path: '/trader',
+      name: 'trader',
+      component: () =>
+        import(/* webpackChunkName: "Trader" */ '../views/Trader.vue'),
     },
   ],
   scrollBehavior(to, from, savedPosition) {

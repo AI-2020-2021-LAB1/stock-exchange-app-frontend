@@ -4,7 +4,9 @@
       <v-row justify="center" class="mx-2">
         <v-card class="elevation-12 ma-2" width="600">
           <v-toolbar color="primary">
-            <v-toolbar-title class="white--text font-weight-bold">Zarejestruj się</v-toolbar-title>
+            <v-toolbar-title class="white--text font-weight-bold"
+              >Zarejestruj się</v-toolbar-title
+            >
           </v-toolbar>
           <v-form v-model="inputValidated" @submit.prevent="registerUser()">
             <v-card-text class="pb-0">
@@ -18,16 +20,29 @@
                 type="text"
                 class="my-2"
               ></v-text-field>
-              <v-text-field
-                outlined
-                v-model="login"
-                prepend-icon="mdi-account"
-                :rules="[rules.required, rules.counter(login, 3, 'i')]"
-                label="Login"
-                color="primary"
-                type="text"
-                class="my-2"
-              ></v-text-field>
+              <v-row align="center" justify="center" class="mx-0">
+                <v-col class="pa-0">
+                  <v-text-field
+                    outlined
+                    v-model="first_name"
+                    prepend-icon="mdi-card-account-details"
+                    :rules="[rules.required]"
+                    label="Imię"
+                    color="primary"
+                    type="text"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="py-0 pr-0">
+                  <v-text-field
+                    outlined
+                    v-model="last_name"
+                    :rules="[rules.required]"
+                    label="Nazwisko"
+                    color="primary"
+                    type="text"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
               <v-row align="center" justify="center" class="mx-0">
                 <v-col class="pa-0">
                   <v-text-field
@@ -51,7 +66,10 @@
                     v-model="password2"
                     :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="showPass = !showPass"
-                    :rules="[rules.required, rules.identical(password1, password2)]"
+                    :rules="[
+                      rules.required,
+                      rules.identical(password1, password2),
+                    ]"
                     label="Powtórz hasło"
                     color="primary"
                     :type="showPass ? 'text' : 'password'"
@@ -60,7 +78,10 @@
                 </v-col>
               </v-row>
               <div v-if="passwdFocus">
-                <password-validator :password="password1" @validation="passwdValid = $event"></password-validator>
+                <password-validator
+                  :password="password1"
+                  @validation="passwdValid = $event"
+                ></password-validator>
               </div>
             </v-card-text>
             <v-card-actions class="pt-0">
@@ -88,7 +109,7 @@
   </v-row>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
@@ -120,7 +141,14 @@ export default class Register extends Vue {
   }
 
   private registerUser() {
-    return;
+    if (this.$data.inputValidated) {
+      this.$store.dispatch('register', {
+        email: this.$data.email,
+        password: this.$data.password1,
+        firstName: this.$data.first_name,
+        lastName: this.$data.last_name,
+      });
+    }
   }
 }
 </script>
