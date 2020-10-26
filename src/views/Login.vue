@@ -12,9 +12,9 @@
                 autofocus
                 outlined
                 v-model="login"
-                prepend-icon="mdi-account"
+                prepend-icon="mdi-at"
                 :rules="[rules.required, rules.counter(login, 3, 'i')]"
-                label="Login"
+                label="E-mail"
                 color="primary"
                 type="text"
                 class="my-2"
