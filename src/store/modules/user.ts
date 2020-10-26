@@ -123,29 +123,13 @@ const userModule: Module<any, any> = {
           router.replace('/login');
         })
         .catch((error) => {
-          if (error.response.data.hasOwnProperty('username')) {
-            dispatch('setSnackbarState', {
-              state: true,
-              msg: 'Użytkownik o takim loginie już istnieje!',
-              color: 'error',
-              timeout: 7500,
-            });
-          } else if (error.response.data.hasOwnProperty('email')) {
-            dispatch('setSnackbarState', {
-              state: true,
-              msg: 'Użytkownik o takim adresie e-mail już istnieje!',
-              color: 'error',
-              timeout: 7500,
-            });
-          } else {
-            dispatch('setSnackbarState', {
-              state: true,
-              msg:
-                'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.',
-              color: 'error',
-              timeout: 7500,
-            });
-          }
+          dispatch('setSnackbarState', {
+            state: true,
+            msg:
+              'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.',
+            color: 'error',
+            timeout: 7500,
+          });
         });
     },
   },
