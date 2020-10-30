@@ -1,16 +1,47 @@
 <template>
-  <v-row class="fill-height" align="center">
-    <v-col cols="12" class="pa-0">
-      <apexchart
-        class="my-auto"
-        align="center"
-        width="500"
-        type="bar"
-        :options="options"
-        :series="series"
-      ></apexchart>
-    </v-col>
-  </v-row>
+  <v-container class="fill-height ma-0 pa-0" style="width: 100%">
+    <v-row no-gutters class="fill-height">
+      <v-col sm="3" style="background: red">
+        <v-row class="fill-height" align="center">
+          <v-col>
+            <p class="text-center ma-0">Lista dostępnych akcji</p>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col sm="9">
+        <v-row no-gutters align="center" style="background: blue; height: 45%">
+          <v-col>
+            <p class="text-center ma-0">Wykres</p>
+          </v-col>
+        </v-row>
+        <v-row
+          no-gutters
+          align="center"
+          style="background: yellow; height: 10%"
+        >
+          <v-col>
+            <p class="text-center ma-0">Panel kupna-sprzedaży</p>
+          </v-col>
+        </v-row>
+        <v-row no-gutters style="height: 45%">
+          <v-col cols="6" style="background: lime">
+            <v-row class="fill-height" align="center">
+              <v-col>
+                <p class="text-center ma-0">Zlecenia kupna</p>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="6" style="background: cyan">
+            <v-row class="fill-height" align="center">
+              <v-col>
+                <p class="text-center ma-0">Zlecenia sprzedaży</p>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -19,29 +50,7 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component
 export default class Trader extends Vue {
   private data() {
-    return {
-      options: {
-        chart: {
-          id: 'vuechart-example',
-        },
-        xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-        },
-      },
-      series: [
-        {
-          name: 'series-1',
-          data: [30, 40, 45, 50, 49, 60, 70, 91],
-        },
-      ],
-    };
+    return {};
   }
 }
 </script>
-
-<style>
-.small {
-  max-width: 600px;
-  margin: 150px auto;
-}
-</style>
