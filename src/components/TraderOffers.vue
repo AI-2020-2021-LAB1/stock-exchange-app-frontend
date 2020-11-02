@@ -1,7 +1,7 @@
 <template>
   <div>
     <p
-      class="text-h6 white--text text-center font-weight-bold primary lighten-1 ma-0"
+      class="text-h6 white--text text-center font-weight-bold primary ma-0"
     >
       {{ title }}
     </p>

@@ -1,14 +1,17 @@
 <template>
   <v-container fluid class="fill-height pa-0">
     <v-row no-gutters class="fill-height">
-      <v-col sm="2" style="background: red">
+      <v-col v-if="$vuetify.breakpoint.mdAndUp" sm="2" style="background: red">
         <v-row class="fill-height" align="center">
           <v-col>
             <p class="text-center ma-0">Lista dostępnych akcji</p>
           </v-col>
         </v-row>
       </v-col>
-      <v-col sm="10">
+      <v-col :sm="$vuetify.breakpoint.mdAndUp ? 10 : 12">
+        <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
+          <v-btn block class="primary" @click="drawer = true">Pokaż inną akcję</v-btn>
+        </div>
         <v-row no-gutters align="center" style="background: blue;">
           <v-col>
             <p class="text-center ma-0">Wykres</p>
@@ -24,7 +27,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters>
-          <v-col :sm="$vuetify.breakpoint.sm ? 12 : 6" :md="$vuetify.breakpoint.mdAndUp">
+          <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
             <v-row align="start">
               <v-col class="py-0">
                 <trader-offers
@@ -34,7 +37,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col>
+          <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
             <v-row align="start">
               <v-col class="py-0">
                 <trader-offers
@@ -47,6 +50,13 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-navigation-drawer app left disable-resize-watcher v-model="drawer" width="300px">
+      <v-row class="fill-height" align="center">
+          <v-col>
+            <p class="text-center ma-0">Lista dostępnych akcji</p>
+          </v-col>
+        </v-row>
+    </v-navigation-drawer>
   </v-container>
 </template>
 
@@ -72,6 +82,7 @@ export default class Trader extends Vue {
   private data() {
     return {
       offers: [],
+      drawer: false,
     };
   }
 }
