@@ -1,10 +1,14 @@
 <template>
   <v-container fluid class="fill-height pa-0">
-    <v-row no-gutters class="fill-height">
-      <v-col v-if="$vuetify.breakpoint.mdAndUp" sm="2" style="background: red">
+    <v-row no-gutters justify="center" class="fill-height">
+      <v-col
+        v-if="$vuetify.breakpoint.mdAndUp"
+        :sm="$vuetify.breakpoint.xl ? 1 : 2"
+        style="background: red"
+      >
         <trader-stocks-list></trader-stocks-list>
       </v-col>
-      <v-col :sm="$vuetify.breakpoint.mdAndUp ? 10 : 12">
+      <v-col :sm="$vuetify.breakpoint.md ? 8 : 12" lg="6" xl="4">
         <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
           <v-btn block class="primary" @click="drawer = true"
             >Pokaż inną akcję</v-btn
@@ -12,7 +16,10 @@
         </div>
         <v-row no-gutters align="center">
           <v-col>
-            <trader-chart :options="chartOptions" :series="series"></trader-chart>
+            <trader-chart
+              :options="chartOptions"
+              :series="series"
+            ></trader-chart>
           </v-col>
         </v-row>
         <v-row no-gutters align="center" style="background: yellow">
