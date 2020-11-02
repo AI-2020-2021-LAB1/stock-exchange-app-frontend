@@ -10,7 +10,7 @@
         dense
         :headers="headers"
         :items="offers"
-        :items-per-page="10"
+        :items-per-page="100"
         :footer-props="footer"
       >
       </v-data-table>

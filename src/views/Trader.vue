@@ -9,7 +9,7 @@
         </v-row>
       </v-col>
       <v-col sm="10">
-        <v-row no-gutters align="center" style="background: blue; height: 45%">
+        <v-row no-gutters align="center" style="background: blue;">
           <v-col>
             <p class="text-center ma-0">Wykres</p>
           </v-col>
@@ -17,15 +17,15 @@
         <v-row
           no-gutters
           align="center"
-          style="background: yellow; height: 10%"
+          style="background: yellow;"
         >
           <v-col>
             <p class="text-center ma-0">Panel kupna-sprzedaży</p>
           </v-col>
         </v-row>
-        <v-row no-gutters style="height: 45%">
+        <v-row no-gutters>
           <v-col cols="6">
-            <v-row class="fill-height" align="start">
+            <v-row align="start">
               <v-col class="py-0">
                 <trader-offers
                   title="Oferty kupna"
@@ -35,7 +35,7 @@
             </v-row>
           </v-col>
           <v-col cols="6">
-            <v-row class="fill-height" align="start">
+            <v-row align="start">
               <v-col class="py-0">
                 <trader-offers
                   title="Oferty sprzedaży"
