@@ -24,7 +24,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters>
-          <v-col cols="6">
+          <v-col :sm="$vuetify.breakpoint.sm ? 12 : 6" :md="$vuetify.breakpoint.mdAndUp">
             <v-row align="start">
               <v-col class="py-0">
                 <trader-offers
@@ -34,7 +34,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="6">
+          <v-col>
             <v-row align="start">
               <v-col class="py-0">
                 <trader-offers

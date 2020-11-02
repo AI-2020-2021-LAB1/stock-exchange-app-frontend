@@ -10,7 +10,7 @@
         dense
         :headers="headers"
         :items="offers"
-        :items-per-page="100"
+        :items-per-page="$vuetify.breakpoint.mdAndUp ? 100 : 10"
         :footer-props="footer"
       >
       </v-data-table>
