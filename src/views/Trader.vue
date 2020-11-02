@@ -1,14 +1,14 @@
 <template>
   <v-container fluid class="fill-height pa-0">
     <v-row no-gutters class="fill-height">
-      <v-col sm="3" style="background: red">
+      <v-col sm="2" style="background: red">
         <v-row class="fill-height" align="center">
           <v-col>
             <p class="text-center ma-0">Lista dostępnych akcji</p>
           </v-col>
         </v-row>
       </v-col>
-      <v-col sm="9">
+      <v-col sm="10">
         <v-row no-gutters align="center" style="background: blue; height: 45%">
           <v-col>
             <p class="text-center ma-0">Wykres</p>
@@ -24,17 +24,17 @@
           </v-col>
         </v-row>
         <v-row no-gutters style="height: 45%">
-          <v-col cols="6" style="background: lime">
-            <v-row class="fill-height" align="center">
+          <v-col cols="6">
+            <v-row class="fill-height" align="start">
               <v-col>
-                <p class="text-center ma-0">Zlecenia kupna</p>
+                <trader-offers></trader-offers>
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="6" style="background: cyan">
-            <v-row class="fill-height" align="center">
+          <v-col cols="6">
+            <v-row class="fill-height" align="start">
               <v-col>
-                <p class="text-center ma-0">Zlecenia sprzedaży</p>
+                <trader-offers></trader-offers>
               </v-col>
             </v-row>
           </v-col>
@@ -46,8 +46,13 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import TraderOffers from '../components/TraderOffers.vue';
 
-@Component
+@Component({
+    components: {
+      TraderOffers,
+    },
+})
 export default class Trader extends Vue {
   private data() {
     return {};
