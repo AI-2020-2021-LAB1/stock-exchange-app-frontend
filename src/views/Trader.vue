@@ -2,11 +2,7 @@
   <v-container fluid class="fill-height pa-0">
     <v-row no-gutters class="fill-height">
       <v-col v-if="$vuetify.breakpoint.mdAndUp" sm="2" style="background: red">
-        <v-row class="fill-height" align="center">
-          <v-col>
-            <p class="text-center ma-0">Lista dostępnych akcji</p>
-          </v-col>
-        </v-row>
+        <trader-stocks-list></trader-stocks-list>
       </v-col>
       <v-col :sm="$vuetify.breakpoint.mdAndUp ? 10 : 12">
         <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
@@ -51,11 +47,7 @@
       </v-col>
     </v-row>
     <v-navigation-drawer app left disable-resize-watcher v-model="drawer" width="300px">
-      <v-row class="fill-height" align="center">
-          <v-col>
-            <p class="text-center ma-0">Lista dostępnych akcji</p>
-          </v-col>
-        </v-row>
+      <trader-stocks-list></trader-stocks-list>
     </v-navigation-drawer>
   </v-container>
 </template>
@@ -63,10 +55,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import TraderOffers from '../components/TraderOffers.vue';
+import TraderStocksList from '../components/TraderStocksList.vue';
 
 @Component({
   components: {
     TraderOffers,
+    TraderStocksList,
   },
 })
 export default class Trader extends Vue {
