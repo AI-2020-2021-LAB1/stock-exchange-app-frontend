@@ -1,32 +1,55 @@
 <template>
-  <v-container class="py-0">
-    <v-row no-gutters>
-      <v-col
-        
-        v-for="n in 3"
-        :key="n"
-        cols="12"
-        sm="4"
+  <div>
+    <p
+      class="text-h6 white--text text-center font-weight-bold primary lighten-1 ma-0"
+    >
+      {{ title }}
+    </p>
+    <v-container class="pa-0">
+      <v-data-table
+        dense
+        :headers="headers"
+        :items="offers"
+        :items-per-page="10"
+        :footer-props="footer"
       >
-        <v-card
-          class="pa-2"
-          outlined
-          tile
-        >
-          One of three columns
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-data-table>
+    </v-container>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class TraderOffers extends Vue {
+  @Prop({ required: true }) private title!: string;
+  @Prop({ required: true }) private offers!: object[];
+
+  get Offers() {
+    return this.offers;
+  }
+
   private data() {
-    return {};
+    return {
+      headers: [
+        {
+          text: 'Suma',
+          value: 'sum',
+        },
+        {
+          text: 'Ilość',
+          value: 'amount',
+        },
+        {
+          text: 'Cena',
+          value: 'price',
+        },
+      ],
+      footer: {
+        'disable-items-per-page': true,
+      },
+    };
   }
 }
 </script>
