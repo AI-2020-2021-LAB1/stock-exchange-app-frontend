@@ -8,7 +8,10 @@
             <v-icon color="green">mdi-cash-usd-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="stock.name"></v-list-item-title>
+            <v-list-item-title>{{ stock.name }}</v-list-item-title>
+            <v-list-item-subtitle
+              >{{ stock.currentPrice.toFixed(2) }} PLN</v-list-item-subtitle
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -17,14 +20,7 @@
 </template>
 
 <script lang="ts">
-// <template>
-//   <v-row class="fill-height" align="center">
-//     <v-col>
-//       <p class="text-center ma-0">Lista dostępnych akcji</p>
-//     </v-col>
-//   </v-row>
-// </template>
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class TraderStocksList extends Vue {
@@ -36,7 +32,7 @@ export default class TraderStocksList extends Vue {
 
   private data() {
     return {
-      selectedItem: 1,
+      selectedItem: 0,
     };
   }
 }
