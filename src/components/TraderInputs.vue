@@ -1,36 +1,34 @@
 <template>
-  <v-card-text class="pb-5">
-    <v-row align="center" justify="center" class="mx-0">
-      <v-col class="pa-0">
-        <v-form @submit.prevent="buy()">
-          <v-row align="center" justify="start" class="mx-0">
-            <span class="success--text pa-3">Chce kupić</span>
-          </v-row>
+  <v-row no-gutters>
+    <v-col cols="12" :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+      <v-card class="ma-1" outlined>
+        <v-card-title class="success white--text font-weight-bold py-1"
+          >Chcę kupić</v-card-title
+        >
+        <v-card-text class="pa-0">
           <v-row align="center" justify="center" class="mx-0">
-            <v-col>
+            <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
-                v-model="howManyCourseBuy"
+                v-model.number="howManyCourseBuy"
                 label="kurs"
-                :rules="[rules.min(howManyCourseBuy, 'Kurs')]"
                 color="primary"
                 type="number"
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
-                v-model="howManyBuy"
-                :rules="[rules.min(howManyBuy, 'Cena')]"
+                v-model.number="howManyBuy"
                 label="ilość"
                 color="primary"
                 type="number"
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
-                v-model="valueBuy"
+                v-model.number="valueBuy"
                 label="wartość"
                 color="primary"
                 disabled
@@ -38,44 +36,50 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row align="center" justify="end" class="mx-0">
-            <v-btn class="pa-6" type="submit" depressed color="success">
-              <span>Kup!</span>
-            </v-btn>
-          </v-row>
-        </v-form>
-      </v-col>
-
-      <v-col class="py-0 pr-0">
-        <v-form @submit.prevent="sell()">
-          <v-row align="center" justify="start" class="mx-0">
-            <span class="error--text pa-3">Chce sprzedać</span>
-          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            block
+            depressed
+            :disabled="!valueBuy > 0"
+            color="success"
+            @click="buy"
+          >
+            <span>Kup</span>
+            <v-icon right>mdi-cart</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+    <v-col cols="12" :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+      <v-card class="ma-1" outlined>
+        <v-card-title class="error white--text font-weight-bold py-1"
+          >Chcę sprzedać</v-card-title
+        >
+        <v-card-text class="pa-0">
           <v-row align="center" justify="center" class="mx-0">
-            <v-col>
+            <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
-                v-model="howManyCourseSell"
-                :rules="[rules.min(howManyCourseSell, 'Kurs')]"
+                v-model.number="howManyCourseSell"
                 label="kurs"
                 color="primary"
                 type="number"
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
-                v-model="howManySell"
+                v-model.number="howManySell"
                 label="ilość"
-                :rules="[rules.min(howManySell, 'Cena')]"
                 color="primary"
                 type="number"
               ></v-text-field>
             </v-col>
-            <v-col>
+            <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
-                v-model="valueSell"
+                v-model.number="valueSell"
                 label="wartość"
                 color="primary"
                 disabled
@@ -83,27 +87,46 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row align="center" justify="end" class="mx-0">
-            <v-btn class="pa-6" type="submit" depressed color="error">
-              <span>Sprzedaj!</span>
-            </v-btn>
-          </v-row>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-card-text>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            block
+            depressed
+            :disabled="!valueSell > 0"
+            color="error"
+            @click="sell"
+          >
+            <span>Sprzedaj</span>
+            <v-icon right>mdi-cash-usd</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Watch } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 
 @Component
 export default class TraderInputs extends Vue {
-  public sell(): void {
+  public sell() {
     console.log('clicked');
   }
-  public buy(): void {
+  public buy() {
     console.log('clicked');
+  }
+
+  @Watch('howManyBuy')
+  @Watch('howManyCourseBuy')
+  @Watch('howManySell')
+  @Watch('howManyCourseSell')
+  private valueChanged(val: number) {
+    if (val < 0) {
+      this.$data.howManyBuy = Math.abs(this.$data.howManyBuy);
+      this.$data.howManyCourseBuy = Math.abs(this.$data.howManyCourseBuy);
+      this.$data.howManySell = Math.abs(this.$data.howManySell);
+      this.$data.howManyCourseSell = Math.abs(this.$data.howManyCourseSell);
+    }
   }
 
   private data() {
@@ -112,21 +135,6 @@ export default class TraderInputs extends Vue {
       howManyCourseBuy: 0,
       howManySell: 0,
       howManyCourseSell: 0,
-      rules: {
-        min: (value: number, field: string) => {
-          if (value < 0) {
-            return (
-              field +
-              ' ' +
-              (field === 'Kurs'
-                ? 'nie może być mniejsze niż zero'
-                : 'nie może być mniejsza niż zero')
-            );
-          } else {
-            return true;
-          }
-        },
-      },
     };
   }
   get valueSell() {
@@ -137,8 +145,3 @@ export default class TraderInputs extends Vue {
   }
 }
 </script>
-<style scoped>
-.v-btn {
-  width: 120px;
-}
-</style>
