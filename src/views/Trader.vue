@@ -57,7 +57,8 @@
       v-model="drawer"
       width="300px"
     >
-    </v-navigation-drawer>
+      <trader-stocks-list :stocks="stocks"></trader-stocks-list
+    ></v-navigation-drawer>
   </v-container>
 </template>
 
