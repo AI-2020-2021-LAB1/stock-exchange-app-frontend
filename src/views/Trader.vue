@@ -21,10 +21,8 @@
             ></trader-chart>
           </v-col>
         </v-row>
-        <v-row no-gutters align="center" style="background: yellow">
-          <v-col>
-            <p class="text-center ma-0">Panel kupna-sprzedaży</p>
-          </v-col>
+        <v-row no-gutters align="center">
+          <TraderInputs></TraderInputs>
         </v-row>
         <v-row no-gutters>
           <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
@@ -67,6 +65,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import TraderOffers from '../components/TraderOffers.vue';
 import TraderStocksList from '../components/TraderStocksList.vue';
+import TraderInputs from '../components/TraderInputs.vue';
 import TraderChart from '../components/TraderChart.vue';
 
 @Component({
@@ -74,6 +73,7 @@ import TraderChart from '../components/TraderChart.vue';
     TraderOffers,
     TraderStocksList,
     TraderChart,
+    TraderInputs,
   },
 })
 export default class Trader extends Vue {
@@ -92,7 +92,7 @@ export default class Trader extends Vue {
         name: 'Firma ' + i,
         abbreviation: 'Fir',
         currentPrice: 10 + Math.random() * (34000 - 10),
-        amount: Math.floor(1 + Math.random() * (1000 - 1))
+        amount: Math.floor(1 + Math.random() * (1000 - 1)),
       });
     }
   }
