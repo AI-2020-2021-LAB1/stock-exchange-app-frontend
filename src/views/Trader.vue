@@ -4,9 +4,8 @@
       <v-col
         v-if="$vuetify.breakpoint.mdAndUp"
         :sm="$vuetify.breakpoint.xl ? 1 : 2"
-        style="background: red"
       >
-        <trader-stocks-list></trader-stocks-list>
+        <trader-stocks-list :stocks="stocks"></trader-stocks-list>
       </v-col>
       <v-col :sm="$vuetify.breakpoint.md ? 8 : 12" lg="6" xl="4">
         <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
@@ -34,6 +33,7 @@
                 <trader-offers
                   title="Oferty kupna"
                   :offers="offers"
+                  colorClass="green--text"
                 ></trader-offers>
               </v-col>
             </v-row>
@@ -44,6 +44,7 @@
                 <trader-offers
                   title="Oferty sprzedaży"
                   :offers="offers"
+                  colorClass="pink--text"
                 ></trader-offers>
               </v-col>
             </v-row>
@@ -58,7 +59,6 @@
       v-model="drawer"
       width="300px"
     >
-      <trader-stocks-list></trader-stocks-list>
     </v-navigation-drawer>
   </v-container>
 </template>
@@ -85,9 +85,20 @@ export default class Trader extends Vue {
         price: i,
       });
     }
+
+    for (let i = 1; i <= 40; i++) {
+      this.$data.stocks.push({
+        id: i,
+        name: 'Firma ' + i,
+        abbreviation: 'Fir',
+        currentPrice: 10 + Math.random() * (34000 - 10),
+        amount: Math.floor(1 + Math.random() * (1000 - 1))
+      });
+    }
   }
   private data() {
     return {
+      stocks: [],
       offers: [],
       drawer: false,
       chartOptions: {
