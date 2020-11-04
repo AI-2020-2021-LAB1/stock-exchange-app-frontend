@@ -56,6 +56,7 @@
       disable-resize-watcher
       v-model="drawer"
       width="300px"
+      style="z-index: 999"
     >
       <trader-stocks-list :stocks="stocks"></trader-stocks-list
     ></v-navigation-drawer>
