@@ -12,12 +12,7 @@
         :footer-props="footer"
       >
         <template v-slot:[`item.sum`]="{ item }">
-          <div
-            :class="colorClass"
-            :style="{ fontWeight: 'bold' }"
-          >
-            {{ item.sum }}
-          </div>
+          <div :class="colorClass" class="font-weight-bold">{{ item.sum }}</div>
         </template>
       </v-data-table>
     </v-container>
@@ -25,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class TraderOffers extends Vue {
@@ -41,23 +36,23 @@ export default class TraderOffers extends Vue {
     return {
       headers: [
         {
-          text: "Suma",
-          value: "sum",
+          text: 'Suma',
+          value: 'sum',
           class: this.colorClass,
         },
         {
-          text: "Ilość",
-          value: "amount",
+          text: 'Ilość',
+          value: 'amount',
           class: this.colorClass,
         },
         {
-          text: "Cena",
-          value: "price",
+          text: 'Cena',
+          value: 'price',
           class: this.colorClass,
         },
       ],
       footer: {
-        "disable-items-per-page": true,
+        'disable-items-per-page': true,
       },
     };
   }

@@ -31,7 +31,7 @@
                 <trader-offers
                   title="Oferty kupna"
                   :offers="offers"
-                  colorClass="green--text"
+                  colorClass="success--text"
                 ></trader-offers>
               </v-col>
             </v-row>
@@ -42,7 +42,7 @@
                 <trader-offers
                   title="Oferty sprzedaży"
                   :offers="offers"
-                  colorClass="pink--text"
+                  colorClass="error--text"
                 ></trader-offers>
               </v-col>
             </v-row>
