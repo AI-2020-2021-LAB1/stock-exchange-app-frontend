@@ -10,6 +10,7 @@
             <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
+                hide-details
                 v-model.number="howManyCourseBuy"
                 label="kurs"
                 color="primary"
@@ -19,6 +20,7 @@
             <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
+                hide-details
                 v-model.number="howManyBuy"
                 label="ilość"
                 color="primary"
@@ -28,6 +30,7 @@
             <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
+                hide-details
                 v-model.number="valueBuy"
                 label="wartość"
                 color="primary"
@@ -61,6 +64,7 @@
             <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
+                hide-details
                 v-model.number="howManyCourseSell"
                 label="kurs"
                 color="primary"
@@ -70,6 +74,7 @@
             <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
+                hide-details
                 v-model.number="howManySell"
                 label="ilość"
                 color="primary"
@@ -79,6 +84,7 @@
             <v-col class="px-1 pb-0">
               <v-text-field
                 outlined
+                hide-details
                 v-model.number="valueSell"
                 label="wartość"
                 color="primary"
@@ -110,10 +116,10 @@ import { Vue, Component, Watch } from 'vue-property-decorator';
 @Component
 export default class TraderInputs extends Vue {
   public sell() {
-    console.log('clicked');
+    return;
   }
   public buy() {
-    console.log('clicked');
+    return;
   }
 
   @Watch('howManyBuy')
