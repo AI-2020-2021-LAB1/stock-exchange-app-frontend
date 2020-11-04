@@ -99,23 +99,6 @@ import { Component, Watch } from 'vue-property-decorator';
 
 @Component
 export default class TraderInputs extends Vue {
-  //  @Watch('howManyBuy')
-  // howManyBuyChanged(newVal: number){
-  //   this.valueBuy = newVal * this.howManyCourseBuy;
-  // }
-
-  //  @Watch('myProperty')
-  // onPropertyChanged(value: string, oldValue: string) {
-  //   // Do stuff with the watcher here.
-  // },
-  // methods: {
-  //   sell() {
-  //     console.log('sell');
-  //   },
-  //   buy() {
-  //     console.log('buy');
-  //   },
-  // },
   public sell(): void {
     console.log('clicked');
   }
@@ -123,14 +106,6 @@ export default class TraderInputs extends Vue {
     console.log('clicked');
   }
 
-  // watch: {
-  //   howManyBuy: function(value: number): void {
-  //     this.valueBuy = value * this.howManyCourseBuy;
-  //   },
-  //   howManySell: function(value: number): void {
-  //     this.valueSell = value * this.howManyCourseSell;
-  //   },
-  // },
   private data() {
     return {
       howManyBuy: 0,
