@@ -70,7 +70,6 @@ import TraderStocksList from '../components/TraderStocksList.vue';
 import TraderInputs from '../components/TraderInputs.vue';
 import TraderChart from '../components/TraderChart.vue';
 import { StocksService } from '../API/stocks';
-import { Stocks } from '../models/StockModel';
 
 @Component({
   components: {
@@ -81,30 +80,10 @@ import { Stocks } from '../models/StockModel';
   },
 })
 export default class Trader extends Vue {
-  public async getStocks(
-    page: number,
-    abbreviation?: string,
-    amount?: number,
-    amountLessThan?: number,
-    amountGreaterThan?: number,
-    currentPrice?: number,
-    currentPriceLessThan?: number,
-    currentPriceGreaterThan?: number,
-    name?: string,
-    size?: number,
-    sort?: string[],
-  ) {
-    try {
-      let stocks: Stocks;
+  private stocksService!: StocksService;
 
-      stocks = await StocksService.getStocks(page);
-
-      for (const stock of stocks.content) {
-        this.$data.stocks.push(stock);
-      }
-    } catch (error) {
-      alert(error);
-    }
+  private beforeCreate() {
+    this.stocksService = new StocksService();
   }
 
   private created() {
@@ -116,17 +95,13 @@ export default class Trader extends Vue {
       });
     }
 
-    this.getStocks(0);
-
-    // for (let i = 1; i <= 40; i++) {
-    //   this.$data.stocks.push({
-    //     id: i,
-    //     name: "Firma " + i,
-    //     abbreviation: "Fir",
-    //     currentPrice: 10 + Math.random() * (34000 - 10),
-    //     amount: Math.floor(1 + Math.random() * (1000 - 1)),
-    //   });
-    // }
+    this.stocksService.getStocks({
+      page: 0,
+    }).then((res) => {
+      res.data.content.forEach((element: object) => {
+        this.$data.stocks.push(element);
+      });
+    });
   }
   private data() {
     return {
