@@ -95,13 +95,23 @@ export default class Trader extends Vue {
       });
     }
 
-    this.stocksService.getStocks({
-      page: 0,
-    }).then((res) => {
-      res.data.content.forEach((element: object) => {
-        this.$data.stocks.push(element);
+    this.stocksService
+      .getStocks({
+        page: 0,
+      })
+      .then((res) => {
+        res.data.content.forEach((element: object) => {
+          this.$data.stocks.push(element);
+        });
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
       });
-    });
   }
   private data() {
     return {
