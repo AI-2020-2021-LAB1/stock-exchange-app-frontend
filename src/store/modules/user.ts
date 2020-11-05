@@ -59,6 +59,12 @@ const userModule: Module<any, any> = {
             refreshToken: res.data.refresh_token,
           });
           dispatch('setRefreshTimer');
+          dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Zalogowano',
+            color: 'success',
+            timeout: 7500,
+          });
           router.replace('/');
         })
         .catch(() => {
