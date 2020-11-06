@@ -3,7 +3,7 @@
     <v-list dense>
       <v-subheader>Lista dostępnych akcji</v-subheader>
       <v-list-item-group v-model="selectedItem" color="primary">
-        <v-list-item v-for="stock in stocks" :key="stock.id">
+        <v-list-item v-for="stock in stocks.content" :key="stock.id">
           <v-list-item-icon>
             <v-icon color="green">mdi-cash-usd-outline</v-icon>
           </v-list-item-icon>
@@ -16,6 +16,7 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <v-pagination v-model="currentPage" :length="stocks.totalPages" @input="paginationClicked"></v-pagination>
   </v-card>
 </template>
 
@@ -30,9 +31,14 @@ export default class TraderStocksList extends Vue {
     return this.stocks;
   }
 
+  private paginationClicked(page: number) {
+    this.$emit('pagination', page);
+  }
+
   private data() {
     return {
       selectedItem: 0,
+      currentPage: 1,
     };
   }
 }

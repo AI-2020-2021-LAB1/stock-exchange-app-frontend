@@ -5,7 +5,7 @@
         v-if="$vuetify.breakpoint.mdAndUp"
         :sm="$vuetify.breakpoint.xl ? 1 : 2"
       >
-        <trader-stocks-list :stocks="stocks"></trader-stocks-list>
+        <trader-stocks-list :stocks="stocks" @pagination="paginationClicked($event)"></trader-stocks-list>
       </v-col>
       <v-col :sm="$vuetify.breakpoint.md ? 8 : 12" lg="6" xl="4">
         <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
@@ -87,6 +87,8 @@ export default class Trader extends Vue {
   }
 
   private created() {
+    this.getStocks(0);
+
     for (let i = 1; i <= 1000; i++) {
       this.$data.offers.push({
         sum: i,
@@ -94,15 +96,20 @@ export default class Trader extends Vue {
         price: i,
       });
     }
+  }
 
+  private paginationClicked(pageNumber: number) {
+    this.getStocks(pageNumber - 1);
+  }
+
+  private getStocks(page: number) {
     this.stocksService
       .getStocks({
-        page: 0,
+        page,
       })
       .then((res) => {
-        res.data.content.forEach((element: object) => {
-          this.$data.stocks.push(element);
-        });
+        this.$data.stocks = [];
+        this.$data.stocks = res.data;
       })
       .catch((err) => {
         this.$store.dispatch('setSnackbarState', {
@@ -113,6 +120,7 @@ export default class Trader extends Vue {
         });
       });
   }
+
   private data() {
     return {
       stocks: [],
