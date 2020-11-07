@@ -5,7 +5,10 @@
         v-if="$vuetify.breakpoint.mdAndUp"
         :sm="$vuetify.breakpoint.xl ? 1 : 2"
       >
-        <trader-stocks-list :stocks="stocks" @pagination="paginationClicked($event)"></trader-stocks-list>
+        <trader-stocks-list
+          :stocks="stocks"
+          @pagination="paginationClicked($event)"
+        ></trader-stocks-list>
       </v-col>
       <v-col :sm="$vuetify.breakpoint.md ? 8 : 12" lg="6" xl="4">
         <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
@@ -30,7 +33,7 @@
               <v-col class="py-0">
                 <trader-offers
                   title="Oferty kupna"
-                  :offers="offers"
+                  :offers="buyingOffers"
                   colorClass="success--text"
                 ></trader-offers>
               </v-col>
@@ -41,7 +44,7 @@
               <v-col class="py-0">
                 <trader-offers
                   title="Oferty sprzedaży"
-                  :offers="offers"
+                  :offers="sellingOffers"
                   colorClass="error--text"
                 ></trader-offers>
               </v-col>
@@ -64,12 +67,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import TraderOffers from '../components/TraderOffers.vue';
 import TraderStocksList from '../components/TraderStocksList.vue';
 import TraderInputs from '../components/TraderInputs.vue';
 import TraderChart from '../components/TraderChart.vue';
 import { StocksService } from '../API/stocks';
+import { OrdersService } from '../API/orders';
+import { OrderType } from '../models/OrderModel';
 
 @Component({
   components: {
@@ -81,32 +86,32 @@ import { StocksService } from '../API/stocks';
 })
 export default class Trader extends Vue {
   private stocksService!: StocksService;
+  private orderService!: OrdersService;
 
   private beforeCreate() {
     this.stocksService = new StocksService();
+    this.orderService = new OrdersService();
   }
 
   private created() {
-    this.getStocks(0);
-
-    for (let i = 1; i <= 1000; i++) {
-      this.$data.offers.push({
-        sum: i,
-        amount: i,
-        price: i,
-      });
-    }
+    this.getStocks({ page: 0 });
+    this.getBuyingOrders({
+      page: 0,
+      orderType: OrderType.BuyingOrder,
+    });
+    this.getSellingOrders({
+      page: 0,
+      orderType: OrderType.SellingOrder,
+    });
   }
 
   private paginationClicked(pageNumber: number) {
-    this.getStocks(pageNumber - 1);
+    this.getStocks({ page: pageNumber - 1 });
   }
 
-  private getStocks(page: number) {
+  private getStocks(params: object) {
     this.stocksService
-      .getStocks({
-        page,
-      })
+      .getStocks(params)
       .then((res) => {
         this.$data.stocks = [];
         this.$data.stocks = res.data;
@@ -121,10 +126,83 @@ export default class Trader extends Vue {
       });
   }
 
+  private getBuyingOrders(params: object) {
+    this.orderService
+      .getOrders(params)
+      .then((res) => {
+        this.$data.buyingOffers = [];
+        this.$data.buyingOffersTotalElements = res.data.totalElements;
+        for (const offer of res.data.content) {
+          this.$data.buyingOffers.push({
+            price: offer.price,
+            amount: offer.amount,
+            sum: (offer.price * offer.amount).toFixed(2),
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getSellingOrders(params: object) {
+    this.orderService
+      .getOrders(params)
+      .then((res) => {
+        this.$data.sellingOffers = [];
+        this.$data.sellingOffersTotalElements = res.data.totalElements;
+        for (const offer of res.data.content) {
+          this.$data.sellingOffers.push({
+            price: offer.price,
+            amount: offer.amount,
+            sum: (offer.price * offer.amount).toFixed(2),
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  @Watch('sellingOffersTotalElements')
+  private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+    if (newVal !== oldVal) {
+      this.getSellingOrders({
+        page: 0,
+        orderType: OrderType.SellingOrder,
+        size: newVal,
+      });
+    }
+  }
+
+  @Watch('buyingOffersTotalElements')
+  private buyingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+    if (newVal !== oldVal) {
+      this.getBuyingOrders({
+        page: 0,
+        orderType: OrderType.BuyingOrder,
+        size: newVal,
+      });
+    }
+  }
+
   private data() {
     return {
       stocks: [],
-      offers: [],
+      sellingOffers: [],
+      buyingOffers: [],
+      sellingOffersTotalElements: 0,
+      buyingOffersTotalElements: 0,
       drawer: false,
       chartOptions: {
         chart: {
