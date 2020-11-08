@@ -3,7 +3,7 @@
     <v-row no-gutters justify="center" class="fill-height">
       <v-col
         v-if="$vuetify.breakpoint.mdAndUp"
-        :sm="$vuetify.breakpoint.xl ? 1 : 2"
+        :sm="$vuetify.breakpoint.xl ? 2 : 3"
       >
         <trader-stocks-list
           :stocks="stocks"
@@ -12,7 +12,7 @@
           @pagination="paginationClicked($event)"
         ></trader-stocks-list>
       </v-col>
-      <v-col :sm="$vuetify.breakpoint.md ? 8 : 12" lg="6" xl="4">
+      <v-col :sm="$vuetify.breakpoint.md ? 9 : 12" lg="6" xl="4">
         <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
           <v-btn block class="primary" @click="drawer = true"
             >Pokaż inną akcję</v-btn
