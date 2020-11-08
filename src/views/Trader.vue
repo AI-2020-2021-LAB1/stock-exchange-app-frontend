@@ -61,7 +61,10 @@
       width="300px"
       style="z-index: 999"
     >
-      <trader-stocks-list :stocks="stocks"></trader-stocks-list
+      <trader-stocks-list
+        :stocks="stocks"
+        @pagination="paginationClicked($event)"
+      ></trader-stocks-list
     ></v-navigation-drawer>
   </v-container>
 </template>
