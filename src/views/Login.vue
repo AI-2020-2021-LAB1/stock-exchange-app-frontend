@@ -9,6 +9,7 @@
           <v-form v-model="inputValidated" @submit.prevent="loginUser()">
             <v-card-text class="pb-0">
               <v-text-field
+                id="email"
                 autofocus
                 outlined
                 v-model="login"
@@ -20,6 +21,7 @@
                 class="my-2"
               ></v-text-field>
               <v-text-field
+                id="password"
                 outlined
                 v-model="password"
                 prepend-icon="mdi-lock"

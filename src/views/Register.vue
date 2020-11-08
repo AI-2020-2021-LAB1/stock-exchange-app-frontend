@@ -11,6 +11,7 @@
           <v-form v-model="inputValidated" @submit.prevent="registerUser()">
             <v-card-text class="pb-0">
               <v-text-field
+                id='email'
                 outlined
                 v-model="email"
                 prepend-icon="mdi-at"
@@ -23,6 +24,7 @@
               <v-row align="center" justify="center" class="mx-0">
                 <v-col class="pa-0">
                   <v-text-field
+                    id="first_name"
                     outlined
                     v-model="first_name"
                     prepend-icon="mdi-card-account-details"
@@ -34,6 +36,7 @@
                 </v-col>
                 <v-col class="py-0 pr-0">
                   <v-text-field
+                    id="last_name"
                     outlined
                     v-model="last_name"
                     :rules="[rules.required]"
@@ -46,6 +49,7 @@
               <v-row align="center" justify="center" class="mx-0">
                 <v-col class="pa-0">
                   <v-text-field
+                    id="password1"
                     outlined
                     v-model="password1"
                     prepend-icon="mdi-lock"
@@ -62,6 +66,7 @@
                 </v-col>
                 <v-col class="py-0 pr-0">
                   <v-text-field
+                    id="password2"
                     outlined
                     v-model="password2"
                     :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
@@ -79,6 +84,7 @@
               </v-row>
               <div v-if="passwdFocus">
                 <password-validator
+                  ref="passwordValidator"
                   :password="password1"
                   @validation="passwdValid = $event"
                 ></password-validator>
