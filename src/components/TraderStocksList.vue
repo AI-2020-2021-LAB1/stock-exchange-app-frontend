@@ -1,6 +1,16 @@
 <template>
   <v-card class="mx-auto" max-width="300" tile>
-    <v-list dense>
+    <v-text-field
+      solo-inverted
+      text
+      clearable
+      hide-details
+      v-model="Search"
+      color="primary"
+      label="Wyszykaj akcje"
+      prepend-inner-icon="mdi-database-search"
+    ></v-text-field>
+    <v-list dense class="pt-0">
       <v-subheader>Lista dostępnych akcji</v-subheader>
       <v-list-item-group v-model="selectedItem" color="primary">
         <v-list-item v-for="stock in stocks.content" :key="stock.id">
@@ -16,7 +26,11 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <v-pagination v-model="currentPage" :length="stocks.totalPages" @input="paginationClicked"></v-pagination>
+    <v-pagination
+      v-model="currentPage"
+      :length="stocks.totalPages"
+      @input="paginationClicked"
+    ></v-pagination>
   </v-card>
 </template>
 
@@ -26,9 +40,18 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class TraderStocksList extends Vue {
   @Prop({ required: true }) private stocks!: object[];
+  @Prop({ required: true }) private search!: string;
 
   get Stocks() {
     return this.stocks;
+  }
+
+  get Search() {
+    return this.search;
+  }
+
+  set Search(val: string) {
+    this.$emit('search', val);
   }
 
   private paginationClicked(page: number) {

@@ -7,6 +7,8 @@
       >
         <trader-stocks-list
           :stocks="stocks"
+          :search="searchStocks"
+          @search="searchStocks = $event"
           @pagination="paginationClicked($event)"
         ></trader-stocks-list>
       </v-col>
@@ -63,9 +65,11 @@
     >
       <trader-stocks-list
         :stocks="stocks"
+        :search="searchStocks"
+        @search="searchStocks = $event"
         @pagination="paginationClicked($event)"
-      ></trader-stocks-list
-    ></v-navigation-drawer>
+      ></trader-stocks-list>
+    </v-navigation-drawer>
   </v-container>
 </template>
 
@@ -109,7 +113,11 @@ export default class Trader extends Vue {
   }
 
   private paginationClicked(pageNumber: number) {
-    this.getStocks({ page: pageNumber - 1 });
+    if (this.$data.searchStocks) {
+      this.getStocks({ page: pageNumber - 1, name: this.$data.searchStocks });
+    } else {
+      this.getStocks({ page: pageNumber - 1 });
+    }
   }
 
   private getStocks(params: object) {
@@ -199,6 +207,15 @@ export default class Trader extends Vue {
     }
   }
 
+  @Watch('searchStocks')
+  private queryStocks(val: string) {
+    if (val) {
+      this.getStocks({ page: 0, name: val });
+    } else {
+      this.getStocks({ page: 0 });
+    }
+  }
+
   private data() {
     return {
       stocks: [],
@@ -206,6 +223,7 @@ export default class Trader extends Vue {
       buyingOffers: [],
       sellingOffersTotalElements: 0,
       buyingOffersTotalElements: 0,
+      searchStocks: '',
       drawer: false,
       chartOptions: {
         chart: {
