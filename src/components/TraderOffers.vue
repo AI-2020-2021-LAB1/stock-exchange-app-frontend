@@ -8,7 +8,7 @@
         dense
         :headers="headers"
         :items="offers"
-        :items-per-page="$vuetify.breakpoint.mdAndUp ? 100 : 10"
+        :items-per-page="$vuetify.breakpoint.mdAndUp ? 20 : 10"
         :footer-props="footer"
       >
         <template v-slot:[`item.sum`]="{ item }">

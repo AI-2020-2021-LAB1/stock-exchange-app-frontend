@@ -3,11 +3,16 @@
     <v-row no-gutters justify="center" class="fill-height">
       <v-col
         v-if="$vuetify.breakpoint.mdAndUp"
-        :sm="$vuetify.breakpoint.xl ? 1 : 2"
+        :sm="$vuetify.breakpoint.xl ? 2 : 3"
       >
-        <trader-stocks-list :stocks="stocks"></trader-stocks-list>
+        <trader-stocks-list
+          :stocks="stocks"
+          :search="searchStocks"
+          @search="searchStocks = $event"
+          @pagination="paginationClicked($event)"
+        ></trader-stocks-list>
       </v-col>
-      <v-col :sm="$vuetify.breakpoint.md ? 8 : 12" lg="6" xl="4">
+      <v-col :sm="$vuetify.breakpoint.md ? 9 : 12" lg="6" xl="4">
         <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
           <v-btn block class="primary" @click="drawer = true"
             >Pokaż inną akcję</v-btn
@@ -30,7 +35,7 @@
               <v-col class="py-0">
                 <trader-offers
                   title="Oferty kupna"
-                  :offers="offers"
+                  :offers="buyingOffers"
                   colorClass="success--text"
                 ></trader-offers>
               </v-col>
@@ -41,7 +46,7 @@
               <v-col class="py-0">
                 <trader-offers
                   title="Oferty sprzedaży"
-                  :offers="offers"
+                  :offers="sellingOffers"
                   colorClass="error--text"
                 ></trader-offers>
               </v-col>
@@ -58,17 +63,25 @@
       width="300px"
       style="z-index: 999"
     >
-      <trader-stocks-list :stocks="stocks"></trader-stocks-list
-    ></v-navigation-drawer>
+      <trader-stocks-list
+        :stocks="stocks"
+        :search="searchStocks"
+        @search="searchStocks = $event"
+        @pagination="paginationClicked($event)"
+      ></trader-stocks-list>
+    </v-navigation-drawer>
   </v-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import TraderOffers from '../components/TraderOffers.vue';
 import TraderStocksList from '../components/TraderStocksList.vue';
 import TraderInputs from '../components/TraderInputs.vue';
 import TraderChart from '../components/TraderChart.vue';
+import { StocksService } from '../API/stocks';
+import { OrdersService } from '../API/orders';
+import { OrderType } from '../models/OrderModel';
 
 @Component({
   components: {
@@ -79,29 +92,138 @@ import TraderChart from '../components/TraderChart.vue';
   },
 })
 export default class Trader extends Vue {
-  private created() {
-    for (let i = 1; i <= 1000; i++) {
-      this.$data.offers.push({
-        sum: i,
-        amount: i,
-        price: i,
-      });
-    }
+  private stocksService!: StocksService;
+  private orderService!: OrdersService;
 
-    for (let i = 1; i <= 40; i++) {
-      this.$data.stocks.push({
-        id: i,
-        name: 'Firma ' + i,
-        abbreviation: 'Fir',
-        currentPrice: 10 + Math.random() * (34000 - 10),
-        amount: Math.floor(1 + Math.random() * (1000 - 1)),
+  private beforeCreate() {
+    this.stocksService = new StocksService();
+    this.orderService = new OrdersService();
+  }
+
+  private created() {
+    this.getStocks({ page: 0 });
+    this.getBuyingOrders({
+      page: 0,
+      orderType: OrderType.BuyingOrder,
+    });
+    this.getSellingOrders({
+      page: 0,
+      orderType: OrderType.SellingOrder,
+    });
+  }
+
+  private paginationClicked(pageNumber: number) {
+    if (this.$data.searchStocks) {
+      this.getStocks({ page: pageNumber - 1, name: this.$data.searchStocks });
+    } else {
+      this.getStocks({ page: pageNumber - 1 });
+    }
+  }
+
+  private getStocks(params: object) {
+    this.stocksService
+      .getStocks(params)
+      .then((res) => {
+        this.$data.stocks = [];
+        this.$data.stocks = res.data;
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getBuyingOrders(params: object) {
+    this.orderService
+      .getOrders(params)
+      .then((res) => {
+        this.$data.buyingOffers = [];
+        this.$data.buyingOffersTotalElements = res.data.totalElements;
+        for (const offer of res.data.content) {
+          this.$data.buyingOffers.push({
+            price: offer.price,
+            amount: offer.amount,
+            sum: (offer.price * offer.amount).toFixed(2),
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getSellingOrders(params: object) {
+    this.orderService
+      .getOrders(params)
+      .then((res) => {
+        this.$data.sellingOffers = [];
+        this.$data.sellingOffersTotalElements = res.data.totalElements;
+        for (const offer of res.data.content) {
+          this.$data.sellingOffers.push({
+            price: offer.price,
+            amount: offer.amount,
+            sum: (offer.price * offer.amount).toFixed(2),
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  @Watch('sellingOffersTotalElements')
+  private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+    if (newVal !== oldVal) {
+      this.getSellingOrders({
+        page: 0,
+        orderType: OrderType.SellingOrder,
+        size: newVal,
       });
     }
   }
+
+  @Watch('buyingOffersTotalElements')
+  private buyingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+    if (newVal !== oldVal) {
+      this.getBuyingOrders({
+        page: 0,
+        orderType: OrderType.BuyingOrder,
+        size: newVal,
+      });
+    }
+  }
+
+  @Watch('searchStocks')
+  private queryStocks(val: string) {
+    if (val) {
+      this.getStocks({ page: 0, name: val });
+    } else {
+      this.getStocks({ page: 0 });
+    }
+  }
+
   private data() {
     return {
       stocks: [],
-      offers: [],
+      sellingOffers: [],
+      buyingOffers: [],
+      sellingOffersTotalElements: 0,
+      buyingOffersTotalElements: 0,
+      searchStocks: '',
       drawer: false,
       chartOptions: {
         chart: {
