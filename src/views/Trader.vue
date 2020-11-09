@@ -1,5 +1,12 @@
 <template>
   <v-container fluid class="fill-height pa-0">
+    <v-row no-gutters v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
+      <v-col cols="12">
+        <v-btn block class="primary" @click="drawer = true"
+          >Otwórz wybór akcji</v-btn
+        >
+      </v-col>
+    </v-row>
     <v-row no-gutters justify="center" class="fill-height">
       <v-col
         v-if="$vuetify.breakpoint.mdAndUp"
@@ -10,14 +17,15 @@
           :search="searchStocks"
           @search="searchStocks = $event"
           @pagination="paginationClicked($event)"
+          @selected="stockSelectionChanged($event)"
         ></trader-stocks-list>
       </v-col>
-      <v-col :sm="$vuetify.breakpoint.md ? 9 : 12" lg="6" xl="4">
-        <div v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
-          <v-btn block class="primary" @click="drawer = true"
-            >Pokaż inną akcję</v-btn
-          >
-        </div>
+      <v-col
+        :sm="$vuetify.breakpoint.md ? 9 : 12"
+        lg="6"
+        xl="4"
+        v-if="buyingOffers.length || sellingOffers.length"
+      >
         <v-row no-gutters align="center">
           <v-col>
             <trader-chart
@@ -54,6 +62,15 @@
           </v-col>
         </v-row>
       </v-col>
+      <v-col :sm="$vuetify.breakpoint.md ? 9 : 12" lg="6" xl="4" v-else>
+        <v-row no-gutters align="center" class="fill-height">
+          <v-col>
+            <p class="text-h4 text-center font-weight-bold pa-2">
+              Wybierz jakąś akcję
+            </p>
+          </v-col>
+        </v-row>
+      </v-col>
     </v-row>
     <v-navigation-drawer
       app
@@ -68,6 +85,7 @@
         :search="searchStocks"
         @search="searchStocks = $event"
         @pagination="paginationClicked($event)"
+        @selected="stockSelectionChanged($event)"
       ></trader-stocks-list>
     </v-navigation-drawer>
   </v-container>
@@ -102,14 +120,6 @@ export default class Trader extends Vue {
 
   private created() {
     this.getStocks({ page: 0 });
-    this.getBuyingOrders({
-      page: 0,
-      orderType: OrderType.BuyingOrder,
-    });
-    this.getSellingOrders({
-      page: 0,
-      orderType: OrderType.SellingOrder,
-    });
   }
 
   private paginationClicked(pageNumber: number) {
@@ -135,6 +145,19 @@ export default class Trader extends Vue {
           timeout: 7500,
         });
       });
+  }
+
+  private stockSelectionChanged(name: string) {
+    this.getBuyingOrders({
+      page: 0,
+      orderType: OrderType.BuyingOrder,
+      name,
+    });
+    this.getSellingOrders({
+      page: 0,
+      orderType: OrderType.SellingOrder,
+      name,
+    });
   }
 
   private getBuyingOrders(params: object) {
@@ -185,27 +208,27 @@ export default class Trader extends Vue {
       });
   }
 
-  @Watch('sellingOffersTotalElements')
-  private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
-    if (newVal !== oldVal) {
-      this.getSellingOrders({
-        page: 0,
-        orderType: OrderType.SellingOrder,
-        size: newVal,
-      });
-    }
-  }
+  // @Watch('sellingOffersTotalElements')
+  // private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+  //   if (newVal !== oldVal) {
+  //     this.getSellingOrders({
+  //       page: 0,
+  //       orderType: OrderType.SellingOrder,
+  //       size: newVal,
+  //     });
+  //   }
+  // }
 
-  @Watch('buyingOffersTotalElements')
-  private buyingOffersTotalElementsChanged(newVal: number, oldVal: number) {
-    if (newVal !== oldVal) {
-      this.getBuyingOrders({
-        page: 0,
-        orderType: OrderType.BuyingOrder,
-        size: newVal,
-      });
-    }
-  }
+  // @Watch('buyingOffersTotalElements')
+  // private buyingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+  //   if (newVal !== oldVal) {
+  //     this.getBuyingOrders({
+  //       page: 0,
+  //       orderType: OrderType.BuyingOrder,
+  //       size: newVal,
+  //     });
+  //   }
+  // }
 
   @Watch('searchStocks')
   private queryStocks(val: string) {
