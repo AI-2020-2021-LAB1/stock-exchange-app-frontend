@@ -7,13 +7,17 @@
       hide-details
       v-model="Search"
       color="primary"
-      label="Wyszykaj akcje"
+      label="Wyszukaj akcje"
       prepend-inner-icon="mdi-database-search"
     ></v-text-field>
     <v-list dense class="pt-0">
       <v-subheader>Lista dostępnych akcji</v-subheader>
       <v-list-item-group v-model="selectedItem" color="primary">
-        <v-list-item v-for="stock in stocks.content" :key="stock.id">
+        <v-list-item
+          v-for="stock in stocks.content"
+          :key="stock.id"
+          @click="stockClicked(stock.name)"
+        >
           <v-list-item-icon>
             <v-icon color="green">mdi-cash-usd-outline</v-icon>
           </v-list-item-icon>
@@ -56,6 +60,10 @@ export default class TraderStocksList extends Vue {
 
   private paginationClicked(page: number) {
     this.$emit('pagination', page);
+  }
+
+  private stockClicked(name: string) {
+    this.$emit('selected', name);
   }
 
   private data() {
