@@ -6,7 +6,7 @@ const userModule: Module<any, any> = {
   state: {
     token: null,
     refreshToken: null,
-    user: { id: 0 },
+    stocks: null,
     timeout: null,
   },
 
@@ -15,9 +15,6 @@ const userModule: Module<any, any> = {
       state.token = auth.token;
       state.refreshToken = auth.refreshToken;
     },
-    storeUser(state, user) {
-      state.user = user;
-    },
     clearAuthData(state) {
       state.token = null;
       state.refreshToken = null;
@@ -25,6 +22,9 @@ const userModule: Module<any, any> = {
     },
     setTimeout(state, data) {
       state.timeout = data;
+    },
+    saveStocks(state, payload) {
+      state.stocks = payload;
     },
   },
 
@@ -58,6 +58,7 @@ const userModule: Module<any, any> = {
             token: res.data.access_token,
             refreshToken: res.data.refresh_token,
           });
+          dispatch('getUserStocks');
           dispatch('setRefreshTimer');
           dispatch('setSnackbarState', {
             state: true,
@@ -138,10 +139,31 @@ const userModule: Module<any, any> = {
           });
         });
     },
+    getUserStocks({ dispatch, commit, state }, optionalBody) {
+      axios
+        .get('api/user/stock/owned', {
+          headers: {
+            Authorization: 'Bearer ' + state.token,
+          },
+          params: optionalBody,
+        })
+        .then((res) => {
+          commit('saveStocks', res.data);
+        })
+        .catch((error) => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg:
+              'Błąd przy pobieraniu akcji uzytkownika: ' +
+              error.response.status,
+            color: 'error',
+            timeout: 7500,
+          });
+        });
+    },
   },
 
   getters: {
-    user: (state) => state.user,
     token: (state) => state.token,
     isAuthenticated: (state) => state.token !== null,
   },
