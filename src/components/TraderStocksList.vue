@@ -7,7 +7,7 @@
       hide-details
       v-model="Search"
       color="primary"
-      label="Wyszykaj akcje"
+      label="Wyszukaj akcje"
       prepend-inner-icon="mdi-database-search"
     ></v-text-field>
     <v-list dense class="pt-0">
