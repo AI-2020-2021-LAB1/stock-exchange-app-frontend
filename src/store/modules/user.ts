@@ -6,7 +6,6 @@ const userModule: Module<any, any> = {
   state: {
     token: null,
     refreshToken: null,
-    stocks: null,
     timeout: null,
   },
 
@@ -22,9 +21,6 @@ const userModule: Module<any, any> = {
     },
     setTimeout(state, data) {
       state.timeout = data;
-    },
-    saveStocks(state, payload) {
-      state.stocks = payload;
     },
   },
 
@@ -58,7 +54,6 @@ const userModule: Module<any, any> = {
             token: res.data.access_token,
             refreshToken: res.data.refresh_token,
           });
-          dispatch('getUserStocks');
           dispatch('setRefreshTimer');
           dispatch('setSnackbarState', {
             state: true,
@@ -134,28 +129,6 @@ const userModule: Module<any, any> = {
             state: true,
             msg:
               'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.',
-            color: 'error',
-            timeout: 7500,
-          });
-        });
-    },
-    getUserStocks({ dispatch, commit, state }, optionalBody) {
-      axios
-        .get('api/user/stock/owned', {
-          headers: {
-            Authorization: 'Bearer ' + state.token,
-          },
-          params: optionalBody,
-        })
-        .then((res) => {
-          commit('saveStocks', res.data);
-        })
-        .catch((error) => {
-          dispatch('setSnackbarState', {
-            state: true,
-            msg:
-              'Błąd przy pobieraniu akcji uzytkownika: ' +
-              error.response.status,
             color: 'error',
             timeout: 7500,
           });

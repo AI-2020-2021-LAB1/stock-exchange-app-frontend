@@ -35,7 +35,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters align="center">
-          <TraderInputs></TraderInputs>
+          <TraderInputs :selectedStock="selectedStock"></TraderInputs>
         </v-row>
         <v-row no-gutters>
           <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
@@ -148,6 +148,8 @@ export default class Trader extends Vue {
   }
 
   private stockSelectionChanged(name: string) {
+    this.getSelectedStockInfo(name);
+    this.getUserStocks(name);
     this.getBuyingOrders({
       page: 0,
       orderType: OrderType.BuyingOrder,
@@ -158,6 +160,48 @@ export default class Trader extends Vue {
       orderType: OrderType.SellingOrder,
       name,
     });
+  }
+
+  private getSelectedStockInfo(name: string) {
+    this.stocksService
+      .getStocks({ name })
+      .then((res) => {
+        if (res.data.content.length === 1) {
+          this.$data.selectedStock.stockInfo = res.data.content[0];
+        } else {
+          this.$data.selectedStock.stockInfo = {};
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getUserStocks(name: string) {
+    this.stocksService
+      .getUserStocks({
+        name,
+      })
+      .then((res) => {
+        if (res.data.content.length === 1) {
+          this.$data.selectedStock.userPossession = res.data.content[0];
+        } else {
+          this.$data.selectedStock.userPossession = {};
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
   }
 
   private getBuyingOrders(params: object) {
@@ -247,6 +291,7 @@ export default class Trader extends Vue {
       sellingOffersTotalElements: 0,
       buyingOffersTotalElements: 0,
       searchStocks: '',
+      selectedStock: {},
       drawer: false,
       chartOptions: {
         chart: {
