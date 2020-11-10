@@ -169,7 +169,7 @@ export default class Trader extends Vue {
         if (res.data.content.length === 1) {
           this.$data.selectedStock.stockInfo = res.data.content[0];
         } else {
-          this.$data.selectedStock.stockInfo = {};
+          this.$data.selectedStock.stockInfo = { amount: 0 };
         }
       })
       .catch((err) => {
@@ -191,7 +191,7 @@ export default class Trader extends Vue {
         if (res.data.content.length === 1) {
           this.$data.selectedStock.userPossession = res.data.content[0];
         } else {
-          this.$data.selectedStock.userPossession = {};
+          this.$data.selectedStock.userPossession = { amountAvailableForSale: 0 };
         }
       })
       .catch((err) => {
