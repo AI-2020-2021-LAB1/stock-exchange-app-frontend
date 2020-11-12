@@ -40,13 +40,11 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import UserStocksList from '../components/UserStocksList.vue';
-import UserInformation from '../components/UserInformation.vue';
 import { StocksService } from '../API/stocks';
 
 @Component({
   components: {
     UserStocksList,
-    UserInformation,
   },
 })
 export default class User extends Vue {
