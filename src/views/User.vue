@@ -1,21 +1,32 @@
 <template>
-  <user-stocks-list
-    :stocks="stocks"
-    :search="searchStocks"
-    @search="searchStocks = $event"
-    @pagination="paginationClicked($event)"
-    @selected="stockSelectionChanged($event)"
-  ></user-stocks-list>
+  <div>
+    <v-row class="fill-height" align="center">
+      <v-card-actions class="mr-auto ml-auto" justify="center">
+        <UserInformation />
+      </v-card-actions>
+    </v-row>
+    <v-row>
+      <user-stocks-list
+        :stocks="stocks"
+        :search="searchStocks"
+        @search="searchStocks = $event"
+        @pagination="paginationClicked($event)"
+        @selected="stockSelectionChanged($event)"
+      ></user-stocks-list>
+    </v-row>
+  </div>
 </template>
 
 <script lang='ts'>
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import UserStocksList from '../components/UserStocksList.vue';
+import UserInformation from '../components/UserInformation.vue';
 import { StocksService } from '../API/stocks';
 
 @Component({
   components: {
     UserStocksList,
+    UserInformation,
   },
 })
 export default class User extends Vue {
