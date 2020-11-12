@@ -119,10 +119,11 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
+import { SelectedStock } from '../models/SelectedStockModel';
 
 @Component
 export default class TraderInputs extends Vue {
-  @Prop({ required: true }) private selectedStock!: object;
+  @Prop({ required: true }) private selectedStock!: SelectedStock;
 
   public sell() {
     return;
