@@ -1,11 +1,31 @@
 <template>
   <div>
-    <v-row class="fill-height" align="center">
-      <v-card-actions class="mr-auto ml-auto" justify="center">
-        <UserInformation />
-      </v-card-actions>
-    </v-row>
-    <v-row>
+    <v-col>
+      <v-container>
+        <v-row justify="space-around">
+          <v-card width="600">
+            <v-img
+              height="300px"
+              src="https://images.pexels.com/photos/241544/pexels-photo-241544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            >
+              <v-card-title class="white--text mt-8">
+                <v-avatar size="66">
+                  <img
+                    alt="user"
+                    src="https://www.vhv.rs/dpng/d/52-524241_fa-user-circle-icon-hd-png-download.png"
+                  />
+                </v-avatar>
+                <p class="ml-3">
+                  John Doe
+                </p>
+              </v-card-title>
+            </v-img>
+          </v-card>
+        </v-row>
+      </v-container>
+    </v-col>
+
+    <v-col>
       <user-stocks-list
         :stocks="stocks"
         :search="searchStocks"
@@ -13,11 +33,11 @@
         @pagination="paginationClicked($event)"
         @selected="stockSelectionChanged($event)"
       ></user-stocks-list>
-    </v-row>
+    </v-col>
   </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import UserStocksList from '../components/UserStocksList.vue';
 import UserInformation from '../components/UserInformation.vue';
