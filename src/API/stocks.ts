@@ -14,4 +14,15 @@ export class StocksService {
 
         return stocks;
     }
+
+    public async getUserStocks(body: object): Promise<AxiosResponse<Stocks>> {
+        const stocks = await axios.get('api/user/stock/owned', {
+            headers: {
+                Authorization: 'Bearer ' + store.getters.token,
+            },
+            params: body,
+        });
+
+        return stocks;
+    }
 }
