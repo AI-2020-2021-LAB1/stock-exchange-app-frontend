@@ -13,6 +13,19 @@ export default new Router({
         import(/* webpackChunkName: "index" */ '../views/Index.vue'),
     },
     {
+      path: '/user',
+      name: 'user',
+      component: () =>
+        import(/* webpackChunkName: "User" */ '../views/User.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/user');
+        } else {
+          next();
+        }
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () =>
@@ -29,13 +42,13 @@ export default new Router({
       name: 'trader',
       component: () =>
         import(/* webpackChunkName: "Trader" */ '../views/Trader.vue'),
-        beforeEnter: (to, from, next) => {
-          if (!store.getters.isAuthenticated) {
-            next('/login');
-          } else {
-            next();
-          }
-        },
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          next();
+        }
+      },
     },
   ],
   scrollBehavior(to, from, savedPosition) {
