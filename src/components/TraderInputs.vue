@@ -1,6 +1,5 @@
 <template>
   <v-row no-gutters>
-    {{ SelectedStock }}
     <v-col cols="12" :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
       <v-card class="ma-1" outlined>
         <v-card-title class="success white--text font-weight-bold py-1"
@@ -43,12 +42,26 @@
               ></v-text-field>
             </v-col>
           </v-row>
+          <v-row no-gutters class="mx-2 mt-2">
+            <v-col cols="12">
+              <v-select
+                dense
+                outlined
+                hide-details
+                label="Typ zlecenia"
+                :items="buyTypeLabels"
+                item-text="text"
+                item-value="index"
+                v-model="buyType"
+              ></v-select>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-btn
             block
             depressed
-            :disabled="!valueBuy > 0"
+            :disabled="valueBuy > 0 && buyType > 0"
             color="success"
             @click="buy"
           >
@@ -100,12 +113,26 @@
               ></v-text-field>
             </v-col>
           </v-row>
+          <v-row no-gutters class="mx-2 mt-2">
+            <v-col cols="12">
+              <v-select
+                dense
+                outlined
+                hide-details
+                label="Typ zlecenia"
+                :items="sellTypeLabels"
+                item-text="text"
+                item-value="index"
+                v-model="sellType"
+              ></v-select>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-btn
             block
             depressed
-            :disabled="!valueSell > 0"
+            :disabled="valueSell > 0 && sellType > 0"
             color="error"
             @click="sell"
           >
@@ -159,8 +186,18 @@ export default class TraderInputs extends Vue {
     return {
       howManyBuy: 0,
       howManyCourseBuy: 0,
+      buyType: 0,
+      buyTypeLabels: [
+        { index: 1, text: 'Cena maksymalna' },
+        { index: 2, text: 'Stała cena' },
+      ],
       howManySell: 0,
       howManyCourseSell: 0,
+      sellType: 0,
+      sellTypeLabels: [
+        { index: 1, text: 'Cena minimalna' },
+        { index: 2, text: 'Stała cena' },
+      ],
       stock: this.selectedStock,
     };
   }
