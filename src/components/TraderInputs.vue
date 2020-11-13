@@ -1,5 +1,6 @@
 <template>
   <v-row no-gutters>
+    {{SelectedStock}}
     <v-col cols="12" :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
       <v-card class="ma-1" outlined>
         <v-card-title class="success white--text font-weight-bold py-1"
@@ -7,7 +8,7 @@
         >
         <v-card-text class="pa-0">
           <p class="text-h6 text-center mb-0">
-            Dostępne: {{ SelectedStock.stockInfo.amount || 0 }}
+            Dostępne: {{ stock.stockInfo.amount || 0 }}
           </p>
           <v-row align="center" justify="center" class="mx-0">
             <v-col class="px-1 pb-0">
@@ -64,8 +65,7 @@
         >
         <v-card-text class="pa-0">
           <p class="text-h6 text-center mb-0">
-            Możesz sprzedać:
-            {{ SelectedStock.userPossession.amountAvailableForSale || 0 }}
+            Możesz sprzedać: {{ stock.userPossession.amountAvailableForSale || 0 }}
           </p>
           <v-row align="center" justify="center" class="mx-0">
             <v-col class="px-1 pb-0">
@@ -166,6 +166,7 @@ export default class TraderInputs extends Vue {
       howManyCourseBuy: 0,
       howManySell: 0,
       howManyCourseSell: 0,
+      stock: this.selectedStock,
     };
   }
   get valueSell() {
@@ -173,10 +174,6 @@ export default class TraderInputs extends Vue {
   }
   get valueBuy() {
     return this.$data.howManyCourseBuy * this.$data.howManyBuy;
-  }
-
-  get userStocks() {
-    return this.$store.getters.userStocks;
   }
 }
 </script>

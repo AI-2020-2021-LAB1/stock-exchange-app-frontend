@@ -1,5 +1,6 @@
 <template>
   <v-container fluid class="fill-height pa-0">
+    {{selectedStock}}
     <v-row no-gutters v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
       <v-col cols="12">
         <v-btn block class="primary" @click="drawer = true"
@@ -35,7 +36,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters align="center">
-          <TraderInputs :selectedStock="selectedStock"></TraderInputs>
+          <trader-inputs :selectedStock="selectedStock"></trader-inputs>
         </v-row>
         <v-row no-gutters>
           <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
