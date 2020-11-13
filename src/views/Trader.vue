@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="fill-height pa-0">
-    {{selectedStock}}
     <v-row no-gutters v-if="!$vuetify.breakpoint.mdAndUp" class="ma-2">
       <v-col cols="12">
         <v-btn block class="primary" @click="drawer = true"
@@ -192,7 +191,9 @@ export default class Trader extends Vue {
         if (res.data.content.length === 1) {
           this.$data.selectedStock.userPossession = res.data.content[0];
         } else {
-          this.$data.selectedStock.userPossession = { amountAvailableForSale: 0 };
+          this.$data.selectedStock.userPossession = {
+            amountAvailableForSale: 0,
+          };
         }
       })
       .catch((err) => {
@@ -253,28 +254,6 @@ export default class Trader extends Vue {
       });
   }
 
-  // @Watch('sellingOffersTotalElements')
-  // private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
-  //   if (newVal !== oldVal) {
-  //     this.getSellingOrders({
-  //       page: 0,
-  //       orderType: OrderType.SellingOrder,
-  //       size: newVal,
-  //     });
-  //   }
-  // }
-
-  // @Watch('buyingOffersTotalElements')
-  // private buyingOffersTotalElementsChanged(newVal: number, oldVal: number) {
-  //   if (newVal !== oldVal) {
-  //     this.getBuyingOrders({
-  //       page: 0,
-  //       orderType: OrderType.BuyingOrder,
-  //       size: newVal,
-  //     });
-  //   }
-  // }
-
   @Watch('searchStocks')
   private queryStocks(val: string) {
     if (val) {
@@ -292,7 +271,10 @@ export default class Trader extends Vue {
       sellingOffersTotalElements: 0,
       buyingOffersTotalElements: 0,
       searchStocks: '',
-      selectedStock: {},
+      selectedStock: {
+        stockInfo: { amount: 0 },
+        userPossession: { amountAvailableForSale: 0 },
+      },
       drawer: false,
       chartOptions: {
         chart: {
