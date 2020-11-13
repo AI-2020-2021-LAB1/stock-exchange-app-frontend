@@ -14,6 +14,30 @@
         @selected="stockSelectionChanged($event)"
       ></user-stocks-list>
     </v-row>
+    <v-row no-gutters>
+      <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+        <v-row align="start">
+          <v-col class="py-0">
+            <user-transactions
+              title="Oferty kupna"
+              :transactions="buyingTransactions"
+              colorClass="success--text"
+            ></user-transactions>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+        <v-row align="start">
+          <v-col class="py-0">
+            <user-transactions
+              title="Oferty sprzedaży"
+              :transactions="sellingTransactions"
+              colorClass="error--text"
+            ></user-transactions>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -21,19 +45,24 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import UserStocksList from '../components/UserStocksList.vue';
 import UserInformation from '../components/UserInformation.vue';
+import UserTransactions from '../components/UserTransactions.vue';
 import { StocksService } from '../API/stocks';
+import { TransactionsService } from '../API/transactions';
 
 @Component({
   components: {
     UserStocksList,
     UserInformation,
+    UserTransactions,
   },
 })
 export default class User extends Vue {
   private stocksService!: StocksService;
+  private transactionsService!: TransactionsService;
 
   private beforeCreate() {
     this.stocksService = new StocksService();
+    this.transactionsService = new TransactionsService();
   }
 
   private created() {
@@ -41,6 +70,7 @@ export default class User extends Vue {
       page: 0,
       size: this.$data.pageSize,
     });
+    this.getUserTransactions({ page: 0 });
   }
 
   private paginationClicked(pageNumber: number) {
@@ -75,6 +105,64 @@ export default class User extends Vue {
       });
   }
 
+  private getUserTransactions(params: object) {
+    this.transactionsService
+      .getTransactions(params)
+      .then((res) => {
+        this.$data.sellingTransactions = [];
+        this.$data.buyingTransactions = [];
+        this.$data.transTotalElements = res.data.totalElements;
+        for (const transaction of res.data.content) {
+          const dateCreatedSell = transaction.sellingOrder.dateCreation;
+          const dateExpiringSell = transaction.sellingOrder.dateExpiration;
+          this.$data.sellingTransactions.push({
+            price: transaction.sellingOrder.price,
+            amount: transaction.sellingOrder.amount,
+            sum: (
+              transaction.sellingOrder.price * transaction.sellingOrder.amount
+            ).toFixed(2),
+            dateCreated: `${dateCreatedSell.substring(
+              0,
+              10,
+            )} ${dateCreatedSell.substring(11, 19)}`,
+            dateExpiring: `${dateExpiringSell.substring(
+              0,
+              10,
+            )} ${dateExpiringSell.substring(11, 19)}`,
+            stock: transaction.sellingOrder.stock.abbreviation,
+            cancel: 'Anuluj',
+          });
+          const dateCreatedBuy = transaction.buyingOrder.dateCreation;
+          const dateExpiringBuy = transaction.buyingOrder.dateExpiration;
+          this.$data.buyingTransactions.push({
+            price: transaction.buyingOrder.price,
+            amount: transaction.buyingOrder.amount,
+            sum: (
+              transaction.buyingOrder.price * transaction.buyingOrder.amount
+            ).toFixed(2),
+            dateCreated: `${dateCreatedBuy.substring(
+              0,
+              10,
+            )} ${dateCreatedBuy.substring(11, 19)}`,
+            dateExpiring: `${dateExpiringBuy.substring(
+              0,
+              10,
+            )} ${dateExpiringBuy.substring(11, 19)}`,
+            stock: transaction.buyingOrder.stock.abbreviation,
+            cancel: 'Anuluj',
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
   @Watch('searchStocks')
   private queryStocks(val: string) {
     if (val) {
@@ -91,11 +179,24 @@ export default class User extends Vue {
     }
   }
 
+  @Watch('transTotalElements')
+  private transTotalElementsChanged(newVal: number, oldVal: number) {
+    if (newVal !== oldVal) {
+      this.getUserTransactions({
+        page: 0,
+        size: newVal,
+      });
+    }
+  }
+
   private data() {
     return {
       stocks: [],
       searchStocks: '',
       pageSize: 5,
+      sellingTransactions: [],
+      buyingTransactions: [],
+      transTotalElements: 0,
     };
   }
 }
