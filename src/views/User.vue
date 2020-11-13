@@ -1,59 +1,78 @@
 <template>
   <div>
-    <v-row class="fill-height" align="center">
-      <v-card-actions class="mr-auto ml-auto" justify="center">
-        <UserInformation />
-      </v-card-actions>
-    </v-row>
-    <v-row>
-      <user-stocks-list
-        :stocks="stocks"
-        :search="searchStocks"
-        @search="searchStocks = $event"
-        @pagination="paginationClicked($event)"
-        @selected="stockSelectionChanged($event)"
-      ></user-stocks-list>
-    </v-row>
-    <v-row no-gutters>
-      <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
-        <v-row align="start">
-          <v-col class="py-0">
-            <user-transactions
-              title="Oferty kupna"
-              :transactions="buyingTransactions"
-              colorClass="success--text"
-            ></user-transactions>
-          </v-col>
+    <v-col>
+      <v-container>
+        <v-row justify="space-around">
+          <v-card width="600">
+            <v-img
+              height="300px"
+              src="https://images.pexels.com/photos/241544/pexels-photo-241544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            >
+              <v-card-title class="white--text mt-8">
+                <v-avatar>
+                  <v-icon class="white--text">mdi-account-circle</v-icon>
+                </v-avatar>
+                <p class="my-auto">John Doe</p>
+              </v-card-title>
+            </v-img>
+          </v-card>
         </v-row>
-      </v-col>
-      <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
-        <v-row align="start">
-          <v-col class="py-0">
-            <user-transactions
-              title="Oferty sprzedaży"
-              :transactions="sellingTransactions"
-              colorClass="error--text"
-            ></user-transactions>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+      </v-container>
+    </v-col>
+    <v-col align="center">
+      <DialogChangeUserData />
+    </v-col>
+    <v-col>
+      <v-row>
+        <user-stocks-list
+          :stocks="stocks"
+          :search="searchStocks"
+          @search="searchStocks = $event"
+          @pagination="paginationClicked($event)"
+          @selected="stockSelectionChanged($event)"
+        ></user-stocks-list>
+      </v-row>
+      <v-row no-gutters>
+        <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+          <v-row align="start">
+            <v-col class="py-0">
+              <user-transactions
+                title="Oferty kupna"
+                :transactions="buyingTransactions"
+                colorClass="success--text"
+              ></user-transactions>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+          <v-row align="start">
+            <v-col class="py-0">
+              <user-transactions
+                title="Oferty sprzedaży"
+                :transactions="sellingTransactions"
+                colorClass="error--text"
+              ></user-transactions>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-col>
   </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import UserStocksList from '../components/UserStocksList.vue';
-import UserInformation from '../components/UserInformation.vue';
 import UserTransactions from '../components/UserTransactions.vue';
+import DialogChangeUserData from '../components/DialogChangeUserData.vue';
 import { StocksService } from '../API/stocks';
 import { TransactionsService } from '../API/transactions';
 
 @Component({
   components: {
     UserStocksList,
-    UserInformation,
     UserTransactions,
+    DialogChangeUserData,
   },
 })
 export default class User extends Vue {
@@ -197,6 +216,7 @@ export default class User extends Vue {
       sellingTransactions: [],
       buyingTransactions: [],
       transTotalElements: 0,
+      showDialog: false,
     };
   }
 }
