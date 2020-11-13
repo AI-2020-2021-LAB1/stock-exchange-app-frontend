@@ -19,7 +19,9 @@
         </v-row>
       </v-container>
     </v-col>
-
+    <v-col align="center">
+      <DialogChangeUserData />
+    </v-col>
     <v-col>
       <user-stocks-list
         :stocks="stocks"
@@ -35,11 +37,13 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import UserStocksList from '../components/UserStocksList.vue';
+import DialogChangeUserData from '../components/DialogChangeUserData.vue';
 import { StocksService } from '../API/stocks';
 
 @Component({
   components: {
     UserStocksList,
+    DialogChangeUserData,
   },
 })
 export default class User extends Vue {
@@ -109,6 +113,7 @@ export default class User extends Vue {
       stocks: [],
       searchStocks: '',
       pageSize: 5,
+      showDialog: false,
     };
   }
 }
