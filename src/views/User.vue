@@ -9,15 +9,10 @@
               src="https://images.pexels.com/photos/241544/pexels-photo-241544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
             >
               <v-card-title class="white--text mt-8">
-                <v-avatar size="66">
-                  <img
-                    alt="user"
-                    src="https://www.vhv.rs/dpng/d/52-524241_fa-user-circle-icon-hd-png-download.png"
-                  />
+                <v-avatar>
+                  <v-icon class="white--text">mdi-account-circle</v-icon>
                 </v-avatar>
-                <p class="ml-3">
-                  John Doe
-                </p>
+                <p class="my-auto">John Doe</p>
               </v-card-title>
             </v-img>
           </v-card>
