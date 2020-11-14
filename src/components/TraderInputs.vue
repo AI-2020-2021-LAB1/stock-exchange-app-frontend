@@ -61,7 +61,7 @@
           <v-btn
             block
             depressed
-            :disabled="valueBuy > 0 && buyType > 0"
+            :disabled="valueBuy === 0 || buyType === 0"
             color="success"
             @click="buy"
           >
@@ -132,7 +132,7 @@
           <v-btn
             block
             depressed
-            :disabled="valueSell > 0 && sellType > 0"
+            :disabled="!valueSell > 0 && sellType === 0"
             color="error"
             @click="sell"
           >
