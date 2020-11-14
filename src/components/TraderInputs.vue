@@ -55,6 +55,67 @@
                 v-model="buyType"
               ></v-select>
             </v-col>
+            <v-col cols="12" class="pt-2">
+              <v-card>
+                <v-card-title class="primary white--text font-weight-bold py-1"
+                  >Ustaw ważność zlecenia</v-card-title
+                >
+                <v-card-text>
+                  <v-menu
+                    ref="buyDatePickerRef"
+                    v-model="buyDatePicker"
+                    :close-on-content-click="false"
+                    :return-value.sync="buyDate"
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="buyDate"
+                        label="Wybierz datę"
+                        prepend-icon="mdi-calendar-edit"
+                        readonly
+                        hide-details
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-if="buyDatePicker"
+                      v-model="buyDate"
+                      full-width
+                      :min="new Date().toISOString()"
+                      @click:date="$refs.buyDatePickerRef.save(buyDate)"
+                    ></v-date-picker>
+                  </v-menu>
+                  <v-menu
+                    ref="buyTimePickerRef"
+                    v-model="buyTimePicker"
+                    :close-on-content-click="false"
+                    :return-value.sync="buyTime"
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="buyTime"
+                        label="Wybierz godzinę"
+                        prepend-icon="mdi-clock-time-four-outline"
+                        readonly
+                        hide-details
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="buyTimePicker"
+                      v-model="buyTime"
+                      full-width
+                      format="24hr"
+                      @click:minute="$refs.buyTimePickerRef.save(buyTime)"
+                    ></v-time-picker>
+                  </v-menu>
+                </v-card-text>
+              </v-card>
+            </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -126,13 +187,74 @@
                 v-model="sellType"
               ></v-select>
             </v-col>
+            <v-col cols="12" class="pt-2">
+              <v-card>
+                <v-card-title class="primary white--text font-weight-bold py-1"
+                  >Ustaw ważność zlecenia</v-card-title
+                >
+                <v-card-text>
+                  <v-menu
+                    ref="sellDatePickerRef"
+                    v-model="sellDatePicker"
+                    :close-on-content-click="false"
+                    :return-value.sync="sellDate"
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="sellDate"
+                        label="Wybierz datę"
+                        prepend-icon="mdi-calendar-edit"
+                        readonly
+                        hide-details
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-if="sellDatePicker"
+                      v-model="sellDate"
+                      full-width
+                      :min="new Date().toISOString()"
+                      @click:date="$refs.sellDatePickerRef.save(sellDate)"
+                    ></v-date-picker>
+                  </v-menu>
+                  <v-menu
+                    ref="sellTimePickerRef"
+                    v-model="sellTimePicker"
+                    :close-on-content-click="false"
+                    :return-value.sync="sellTime"
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="sellTime"
+                        label="Wybierz godzinę"
+                        prepend-icon="mdi-clock-time-four-outline"
+                        readonly
+                        hide-details
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="sellTimePicker"
+                      v-model="sellTime"
+                      full-width
+                      format="24hr"
+                      @click:minute="$refs.sellTimePickerRef.save(sellTime)"
+                    ></v-time-picker>
+                  </v-menu>
+                </v-card-text>
+              </v-card>
+            </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
           <v-btn
             block
             depressed
-            :disabled="!valueSell > 0 && sellType === 0"
+            :disabled="valueSell === 0 || sellType === 0"
             color="error"
             @click="sell"
           >
@@ -182,6 +304,30 @@ export default class TraderInputs extends Vue {
     }
   }
 
+  private clearInputs() {
+    const dt = new Date();
+    const date = dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + (dt.getDate() + 1);
+    const time = dt.getHours() + ':' + dt.getMinutes();
+    this.$data.howManyBuy = 0;
+    this.$data.howManyCourseBuy = 0;
+    this.$data.buyType = 0;
+    this.$data.buyTimePicker = false;
+    this.$data.buyTime = time;
+    this.$data.buyDatePicker = false;
+    this.$data.buyDate = date;
+    this.$data.howManySell = 0;
+    this.$data.howManyCourseSell = 0;
+    this.$data.sellType = 0;
+    this.$data.sellTimePicker = false;
+    this.$data.sellTime = time;
+    this.$data.sellDatePicker = false;
+    this.$data.sellDate = date;
+  }
+
+  private created() {
+    this.clearInputs();
+  }
+
   private data() {
     return {
       howManyBuy: 0,
@@ -191,6 +337,10 @@ export default class TraderInputs extends Vue {
         { index: 1, text: 'Cena maksymalna' },
         { index: 2, text: 'Stała cena' },
       ],
+      buyTimePicker: false,
+      buyTime: null,
+      buyDatePicker: false,
+      buyDate: null,
       howManySell: 0,
       howManyCourseSell: 0,
       sellType: 0,
@@ -198,6 +348,10 @@ export default class TraderInputs extends Vue {
         { index: 1, text: 'Cena minimalna' },
         { index: 2, text: 'Stała cena' },
       ],
+      sellTimePicker: false,
+      sellTime: null,
+      sellDatePicker: false,
+      sellDate: null,
       stock: this.selectedStock,
     };
   }
