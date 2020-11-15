@@ -304,6 +304,11 @@ export default class TraderInputs extends Vue {
     }
   }
 
+  @Watch('stock', { deep: true })
+  private stockChanged() {
+    this.clearInputs();
+  }
+
   private clearInputs() {
     const dt = new Date();
     const date = dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + (dt.getDate() + 1);
