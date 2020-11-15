@@ -35,7 +35,10 @@
           </v-col>
         </v-row>
         <v-row no-gutters align="center">
-          <trader-inputs :selectedStock="selectedStock"></trader-inputs>
+          <trader-inputs
+            :selectedStock="selectedStock"
+            @reload="getSelectedStockInfo($event)"
+          ></trader-inputs>
         </v-row>
         <v-row no-gutters>
           <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
@@ -120,6 +123,7 @@ export default class Trader extends Vue {
 
   private created() {
     this.getStocks({ page: 0 });
+    this.$data.lastRequest = { page: 0 };
   }
 
   private paginationClicked(pageNumber: number) {

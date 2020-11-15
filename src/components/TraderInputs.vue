@@ -14,7 +14,7 @@
               <v-text-field
                 outlined
                 hide-details
-                v-model.number="howManyCourseBuy"
+                v-model.number="buyPrice"
                 label="kurs"
                 color="primary"
                 type="number"
@@ -24,7 +24,7 @@
               <v-text-field
                 outlined
                 hide-details
-                v-model.number="howManyBuy"
+                v-model.number="buyAmount"
                 label="ilość"
                 color="primary"
                 type="number"
@@ -34,7 +34,7 @@
               <v-text-field
                 outlined
                 hide-details
-                v-model.number="valueBuy"
+                v-model.number="buyValue"
                 label="wartość"
                 color="primary"
                 disabled
@@ -51,7 +51,7 @@
                 label="Typ zlecenia"
                 :items="buyTypeLabels"
                 item-text="text"
-                item-value="index"
+                item-value="value"
                 v-model="buyType"
               ></v-select>
             </v-col>
@@ -122,7 +122,7 @@
           <v-btn
             block
             depressed
-            :disabled="valueBuy === 0 || buyType === 0"
+            :disabled="buyValue === 0 || buyType === 0"
             color="success"
             @click="buy"
           >
@@ -146,7 +146,7 @@
               <v-text-field
                 outlined
                 hide-details
-                v-model.number="howManyCourseSell"
+                v-model.number="sellPrice"
                 label="kurs"
                 color="primary"
                 type="number"
@@ -156,7 +156,7 @@
               <v-text-field
                 outlined
                 hide-details
-                v-model.number="howManySell"
+                v-model.number="sellAmount"
                 label="ilość"
                 color="primary"
                 type="number"
@@ -166,7 +166,7 @@
               <v-text-field
                 outlined
                 hide-details
-                v-model.number="valueSell"
+                v-model.number="sellValue"
                 label="wartość"
                 color="primary"
                 disabled
@@ -183,7 +183,7 @@
                 label="Typ zlecenia"
                 :items="sellTypeLabels"
                 item-text="text"
-                item-value="index"
+                item-value="value"
                 v-model="sellType"
               ></v-select>
             </v-col>
@@ -254,7 +254,7 @@
           <v-btn
             block
             depressed
-            :disabled="valueSell === 0 || sellType === 0"
+            :disabled="sellValue === 0 || sellType === 0"
             color="error"
             @click="sell"
           >
@@ -269,37 +269,119 @@
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { SelectedStock } from '../models/SelectedStockModel';
+import { OrdersService } from '../API/orders';
 
 @Component
 export default class TraderInputs extends Vue {
+  private orderService!: OrdersService;
   @Prop({ required: true }) private selectedStock!: SelectedStock;
 
-  public sell() {
-    return;
-  }
   public buy() {
-    return;
+    const dt = new Date(this.$data.buyDate + ' ' + this.$data.buyTime);
+    this.orderService
+      .placeOrder({
+        amount: this.$data.buyAmount,
+        dateExpiration: dt.toISOString(),
+        orderType: 'BUYING_ORDER',
+        price: this.$data.buyPrice,
+        priceType: this.$data.buyType,
+        stock: {
+          id: this.$data.stock.stockInfo.id,
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Zlecenie zakupu zostało dodane',
+            color: 'success',
+            timeout: 7500,
+          });
+          this.reloadStock();
+        } else {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Error ' + res.status,
+            color: 'error',
+            timeout: 7500,
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
   }
 
-  @Watch('howManyBuy')
-  @Watch('howManyCourseBuy')
-  @Watch('howManySell')
-  @Watch('howManyCourseSell')
+  public sell() {
+    const dt = new Date(this.$data.sellDate + ' ' + this.$data.sellTime);
+    this.orderService
+      .placeOrder({
+        amount: this.$data.sellAmount,
+        dateExpiration: dt.toISOString(),
+        orderType: 'SELLING_ORDER',
+        price: this.$data.sellPrice,
+        priceType: this.$data.sellType,
+        stock: {
+          id: this.$data.stock.stockInfo.id,
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Zlecenie sprzedaży zostało dodane',
+            color: 'success',
+            timeout: 7500,
+          });
+          this.reloadStock();
+        } else {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Error ' + res.status,
+            color: 'error',
+            timeout: 7500,
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private reloadStock() {
+    this.$emit('reload', this.$data.stock.stockInfo.name);
+    this.clearInputs();
+  }
+
+  @Watch('buyAmount')
+  @Watch('buyPrice')
+  @Watch('sellAmount')
+  @Watch('sellPrice')
   private valueChanged(val: number) {
     if (val < 0) {
-      this.$data.howManyBuy = Math.abs(this.$data.howManyBuy);
-      this.$data.howManyCourseBuy = Math.abs(this.$data.howManyCourseBuy);
-      this.$data.howManySell = Math.abs(this.$data.howManySell);
-      this.$data.howManyCourseSell = Math.abs(this.$data.howManyCourseSell);
+      this.$data.buyAmount = Math.abs(this.$data.buyAmount);
+      this.$data.buyPrice = Math.abs(this.$data.buyPrice);
+      this.$data.sellAmount = Math.abs(this.$data.sellAmount);
+      this.$data.sellPrice = Math.abs(this.$data.sellPrice);
     } else {
-      if (this.$data.howManyBuy > this.$data.stock.stockInfo.amount) {
-        this.$data.howManyBuy = this.$data.stock.stockInfo.amount;
+      if (this.$data.buyAmount > this.$data.stock.stockInfo.amount) {
+        this.$data.buyAmount = this.$data.stock.stockInfo.amount;
       }
       if (
-        this.$data.howManySell >
+        this.$data.sellAmount >
         this.$data.stock.userPossession.amountAvailableForSale
       ) {
-        this.$data.howManySell = this.$data.stock.userPossession.amountAvailableForSale;
+        this.$data.sellAmount = this.$data.stock.userPossession.amountAvailableForSale;
       }
     }
   }
@@ -311,22 +393,27 @@ export default class TraderInputs extends Vue {
 
   private clearInputs() {
     const dt = new Date();
-    const date = dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + (dt.getDate() + 1);
+    const date =
+      dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + (dt.getDate() + 1);
     const time = dt.getHours() + ':' + dt.getMinutes();
-    this.$data.howManyBuy = 0;
-    this.$data.howManyCourseBuy = 0;
+    this.$data.buyAmount = 0;
+    this.$data.buyPrice = 0;
     this.$data.buyType = 0;
     this.$data.buyTimePicker = false;
     this.$data.buyTime = time;
     this.$data.buyDatePicker = false;
     this.$data.buyDate = date;
-    this.$data.howManySell = 0;
-    this.$data.howManyCourseSell = 0;
+    this.$data.sellAmount = 0;
+    this.$data.sellPrice = 0;
     this.$data.sellType = 0;
     this.$data.sellTimePicker = false;
     this.$data.sellTime = time;
     this.$data.sellDatePicker = false;
     this.$data.sellDate = date;
+  }
+
+  private beforeCreate() {
+    this.orderService = new OrdersService();
   }
 
   private created() {
@@ -335,23 +422,23 @@ export default class TraderInputs extends Vue {
 
   private data() {
     return {
-      howManyBuy: 0,
-      howManyCourseBuy: 0,
+      buyAmount: 0,
+      buyPrice: 0,
       buyType: 0,
       buyTypeLabels: [
-        { index: 1, text: 'Cena maksymalna' },
-        { index: 2, text: 'Stała cena' },
+        { value: 'LESS_OR_EQUAL', text: 'Cena maksymalna' },
+        { value: 'EQUAL', text: 'Stała cena' },
       ],
       buyTimePicker: false,
       buyTime: null,
       buyDatePicker: false,
       buyDate: null,
-      howManySell: 0,
-      howManyCourseSell: 0,
+      sellAmount: 0,
+      sellPrice: 0,
       sellType: 0,
       sellTypeLabels: [
-        { index: 1, text: 'Cena minimalna' },
-        { index: 2, text: 'Stała cena' },
+        { value: 'GREATER_OR_EQUAL', text: 'Cena minimalna' },
+        { value: 'EQUAL', text: 'Stała cena' },
       ],
       sellTimePicker: false,
       sellTime: null,
@@ -360,11 +447,12 @@ export default class TraderInputs extends Vue {
       stock: this.selectedStock,
     };
   }
-  get valueSell() {
-    return this.$data.howManySell * this.$data.howManyCourseSell;
+  get buyValue() {
+    return this.$data.buyAmount * this.$data.buyPrice;
   }
-  get valueBuy() {
-    return this.$data.howManyCourseBuy * this.$data.howManyBuy;
+
+  get sellValue() {
+    return this.$data.sellAmount * this.$data.sellPrice;
   }
 }
 </script>
