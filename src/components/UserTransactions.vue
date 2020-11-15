@@ -12,7 +12,20 @@
         :footer-props="footer"
       >
         <template v-slot:[`item.sum`]="{ item }">
-          <div :class="colorClass" class="font-weight-bold">{{ item.sum }}</div>
+          <div 
+          :class="colorClass ? colorClass 
+          : item.type === 'sprzedaży' ? 'error--text' : 'success--text'" 
+          class="font-weight-bold">
+          {{ item.sum }}
+          </div>
+        </template>
+        <template v-slot:[`item.type`]="{ item }">
+          <div 
+          :class="colorClass ? colorClass 
+          : item.type === 'sprzedaży' ? 'error--text' : 'success--text'" 
+          class="font-weight-bold">
+          {{ item.type }}
+          </div>
         </template>
         <template v-slot:[`item.cancel`]="{ item }">
           <div>
@@ -34,7 +47,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class UserTransactions extends Vue {
   @Prop({ required: true }) private title!: string;
   @Prop({ required: true }) private transactions!: object[];
-  @Prop({ required: true }) private colorClass!: string;
+  @Prop({ required: true }) private headers!: object[];
+  @Prop({}) private colorClass!: string;
 
   get Transactions() {
     return this.transactions;
@@ -42,43 +56,6 @@ export default class UserTransactions extends Vue {
 
   private data() {
     return {
-      headers: [
-        {
-          text: 'Suma',
-          value: 'sum',
-          class: this.colorClass,
-        },
-        {
-          text: 'Ilość',
-          value: 'amount',
-          class: this.colorClass,
-        },
-        {
-          text: 'Cena',
-          value: 'price',
-          class: this.colorClass,
-        },
-        {
-          text: 'Spółka',
-          value: 'stock',
-          class: this.colorClass,
-        },
-        {
-          text: 'Data stw.',
-          value: 'dateCreated',
-          class: this.colorClass,
-        },
-        {
-          text: 'Data wyg.',
-          value: 'dateExpiring',
-          class: this.colorClass,
-        },
-        {
-          text: 'Anulacja',
-          value: 'cancel',
-          class: this.colorClass,
-        },
-      ],
       footer: {
         'disable-items-per-page': true,
       },
