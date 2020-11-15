@@ -35,7 +35,10 @@
           </v-col>
         </v-row>
         <v-row no-gutters align="center">
-          <TraderInputs></TraderInputs>
+          <trader-inputs
+            :selectedStock="selectedStock"
+            @reload="getSelectedStockInfo($event)"
+          ></trader-inputs>
         </v-row>
         <v-row no-gutters>
           <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
@@ -120,6 +123,7 @@ export default class Trader extends Vue {
 
   private created() {
     this.getStocks({ page: 0 });
+    this.$data.lastRequest = { page: 0 };
   }
 
   private paginationClicked(pageNumber: number) {
@@ -148,6 +152,8 @@ export default class Trader extends Vue {
   }
 
   private stockSelectionChanged(name: string) {
+    this.getSelectedStockInfo(name);
+    this.getUserStocks(name);
     this.getBuyingOrders({
       page: 0,
       orderType: OrderType.BuyingOrder,
@@ -158,6 +164,50 @@ export default class Trader extends Vue {
       orderType: OrderType.SellingOrder,
       name,
     });
+  }
+
+  private getSelectedStockInfo(name: string) {
+    this.stocksService
+      .getStocks({ name })
+      .then((res) => {
+        if (res.data.content.length === 1) {
+          this.$data.selectedStock.stockInfo = res.data.content[0];
+        } else {
+          this.$data.selectedStock.stockInfo = { amount: 0 };
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getUserStocks(name: string) {
+    this.stocksService
+      .getUserStocks({
+        name,
+      })
+      .then((res) => {
+        if (res.data.content.length === 1) {
+          this.$data.selectedStock.userPossession = res.data.content[0];
+        } else {
+          this.$data.selectedStock.userPossession = {
+            amountAvailableForSale: 0,
+          };
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
   }
 
   private getBuyingOrders(params: object) {
@@ -208,28 +258,6 @@ export default class Trader extends Vue {
       });
   }
 
-  // @Watch('sellingOffersTotalElements')
-  // private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
-  //   if (newVal !== oldVal) {
-  //     this.getSellingOrders({
-  //       page: 0,
-  //       orderType: OrderType.SellingOrder,
-  //       size: newVal,
-  //     });
-  //   }
-  // }
-
-  // @Watch('buyingOffersTotalElements')
-  // private buyingOffersTotalElementsChanged(newVal: number, oldVal: number) {
-  //   if (newVal !== oldVal) {
-  //     this.getBuyingOrders({
-  //       page: 0,
-  //       orderType: OrderType.BuyingOrder,
-  //       size: newVal,
-  //     });
-  //   }
-  // }
-
   @Watch('searchStocks')
   private queryStocks(val: string) {
     if (val) {
@@ -247,6 +275,10 @@ export default class Trader extends Vue {
       sellingOffersTotalElements: 0,
       buyingOffersTotalElements: 0,
       searchStocks: '',
+      selectedStock: {
+        stockInfo: { amount: 0 },
+        userPossession: { amountAvailableForSale: 0 },
+      },
       drawer: false,
       chartOptions: {
         chart: {
