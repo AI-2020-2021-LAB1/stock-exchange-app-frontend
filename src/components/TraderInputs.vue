@@ -393,9 +393,20 @@ export default class TraderInputs extends Vue {
 
   private clearInputs() {
     const dt = new Date();
+    const month = dt.getMonth() + 1;
+    const day = dt.getDate() + 1;
     const date =
-      dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + (dt.getDate() + 1);
-    const time = dt.getHours() + ':' + dt.getMinutes();
+      dt.getFullYear() +
+      '-' +
+      (month > 9 ? month : '0' + month.toString()) +
+      '-' +
+      (day > 9 ? day : '0' + day.toString());
+    const hours = dt.getHours();
+    const minutes = dt.getMinutes();
+    const time =
+      (hours > 9 ? hours : '0' + hours.toString()) +
+      ':' +
+      (minutes > 9 ? minutes : '0' + minutes.toString());
     this.$data.buyAmount = 0;
     this.$data.buyPrice = 0;
     this.$data.buyType = 0;
