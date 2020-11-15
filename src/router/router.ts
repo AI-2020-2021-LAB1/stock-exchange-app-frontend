@@ -19,7 +19,7 @@ export default new Router({
         import(/* webpackChunkName: "User" */ '../views/User.vue'),
       beforeEnter: (to, from, next) => {
         if (!store.getters.isAuthenticated) {
-          next('/user');
+          next('/login');
         } else {
           next();
         }
