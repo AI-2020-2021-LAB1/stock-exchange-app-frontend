@@ -12,19 +12,31 @@
         :footer-props="footer"
       >
         <template v-slot:[`item.sum`]="{ item }">
-          <div 
-          :class="colorClass ? colorClass 
-          : item.type === 'sprzedaży' ? 'error--text' : 'success--text'" 
-          class="font-weight-bold">
-          {{ item.sum }}
+          <div
+            :class="
+              colorClass
+                ? colorClass
+                : item.type === 'sprzedaży'
+                ? 'error--text'
+                : 'success--text'
+            "
+            class="font-weight-bold"
+          >
+            {{ item.sum }}
           </div>
         </template>
         <template v-slot:[`item.type`]="{ item }">
-          <div 
-          :class="colorClass ? colorClass 
-          : item.type === 'sprzedaży' ? 'error--text' : 'success--text'" 
-          class="font-weight-bold">
-          {{ item.type }}
+          <div
+            :class="
+              colorClass
+                ? colorClass
+                : item.type === 'sprzedaży'
+                ? 'error--text'
+                : 'success--text'
+            "
+            class="font-weight-bold"
+          >
+            {{ item.type }}
           </div>
         </template>
         <template v-slot:[`item.cancel`]="{ item }">

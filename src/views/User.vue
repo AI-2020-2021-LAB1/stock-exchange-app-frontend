@@ -1,43 +1,38 @@
 <template>
-  <div>
-    <v-col>
-      <v-container>
-        <v-row justify="space-around">
-          <v-card width="600">
-            <v-img
-              height="300px"
-              src="https://images.pexels.com/photos/241544/pexels-photo-241544.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            >
-              <v-card-title class="white--text mt-8">
-                <v-avatar>
-                  <v-icon class="white--text">mdi-account-circle</v-icon>
-                </v-avatar>
-                <p class="my-auto">John Doe</p>
-              </v-card-title>
-            </v-img>
-          </v-card>
-        </v-row>
-      </v-container>
+  <v-row no-gutters align="center">
+    <v-col cols="12">
+      <v-card width="600" class="mx-auto mt-2">
+        <v-img height="300px" src="@/assets/stock-exchange.jpeg">
+          <v-card-title class="white--text mt-8">
+            <v-avatar>
+              <v-icon class="white--text">mdi-account-circle</v-icon>
+            </v-avatar>
+            <p class="my-auto">John Doe</p>
+          </v-card-title>
+        </v-img>
+      </v-card>
     </v-col>
-    <v-col align="center">
-      <DialogChangeUserData />
+    <v-col cols="12" class="mx-2 mt-2">
+      <dialog-change-user-data></dialog-change-user-data>
     </v-col>
-    <v-col>
-      <v-row>
-        <user-stocks-list
+    <v-col cols="12">
+      <v-row no-gutters>
+        <v-col class="ma-2">
+          <user-stocks-list
           :stocks="stocks"
           :search="searchStocks"
           @search="searchStocks = $event"
           @pagination="paginationClicked($event)"
           @selected="stockSelectionChanged($event)"
         ></user-stocks-list>
+        </v-col>
       </v-row>
       <v-row no-gutters>
-        <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+        <v-col cols="12">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
-                title="Oferty kupna"
+                title="Historia transakcji kupna"
                 :transactions="buyingTransactions"
                 colorClass="success--text"
                 :headers="headersBuyingTransactions"
@@ -45,11 +40,11 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+        <v-col cols="12">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
-                title="Oferty sprzedaży"
+                title="Historia transakcji sprzedaży"
                 :transactions="sellingTransactions"
                 colorClass="error--text"
                 :headers="headersSellingTransactions"
@@ -59,7 +54,7 @@
         </v-col>
       </v-row>
       <v-row no-gutters>
-        <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+        <v-col cols="12">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
@@ -70,7 +65,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
+        <v-col cols="12">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
@@ -83,7 +78,7 @@
         </v-col>
       </v-row>
     </v-col>
-  </div>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -159,6 +154,7 @@ export default class User extends Vue {
     this.transactionsService
       .getTransactions(params)
       .then((res) => {
+        console.log(res.data);
         this.$data.sellingTransactions = [];
         this.$data.buyingTransactions = [];
         this.$data.transTotalElements = res.data.totalElements;

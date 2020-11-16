@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="300" tile>
+  <v-card class="mx-auto mx-2" tile>
     <v-text-field
       solo-inverted
       text
@@ -18,27 +18,26 @@
           :key="stock.id"
           @click="stockClicked(stock.name)"
         >
-          <v-list-item-icon>
-            <v-icon color="green">mdi-cash-usd-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ stock.name }}</v-list-item-title>
-            <v-list-item-subtitle>{{
-              stock.abbreviation
-            }}</v-list-item-subtitle>
-            <v-list-item-subtitle
-              >{{ stock.currentPrice.toFixed(2) }} PLN</v-list-item-subtitle
-            >
-            <v-list-item-action>
-              <v-btn
-                small
-                color="error"
+          <v-row no-gutters>
+            <v-list-item-icon>
+              <v-icon color="green">mdi-cash-usd-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ stock.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{
+                stock.abbreviation
+              }}</v-list-item-subtitle>
+              <v-list-item-subtitle
+                >{{ stock.currentPrice.toFixed(2) }} PLN</v-list-item-subtitle
               >
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn small color="error">
                 <span>Sprzedaj</span>
                 <v-icon right>mdi-cash-usd</v-icon>
               </v-btn>
             </v-list-item-action>
-          </v-list-item-content>
+          </v-row>
         </v-list-item>
       </v-list-item-group>
     </v-list>
