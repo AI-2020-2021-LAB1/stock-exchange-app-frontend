@@ -152,6 +152,7 @@ export default class Trader extends Vue {
   }
 
   private stockSelectionChanged(name: string) {
+    this.$data.stockName = name;
     this.getSelectedStockInfo(name);
     this.getUserStocks(name);
     this.getBuyingOrders({
@@ -258,6 +259,30 @@ export default class Trader extends Vue {
       });
   }
 
+  @Watch('sellingOffersTotalElements')
+  private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+    if (newVal !== oldVal) {
+      this.getSellingOrders({
+        page: 0,
+        orderType: OrderType.SellingOrder,
+        size: newVal,
+        name: this.$data.stockName,
+      });
+    }
+  }
+
+  @Watch('buyingOffersTotalElements')
+  private buyingOffersTotalElementsChanged(newVal: number, oldVal: number) {
+    if (newVal !== oldVal) {
+      this.getBuyingOrders({
+        page: 0,
+        orderType: OrderType.BuyingOrder,
+        size: newVal,
+        name: this.$data.stockName,
+      });
+    }
+  }
+  
   @Watch('searchStocks')
   private queryStocks(val: string) {
     if (val) {
@@ -272,6 +297,7 @@ export default class Trader extends Vue {
       stocks: [],
       sellingOffers: [],
       buyingOffers: [],
+      stockName: '',
       sellingOffersTotalElements: 0,
       buyingOffersTotalElements: 0,
       searchStocks: '',
