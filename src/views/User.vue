@@ -19,12 +19,12 @@
       <v-row no-gutters>
         <v-col class="ma-2">
           <user-stocks-list
-          :stocks="stocks"
-          :search="searchStocks"
-          @search="searchStocks = $event"
-          @pagination="paginationClicked($event)"
-          @selected="stockSelectionChanged($event)"
-        ></user-stocks-list>
+            :stocks="stocks"
+            :search="searchStocks"
+            @search="searchStocks = $event"
+            @pagination="paginationClicked($event)"
+            @selected="stockSelectionChanged($event)"
+          ></user-stocks-list>
         </v-col>
       </v-row>
       <v-row no-gutters>
@@ -36,6 +36,9 @@
                 :transactions="buyingTransactions"
                 colorClass="success--text"
                 :headers="headersBuyingTransactions"
+                :paginationEnum="2"
+                :totalPages="pagesBuyingTrans"
+                @paginationByEnum="paginationByEnum($event)"
               ></user-transactions>
             </v-col>
           </v-row>
@@ -48,6 +51,9 @@
                 :transactions="sellingTransactions"
                 colorClass="error--text"
                 :headers="headersSellingTransactions"
+                :paginationEnum="1"
+                :totalPages="pagesSellingTrans"
+                @paginationByEnum="paginationByEnum($event)"
               ></user-transactions>
             </v-col>
           </v-row>
@@ -61,6 +67,9 @@
                 title="Zlecenia aktywne"
                 :transactions="activeOrders"
                 :headers="headersActiveOrders"
+                :paginationEnum="3"
+                :totalPages="pagesActiveOrders"
+                @paginationByEnum="paginationByEnum($event)"
               ></user-transactions>
             </v-col>
           </v-row>
@@ -72,6 +81,9 @@
                 title="Zlecenia zamknięte"
                 :transactions="closedOrders"
                 :headers="headersClosedOrders"
+                :paginationEnum="4"
+                :totalPages="pagesClosedOrders"
+                @paginationByEnum="paginationByEnum($event)"
               ></user-transactions>
             </v-col>
           </v-row>
@@ -90,6 +102,14 @@ import { StocksService } from '../API/stocks';
 import { TransactionsService } from '../API/transactions';
 import { OrdersService } from '../API/orders';
 import { OrderType } from '../models/OrderModel';
+import { formatDate } from '../helpers';
+
+enum PaginationEnum {
+  SellingTrans = 1,
+  BuyingTrans = 2,
+  ActiveOrders = 3,
+  ClosedOrders = 4,
+}
 
 @Component({
   components: {
@@ -103,6 +123,10 @@ export default class User extends Vue {
   private transactionsService!: TransactionsService;
   private ordersService!: OrdersService;
 
+  public _formatDate(date: string) {
+    return formatDate(date);
+  }
+
   private beforeCreate() {
     this.stocksService = new StocksService();
     this.transactionsService = new TransactionsService();
@@ -114,8 +138,22 @@ export default class User extends Vue {
       page: 0,
       size: this.$data.pageSize,
     });
-    this.getUserTransactions({ page: 0 });
-    this.getUserOrders({ page: 0 });
+    this.getUserSellingTransactions({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
+    this.getUserBuyingTransactions({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
+    this.getUserActiveOrders({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
+    this.getUserClosedOrders({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
   }
 
   private paginationClicked(pageNumber: number) {
@@ -131,6 +169,51 @@ export default class User extends Vue {
         size: this.$data.pageSize,
       });
     }
+  }
+
+  private paginationByEnum(params: { page: number; paginationEnum: number }) {
+    switch (params.paginationEnum) {
+      case PaginationEnum.SellingTrans:
+        this.paginationSellingTransClicked(params.page);
+        break;
+      case PaginationEnum.BuyingTrans:
+        this.paginationBuyingTransClicked(params.page);
+        break;
+      case PaginationEnum.ActiveOrders:
+        this.paginationActiveOrdersClicked(params.page);
+        break;
+      case PaginationEnum.ClosedOrders:
+        this.paginationClosedOrdersClicked(params.page);
+        break;
+    }
+  }
+
+  private paginationSellingTransClicked(pageNumber: number) {
+    this.getUserSellingTransactions({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
+    });
+  }
+
+  private paginationBuyingTransClicked(pageNumber: number) {
+    this.getUserBuyingTransactions({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
+    });
+  }
+
+  private paginationActiveOrdersClicked(pageNumber: number) {
+    this.getUserActiveOrders({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
+    });
+  }
+
+  private paginationClosedOrdersClicked(pageNumber: number) {
+    this.getUserClosedOrders({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
+    });
   }
 
   private getUserStocks(params: object) {
@@ -150,68 +233,63 @@ export default class User extends Vue {
       });
   }
 
-  private getUserTransactions(params: object) {
+  private getUserSellingTransactions(params: object) {
     this.transactionsService
       .getTransactions(params)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.$data.sellingTransactions = [];
-        this.$data.buyingTransactions = [];
-        this.$data.transTotalElements = res.data.totalElements;
+        this.$data.pagesSellingTrans = res.data.totalPages;
         for (const transaction of res.data.content) {
-          const dateCreatedSell = transaction.sellingOrder.dateCreation;
-          const dateExpiringSell = transaction.sellingOrder.dateExpiration;
-          let dateClosingSell = '';
-          if (transaction.sellingOrder.dateClosing) {
-            dateClosingSell = transaction.sellingOrder.dateClosing;
-          }
           this.$data.sellingTransactions.push({
             price: transaction.sellingOrder.price,
             amount: transaction.sellingOrder.amount,
             sum: (
               transaction.sellingOrder.price * transaction.sellingOrder.amount
             ).toFixed(2),
-            dateCreated: `${dateCreatedSell.substring(
-              0,
-              10,
-            )} ${dateCreatedSell.substring(11, 19)}`,
-            dateExpiring: `${dateExpiringSell.substring(
-              0,
-              10,
-            )} ${dateExpiringSell.substring(11, 19)}`,
-            dateClosing: dateClosingSell
-              ? `${dateClosingSell.substring(
-                  0,
-                  10,
-                )} ${dateClosingSell.substring(11, 19)}`
+            dateCreated: this._formatDate(
+              transaction.sellingOrder.dateCreation,
+            ),
+            dateExpiring: this._formatDate(
+              transaction.sellingOrder.dateExpiration,
+            ),
+            dateClosing: transaction.sellingOrder.dateClosing
+              ? this._formatDate(transaction.sellingOrder.dateClosing)
               : '',
             stock: transaction.sellingOrder.stock.abbreviation,
           });
-          const dateCreatedBuy = transaction.buyingOrder.dateCreation;
-          const dateExpiringBuy = transaction.buyingOrder.dateExpiration;
-          let dateClosingBuy = '';
-          if (transaction.buyingOrder.dateClosing) {
-            dateClosingBuy = transaction.buyingOrder.dateClosing;
-          }
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getUserBuyingTransactions(params: object) {
+    this.transactionsService
+      .getTransactions(params)
+      .then((res) => {
+        // console.log(res.data);
+        this.$data.buyingTransactions = [];
+        this.$data.pagesBuyingTrans = res.data.totalPages;
+        for (const transaction of res.data.content) {
           this.$data.buyingTransactions.push({
             price: transaction.buyingOrder.price,
             amount: transaction.buyingOrder.amount,
             sum: (
               transaction.buyingOrder.price * transaction.buyingOrder.amount
             ).toFixed(2),
-            dateCreated: `${dateCreatedBuy.substring(
-              0,
-              10,
-            )} ${dateCreatedBuy.substring(11, 19)}`,
-            dateExpiring: `${dateExpiringBuy.substring(
-              0,
-              10,
-            )} ${dateExpiringBuy.substring(11, 19)}`,
-            dateClosing: dateClosingBuy
-              ? `${dateClosingBuy.substring(0, 10)} ${dateClosingBuy.substring(
-                  11,
-                  19,
-                )}`
+            dateCreated: this._formatDate(transaction.buyingOrder.dateCreation),
+            dateExpiring: this._formatDate(
+              transaction.buyingOrder.dateExpiration,
+            ),
+            dateClosing: transaction.buyingOrder.dateClosing
+              ? this._formatDate(transaction.buyingOrder.dateClosing)
               : '',
             stock: transaction.buyingOrder.stock.abbreviation,
           });
@@ -227,56 +305,54 @@ export default class User extends Vue {
       });
   }
 
-  private getUserOrders(params: object) {
+  private getUserActiveOrders(params: object) {
     this.ordersService
-      .getUserOrders(params)
+      .getUserOrders({ ...params, active: true })
+      .then((res) => {
+        this.$data.activeOrders = [];
+        this.$data.pagesActiveOrders = res.data.totalPages;
+        for (const order of res.data.content) {
+          this.$data.activeOrders.push({
+            price: order.price,
+            amount: order.amount,
+            sum: (order.price * order.amount).toFixed(2),
+            dateCreated: this._formatDate(order.dateCreation),
+            dateExpiring: this._formatDate(order.dateExpiration),
+            dateClosing: '',
+            stock: order.stock.abbreviation,
+            cancel: 'Anuluj',
+            type:
+              order.orderType === OrderType.BuyingOrder ? 'kupna' : 'sprzedaży',
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getUserClosedOrders(params: object) {
+    this.ordersService
+      .getUserOrders({ ...params, active: false })
       .then((res) => {
         this.$data.closedOrders = [];
-        this.$data.activeOrders = [];
-        this.$data.ordersTotalElements = res.data.totalElements;
+        this.$data.pagesClosedOrders = res.data.totalPages;
         for (const order of res.data.content) {
-          const dateCreated = order.dateCreation;
-          const dateExpiring = order.dateExpiration;
+          // console.log(order.dateClosing)
           if (order.dateClosing) {
-            const dateClosing = order.dateClosing;
             this.$data.closedOrders.push({
               price: order.price,
               amount: order.amount,
               sum: (order.price * order.amount).toFixed(2),
-              dateCreated: `${dateCreated.substring(
-                0,
-                10,
-              )} ${dateCreated.substring(11, 19)}`,
-              dateExpiring: `${dateExpiring.substring(
-                0,
-                10,
-              )} ${dateExpiring.substring(11, 19)}`,
-              dateClosing: `${dateClosing.substring(
-                0,
-                10,
-              )} ${dateClosing.substring(11, 19)}`,
+              dateCreated: this._formatDate(order.dateCreation),
+              dateExpiring: this._formatDate(order.dateExpiration),
+              dateClosing: this._formatDate(order.dateClosing),
               stock: order.stock.abbreviation,
-              type:
-                order.orderType === OrderType.BuyingOrder
-                  ? 'kupna'
-                  : 'sprzedaży',
-            });
-          } else {
-            this.$data.activeOrders.push({
-              price: order.price,
-              amount: order.amount,
-              sum: (order.price * order.amount).toFixed(2),
-              dateCreated: `${dateCreated.substring(
-                0,
-                10,
-              )} ${dateCreated.substring(11, 19)}`,
-              dateExpiring: `${dateExpiring.substring(
-                0,
-                10,
-              )} ${dateExpiring.substring(11, 19)}`,
-              dateClosing: '',
-              stock: order.stock.abbreviation,
-              cancel: 'Anuluj',
               type:
                 order.orderType === OrderType.BuyingOrder
                   ? 'kupna'
@@ -311,37 +387,20 @@ export default class User extends Vue {
     }
   }
 
-  @Watch('transTotalElements')
-  private transTotalElementsChanged(newVal: number, oldVal: number) {
-    if (newVal !== oldVal) {
-      this.getUserTransactions({
-        page: 0,
-        size: newVal,
-      });
-    }
-  }
-
-  @Watch('ordersTotalElements')
-  private ordersTotalElementsChanged(newVal: number, oldVal: number) {
-    if (newVal !== oldVal) {
-      this.getUserOrders({
-        page: 0,
-        size: newVal,
-      });
-    }
-  }
-
   private data() {
     return {
       stocks: [],
       searchStocks: '',
       pageSize: 5,
+      pageSizeTrans: 20,
+      pagesSellingTrans: 1,
+      pagesBuyingTrans: 1,
+      pagesActiveOrders: 1,
+      pagesClosedOrders: 1,
       closedOrders: [],
       activeOrders: [],
       sellingTransactions: [],
       buyingTransactions: [],
-      transTotalElements: 0,
-      ordersTotalElements: 0,
       headersSellingTransactions: [
         {
           text: 'Suma',

@@ -8,8 +8,8 @@
         dense
         :headers="headers"
         :items="transactions"
-        :items-per-page="$vuetify.breakpoint.mdAndUp ? 20 : 10"
-        :footer-props="footer"
+        :items-per-page="20"
+        hide-default-footer
       >
         <template v-slot:[`item.sum`]="{ item }">
           <div
@@ -47,6 +47,15 @@
             </v-btn>
           </div>
         </template>
+        <template v-slot:footer>
+          <div>
+            <v-pagination
+              v-model="currentPage"
+              :length="totalPages"
+              @input="paginationClicked"
+            ></v-pagination>
+          </div>
+        </template>
       </v-data-table>
     </v-container>
   </div>
@@ -60,17 +69,24 @@ export default class UserTransactions extends Vue {
   @Prop({ required: true }) private title!: string;
   @Prop({ required: true }) private transactions!: object[];
   @Prop({ required: true }) private headers!: object[];
+  @Prop({ required: true }) private paginationEnum!: number;
+  @Prop({ required: true }) private totalPages!: number;
   @Prop({}) private colorClass!: string;
 
   get Transactions() {
     return this.transactions;
   }
 
+  private paginationClicked(page: number) {
+    this.$emit('paginationByEnum', {
+      page,
+      paginationEnum: this.paginationEnum,
+    });
+  }
+
   private data() {
     return {
-      footer: {
-        'disable-items-per-page': true,
-      },
+      currentPage: 1,
     };
   }
 }

@@ -5,7 +5,7 @@ import store from '../store';
 
 export class TransactionsService {
     public async getTransactions(body: object): Promise<AxiosResponse<Transactions>> {
-        const transactions = await axios.get('api/transaction', {
+        const transactions = await axios.get('api/user/transaction/owned', {
             headers: {
                 Authorization: 'Bearer ' + store.getters.token,
             },
