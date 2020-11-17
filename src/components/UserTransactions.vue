@@ -1,0 +1,93 @@
+<template>
+  <div>
+    <p class="text-h6 white--text text-center font-weight-bold primary ma-0">
+      {{ title }}
+    </p>
+    <v-container class="pa-0">
+      <v-data-table
+        dense
+        :headers="headers"
+        :items="transactions"
+        :items-per-page="20"
+        hide-default-footer
+      >
+        <template v-slot:[`item.sum`]="{ item }">
+          <div
+            :class="
+              colorClass
+                ? colorClass
+                : item.type === 'sprzedaży'
+                ? 'error--text'
+                : 'success--text'
+            "
+            class="font-weight-bold"
+          >
+            {{ item.sum }}
+          </div>
+        </template>
+        <template v-slot:[`item.type`]="{ item }">
+          <div
+            :class="
+              colorClass
+                ? colorClass
+                : item.type === 'sprzedaży'
+                ? 'error--text'
+                : 'success--text'
+            "
+            class="font-weight-bold"
+          >
+            {{ item.type }}
+          </div>
+        </template>
+        <template v-slot:[`item.cancel`]="{ item }">
+          <div>
+            <v-btn small color="error">
+              <span>{{ item.cancel }}</span>
+              <v-icon right>mdi-cancel</v-icon>
+            </v-btn>
+          </div>
+        </template>
+        <template v-slot:footer>
+          <div>
+            <v-pagination
+              v-model="currentPage"
+              :length="totalPages"
+              @input="paginationClicked"
+            ></v-pagination>
+          </div>
+        </template>
+      </v-data-table>
+    </v-container>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+
+@Component
+export default class UserTransactions extends Vue {
+  @Prop({ required: true }) private title!: string;
+  @Prop({ required: true }) private transactions!: object[];
+  @Prop({ required: true }) private headers!: object[];
+  @Prop({ required: true }) private paginationEnum!: number;
+  @Prop({ required: true }) private totalPages!: number;
+  @Prop({}) private colorClass!: string;
+
+  get Transactions() {
+    return this.transactions;
+  }
+
+  private paginationClicked(page: number) {
+    this.$emit('paginationByEnum', {
+      page,
+      paginationEnum: this.paginationEnum,
+    });
+  }
+
+  private data() {
+    return {
+      currentPage: 1,
+    };
+  }
+}
+</script>
