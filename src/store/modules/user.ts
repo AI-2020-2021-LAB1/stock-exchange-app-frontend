@@ -6,7 +6,6 @@ const userModule: Module<any, any> = {
   state: {
     token: null,
     refreshToken: null,
-    user: { id: 0 },
     timeout: null,
   },
 
@@ -14,9 +13,6 @@ const userModule: Module<any, any> = {
     authUser(state, auth) {
       state.token = auth.token;
       state.refreshToken = auth.refreshToken;
-    },
-    storeUser(state, user) {
-      state.user = user;
     },
     clearAuthData(state) {
       state.token = null;
@@ -141,7 +137,6 @@ const userModule: Module<any, any> = {
   },
 
   getters: {
-    user: (state) => state.user,
     token: (state) => state.token,
     isAuthenticated: (state) => state.token !== null,
   },
