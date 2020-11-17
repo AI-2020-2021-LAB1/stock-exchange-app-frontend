@@ -282,7 +282,7 @@ export default class Trader extends Vue {
       });
     }
   }
-  
+
   @Watch('searchStocks')
   private queryStocks(val: string) {
     if (val) {
