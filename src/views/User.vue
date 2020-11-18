@@ -13,7 +13,7 @@
       </v-card>
     </v-col>
     <v-col cols="12" class="mx-2 mt-2">
-      <dialog-change-user-data></dialog-change-user-data>
+      <user-dialog-change-user-data></user-dialog-change-user-data>
     </v-col>
     <v-col cols="12">
       <v-row no-gutters>
@@ -97,7 +97,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import UserStocksList from '../components/UserStocksList.vue';
 import UserTransactions from '../components/UserTransactions.vue';
-import DialogChangeUserData from '../components/DialogChangeUserData.vue';
+import UserDialogChangeUserData from '../components/UserDialogChangeUserData.vue';
 import { StocksService } from '../API/stocks';
 import { TransactionsService } from '../API/transactions';
 import { OrdersService } from '../API/orders';
@@ -115,7 +115,7 @@ enum PaginationEnum {
   components: {
     UserStocksList,
     UserTransactions,
-    DialogChangeUserData,
+    UserDialogChangeUserData,
   },
 })
 export default class User extends Vue {
