@@ -1,51 +1,55 @@
 <template>
-  <v-card class="mx-auto mx-2" tile>
-    <v-text-field
-      solo-inverted
-      text
-      clearable
-      hide-details
-      v-model="Search"
-      color="primary"
-      label="Wyszukaj akcje"
-      prepend-inner-icon="mdi-database-search"
-    ></v-text-field>
-    <v-list dense class="pt-0">
-      <v-subheader>Lista posiadanych akcji</v-subheader>
-      <v-list-item-group v-model="selectedItem" color="primary">
-        <v-list-item
-          v-for="stock in stocks.content"
-          :key="stock.id"
-          @click="stockClicked(stock.name)"
-        >
-          <v-row no-gutters>
-            <v-list-item-icon>
-              <v-icon color="green">mdi-cash-usd-outline</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>{{ stock.name }}</v-list-item-title>
-              <v-list-item-subtitle>{{
-                stock.abbreviation
-              }}</v-list-item-subtitle>
-              <v-list-item-subtitle
-                >{{ stock.currentPrice.toFixed(2) }} PLN</v-list-item-subtitle
-              >
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn small color="error">
-                <span>Sprzedaj</span>
-                <v-icon right>mdi-cash-usd</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-row>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-    <v-pagination
-      v-model="currentPage"
-      :length="stocks.totalPages"
-      @input="paginationClicked"
-    ></v-pagination>
+  <v-card class="rounded-lg mx-auto mx-2" tile>
+    <v-card-title
+      class="text-h5 font-weight-bold justify-center white--text primary py-1"
+      >Lista posiadanych akcji</v-card-title
+    >
+    <v-card-text class="pt-2 pb-0">
+      <v-text-field
+        solo-inverted
+        text
+        clearable
+        hide-details
+        v-model="Search"
+        color="primary"
+        label="Wyszukaj akcje"
+        prepend-inner-icon="mdi-database-search"
+      ></v-text-field>
+      <v-expansion-panels :inset="$vuetify.breakpoint.mdAndUp" class="mt-4">
+        <v-expansion-panel v-for="stock in stocks.content" :key="stock.id">
+          <v-expansion-panel-header>
+            <v-row no-gutters align="center" justify="start">
+              <v-col cols="auto">
+                <v-icon left class="primary--text">mdi-wallet</v-icon>
+              </v-col>
+              <v-col cols="auto" class="pa-3">
+                <p class="mt-auto font-weight-bold text-center mb-1">Nazwa</p>
+                <p class="my-auto text-center">{{ stock.name }}</p>
+              </v-col>
+              <v-col cols="auto" class="pa-3">
+                <p class="mt-auto font-weight-bold text-center mb-1">Skrót</p>
+                <p class="my-auto text-center">{{ stock.abbreviation }}</p>
+              </v-col>
+              <v-col cols="auto" class="pa-3">
+                <p class="mt-auto font-weight-bold text-center mb-1">
+                  Aktualna cena
+                </p>
+                <p class="my-auto text-center">
+                  {{ stock.currentPrice.toFixed(2) }}
+                </p>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content> Dummy content </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
+      <v-pagination
+        v-model="currentPage"
+        :length="stocks.totalPages"
+        @input="paginationClicked"
+      ></v-pagination>
+    </v-card-text>
   </v-card>
 </template>
 
