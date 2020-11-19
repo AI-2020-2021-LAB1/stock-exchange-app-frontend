@@ -11,7 +11,7 @@
           <v-form v-model="inputValidated" @submit.prevent="registerUser()">
             <v-card-text class="pb-0">
               <v-text-field
-                id='email'
+                id="email"
                 outlined
                 v-model="email"
                 prepend-icon="mdi-at"
