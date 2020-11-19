@@ -12,6 +12,26 @@
             <v-card-text class="pb-0">
               <v-row align="center" justify="center" class="mx-0">
                 <v-col class="pa-0">
+                  <v-select
+                    outlined
+                    color="primary"
+                    :items="itemsConfiguration"
+                    v-model="selectConfiguration"
+                    label="Wybierz konfiguracje"
+                  ></v-select>
+                </v-col>
+                <v-col class="py-0 pr-0">
+                  <v-select
+                    outlined
+                    color="primary"
+                    :items="itemsDifficult"
+                    v-model="selectDifficult"
+                    label="Poziom trudności"
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row align="center" justify="center" class="mx-0">
+                <v-col class="pa-0">
                   <v-text-field
                     outlined
                     hide-details
@@ -66,6 +86,15 @@ export default class Register extends Vue {
       opCount: 1,
       opPrice: 100,
       checkboxUser: false,
+      selectConfiguration: null,
+      selectDifficult: null,
+      itemsConfiguration: [
+        'Konfiguracja 1',
+        'Konfiguracja 2',
+        'Konfiguracja 3',
+        'Konfiguracja 4',
+      ],
+      itemsDifficult: ['1', '2', '3'],
     };
   }
 }

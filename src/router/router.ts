@@ -17,6 +17,13 @@ export default new Router({
       name: 'benchmark',
       component: () =>
         import(/* webpackChunkName: "index" */ '../views/Benchmark.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          next();
+        }
+      },
     },
     {
       path: '/login',
