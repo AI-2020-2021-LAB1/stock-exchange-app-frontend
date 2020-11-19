@@ -193,6 +193,7 @@ export default class Trader extends Vue {
             this.$data.chart = [
               { data: candles },
             ];
+            this.$data.chartOptions.xaxis.max = Date.now();
             this.$data.chartOptions.xaxis.min = Date.now() - 3600;
           });
       })
