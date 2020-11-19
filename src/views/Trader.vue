@@ -30,7 +30,7 @@
           <v-col>
             <trader-chart
               :options="chartOptions"
-              :series="series"
+              :series="chart"
             ></trader-chart>
           </v-col>
         </v-row>
@@ -103,6 +103,7 @@ import TraderChart from '../components/TraderChart.vue';
 import { StocksService } from '../API/stocks';
 import { OrdersService } from '../API/orders';
 import { OrderType } from '../models/OrderModel';
+import { ChartData } from '@/models/StockModel';
 
 @Component({
   components: {
@@ -175,7 +176,25 @@ export default class Trader extends Vue {
           this.$data.selectedStock.stockInfo = res.data.content[0];
         } else {
           this.$data.selectedStock.stockInfo = { amount: 0 };
+          this.$data.chart = [];
         }
+        this.stocksService
+          .getStockChart(this.$data.selectedStock.stockInfo.id, {})
+          .then((resp) => {
+            const candles = resp.data.map((el: ChartData) => {
+              return [
+                Date.parse(el.timestamp),
+                el.open.toFixed(2),
+                el.max.toFixed(2),
+                el.min.toFixed(2),
+                el.close.toFixed(2),
+              ];
+            });
+            this.$data.chart = [
+              { data: candles },
+            ];
+            this.$data.chartOptions.xaxis.min = Date.now() - 3600;
+          });
       })
       .catch((err) => {
         this.$store.dispatch('setSnackbarState', {
@@ -302,9 +321,10 @@ export default class Trader extends Vue {
       buyingOffersTotalElements: 0,
       searchStocks: '',
       selectedStock: {
-        stockInfo: { amount: 0 },
+        stockInfo: { amount: 0},
         userPossession: { amountAvailableForSale: 0 },
       },
+      chart: [],
       drawer: false,
       chartOptions: {
         chart: {
@@ -321,6 +341,8 @@ export default class Trader extends Vue {
           tooltip: {
             enabled: true,
           },
+          max: function(max: any) { return max + 10 },
+          min: function(min: any) { return min },
         },
       },
       series: [
