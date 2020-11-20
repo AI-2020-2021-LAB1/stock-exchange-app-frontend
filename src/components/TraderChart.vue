@@ -1,5 +1,6 @@
 <template>
   <apexchart
+    ref="chart"
     width="100%"
     :options="options"
     :series="series"
