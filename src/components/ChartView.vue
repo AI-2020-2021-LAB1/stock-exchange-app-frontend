@@ -11,7 +11,7 @@
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
 
 @Component
-export default class TraderChart extends Vue {
+export default class ChartView extends Vue {
   @Prop({ required: true }) private options!: object;
   @Prop({ required: true }) private series!: object;
 }

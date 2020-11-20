@@ -28,10 +28,10 @@
       >
         <v-row no-gutters align="center">
           <v-col>
-            <trader-chart
+            <chart-view
               :options="chartOptions"
               :series="chart"
-            ></trader-chart>
+            ></chart-view>
           </v-col>
         </v-row>
         <v-row no-gutters align="center">
@@ -99,7 +99,6 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import TraderOffers from '../components/TraderOffers.vue';
 import TraderStocksList from '../components/TraderStocksList.vue';
 import TraderInputs from '../components/TraderInputs.vue';
-import TraderChart from '../components/TraderChart.vue';
 import { StocksService } from '../API/stocks';
 import { OrdersService } from '../API/orders';
 import { OrderType } from '../models/OrderModel';
@@ -109,7 +108,6 @@ import { ChartData } from '@/models/StockModel';
   components: {
     TraderOffers,
     TraderStocksList,
-    TraderChart,
     TraderInputs,
   },
 })
@@ -180,7 +178,7 @@ export default class Trader extends Vue {
         }
         this.stocksService
           .getStockChart(this.$data.selectedStock.stockInfo.id, {
-            interval: 30,
+            interval: 5,
           })
           .then((resp) => {
             const candles = resp.data.map((el: ChartData) => {
