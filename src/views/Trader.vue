@@ -179,7 +179,9 @@ export default class Trader extends Vue {
           this.$data.chart = [];
         }
         this.stocksService
-          .getStockChart(this.$data.selectedStock.stockInfo.id, { interval: 30})
+          .getStockChart(this.$data.selectedStock.stockInfo.id, {
+            interval: 30,
+          })
           .then((resp) => {
             const candles = resp.data.map((el: ChartData) => {
               return [
@@ -190,11 +192,22 @@ export default class Trader extends Vue {
                 el.close.toFixed(2),
               ];
             });
-            console.log('changes');
+            const min = new Date();
+            min.setHours(min.getHours() - 1);
             this.$data.chart = [{ data: candles }];
-            this.$data.chartOptions.title.text = 'Akcje spółki ' + this.$data.selectedStock.stockInfo.name;
-            this.$data.chartOptions.xaxis.max = new Date().getTime();
-            this.$data.chartOptions.xaxis.min = new Date(Date.now() - 3600).getTime();
+            this.$data.chartOptions = {
+              ...this.$data.chartOptions,
+              ...{
+                title: {
+                  text:
+                    'Akcje spółki ' + this.$data.selectedStock.stockInfo.name,
+                },
+                xaxis: {
+                  min: min.getTime(),
+                  max: new Date().getTime(),
+                },
+              },
+            };
           });
       })
       .catch((err) => {
