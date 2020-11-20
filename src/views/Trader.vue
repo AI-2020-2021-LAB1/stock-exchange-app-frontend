@@ -179,20 +179,22 @@ export default class Trader extends Vue {
           this.$data.chart = [];
         }
         this.stocksService
-          .getStockChart(this.$data.selectedStock.stockInfo.id, {})
+          .getStockChart(this.$data.selectedStock.stockInfo.id, { interval: 30})
           .then((resp) => {
             const candles = resp.data.map((el: ChartData) => {
               return [
-                Date.parse(el.timestamp),
+                new Date(el.timestamp),
                 el.open.toFixed(2),
                 el.max.toFixed(2),
                 el.min.toFixed(2),
                 el.close.toFixed(2),
               ];
             });
+            console.log('changes');
             this.$data.chart = [{ data: candles }];
-            this.$data.chartOptions.xaxis.max = Date.now();
-            this.$data.chartOptions.xaxis.min = Date.now() - 3600;
+            this.$data.chartOptions.title.text = 'Akcje spółki ' + this.$data.selectedStock.stockInfo.name;
+            this.$data.chartOptions.xaxis.max = new Date().getTime();
+            this.$data.chartOptions.xaxis.min = new Date(Date.now() - 3600).getTime();
           });
       })
       .catch((err) => {
@@ -330,8 +332,8 @@ export default class Trader extends Vue {
           type: 'candlestick',
         },
         title: {
-          text: 'Akcje spółki Test',
-          align: 'left',
+          text: '',
+          align: 'center',
         },
         xaxis: {
           type: 'datetime',
@@ -339,12 +341,6 @@ export default class Trader extends Vue {
         yaxis: {
           tooltip: {
             enabled: true,
-          },
-          max: function (max: any) {
-            return max + 10;
-          },
-          min: function (min: any) {
-            return min;
           },
         },
       },
