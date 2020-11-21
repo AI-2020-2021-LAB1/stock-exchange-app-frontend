@@ -17,6 +17,7 @@
       ></v-text-field>
       <v-expansion-panels
         :inset="$vuetify.breakpoint.mdAndUp"
+        :popout="!$vuetify.breakpoint.mdAndUp"
         class="mt-4"
         v-model="ownStockInspect"
       >
@@ -26,16 +27,24 @@
               <v-col cols="auto">
                 <v-icon left class="primary--text">mdi-wallet</v-icon>
               </v-col>
-              <v-col v-for="el in stockElems" :key="el.text" cols="auto" class="pa-3">
-                <p class="mt-auto font-weight-bold text-center mb-1">{{ el.text }}</p>
+              <v-col
+                v-for="el in stockElems"
+                :key="el.text"
+                cols="auto"
+                class="pa-3"
+              >
+                <p class="mt-auto font-weight-bold text-center mb-1">
+                  {{ el.text }}
+                </p>
                 <p class="my-auto text-center">{{ stock[el.value] }}</p>
               </v-col>
             </v-row>
           </v-expansion-panel-header>
-          <v-expansion-panel-content> Dummy content </v-expansion-panel-content>
+          <v-expansion-panel-content>
+            <chart-view :options="chartOptions" :series="chart"></chart-view>
+          </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-
       <v-pagination
         v-model="currentPage"
         :length="stocks.totalPages"
@@ -46,14 +55,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { StocksService } from '../API/stocks';
-import { ChartData } from '@/models/StockModel';
+import { ChartData, Stocks } from '@/models/StockModel';
 
 @Component
 export default class UserStocksList extends Vue {
   private stocksService!: StocksService;
-  @Prop({ required: true }) private stocks!: object[];
+  @Prop({ required: true }) private stocks!: Stocks;
   @Prop({ required: true }) private search!: string;
 
   private beforeCreate() {
@@ -72,12 +81,13 @@ export default class UserStocksList extends Vue {
     this.$emit('pagination', page);
   }
 
-  private getStockChart(id: number) {
+  private getStockChart(id: number, index: number) {
     this.stocksService
       .getStockChart(id, {
         interval: 5,
       })
       .then((resp) => {
+        console.log(new Date().getTime())
         const candles = resp.data.map((el: ChartData) => {
           return [
             new Date(el.timestamp),
@@ -94,11 +104,8 @@ export default class UserStocksList extends Vue {
           ...this.$data.chartOptions,
           ...{
             title: {
-              text: 'Akcje spółki ' + this.$data.selectedStock.stockInfo.name,
-            },
-            xaxis: {
-              min: min.getTime(),
-              max: new Date().getTime(),
+              text: 'Akcje spółki ' + this.stocks.content[index].name,
+              align: 'center',
             },
           },
         };
@@ -113,11 +120,36 @@ export default class UserStocksList extends Vue {
       });
   }
 
+  @Watch('ownStockInspect')
+  private loadChart(val: number) {
+    if (val !== undefined) {
+      this.getStockChart(this.stocks.content[val].id, val);
+    }
+  }
+
   private data() {
     return {
+      type: 'datetime',
       currentPage: 1,
       chart: [],
       ownStockInspect: undefined,
+      chartOptions: {
+        chart: {
+          type: 'candlestick',
+        },
+        title: {
+          text: '',
+          align: 'center',
+        },
+        xaxis: {
+          type: 'datetime',
+        },
+        yaxis: {
+          tooltip: {
+            enabled: true,
+          },
+        },
+      },
       stockElems: [
         {
           text: 'Nazwa',
