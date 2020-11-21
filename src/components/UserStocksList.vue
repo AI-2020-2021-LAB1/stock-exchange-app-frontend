@@ -80,10 +80,6 @@ export default class UserStocksList extends Vue {
     this.stocksService = new StocksService();
   }
 
-  get Stocks() {
-    return this.stocks;
-  }
-
   get Search() {
     return this.search;
   }
@@ -94,10 +90,6 @@ export default class UserStocksList extends Vue {
 
   private paginationClicked(page: number) {
     this.$emit('pagination', page);
-  }
-
-  private stockClicked(name: string) {
-    this.$emit('selected', name);
   }
 
   private getStockChart(id: number) {
@@ -143,7 +135,6 @@ export default class UserStocksList extends Vue {
 
   private data() {
     return {
-      selectedItem: 0,
       currentPage: 1,
       chart: [],
       ownStockInspect: undefined,
