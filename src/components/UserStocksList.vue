@@ -26,29 +26,9 @@
               <v-col cols="auto">
                 <v-icon left class="primary--text">mdi-wallet</v-icon>
               </v-col>
-              <v-col cols="auto" class="pa-3">
-                <p class="mt-auto font-weight-bold text-center mb-1">Nazwa</p>
-                <p class="my-auto text-center">{{ stock.name }}</p>
-              </v-col>
-              <v-col cols="auto" class="pa-3">
-                <p class="mt-auto font-weight-bold text-center mb-1">Skrót</p>
-                <p class="my-auto text-center">{{ stock.abbreviation }}</p>
-              </v-col>
-              <v-col cols="auto" class="pa-3">
-                <p class="mt-auto font-weight-bold text-center mb-1">
-                  Aktualna cena
-                </p>
-                <p class="my-auto text-center">
-                  {{ stock.currentPrice.toFixed(2) }}
-                </p>
-              </v-col>
-              <v-col cols="auto" class="pa-3">
-                <p class="mt-auto font-weight-bold text-center mb-1">
-                  Posiadane Akcje
-                </p>
-                <p class="my-auto text-center">
-                  {{ stock.amount }}
-                </p>
+              <v-col v-for="el in stockElems" :key="el.text" cols="auto" class="pa-3">
+                <p class="mt-auto font-weight-bold text-center mb-1">{{ el.text }}</p>
+                <p class="my-auto text-center">{{ stock[el.value] }}</p>
               </v-col>
             </v-row>
           </v-expansion-panel-header>
@@ -138,6 +118,24 @@ export default class UserStocksList extends Vue {
       currentPage: 1,
       chart: [],
       ownStockInspect: undefined,
+      stockElems: [
+        {
+          text: 'Nazwa',
+          value: 'name',
+        },
+        {
+          text: 'Skrót',
+          value: 'abbreviation',
+        },
+        {
+          text: 'Aktualna cena',
+          value: 'currentPrice',
+        },
+        {
+          text: 'Posiadane akcje',
+          value: 'amount',
+        },
+      ],
     };
   }
 }

@@ -237,7 +237,6 @@ export default class User extends Vue {
     this.transactionsService
       .getTransactions(params)
       .then((res) => {
-        // console.log(res.data);
         this.$data.sellingTransactions = [];
         this.$data.pagesSellingTrans = res.data.totalPages;
         for (const transaction of res.data.content) {
@@ -274,7 +273,6 @@ export default class User extends Vue {
     this.transactionsService
       .getTransactions(params)
       .then((res) => {
-        // console.log(res.data);
         this.$data.buyingTransactions = [];
         this.$data.pagesBuyingTrans = res.data.totalPages;
         for (const transaction of res.data.content) {
@@ -343,7 +341,6 @@ export default class User extends Vue {
         this.$data.closedOrders = [];
         this.$data.pagesClosedOrders = res.data.totalPages;
         for (const order of res.data.content) {
-          // console.log(order.dateClosing)
           if (order.dateClosing) {
             this.$data.closedOrders.push({
               price: order.price,
