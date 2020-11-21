@@ -28,10 +28,7 @@
       >
         <v-row no-gutters align="center">
           <v-col>
-            <chart-view
-              :options="chartOptions"
-              :series="chart"
-            ></chart-view>
+            <chart-view :options="chartOptions" :series="chart"></chart-view>
           </v-col>
         </v-row>
         <v-row no-gutters align="center">
@@ -206,6 +203,15 @@ export default class Trader extends Vue {
                 },
               },
             };
+          })
+          .catch((err) => {
+            this.$store.dispatch('setSnackbarState', {
+              state: true,
+              msg:
+                'Błąd ' + err.response.status + ' podczas pobierania wykresu!',
+              color: 'error',
+              timeout: 7500,
+            });
           });
       })
       .catch((err) => {

@@ -15,7 +15,11 @@
         label="Wyszukaj akcje"
         prepend-inner-icon="mdi-database-search"
       ></v-text-field>
-      <v-expansion-panels :inset="$vuetify.breakpoint.mdAndUp" class="mt-4">
+      <v-expansion-panels
+        :inset="$vuetify.breakpoint.mdAndUp"
+        class="mt-4"
+        v-model="ownStockInspect"
+      >
         <v-expansion-panel v-for="stock in stocks.content" :key="stock.id">
           <v-expansion-panel-header>
             <v-row no-gutters align="center" justify="start">
@@ -38,6 +42,14 @@
                   {{ stock.currentPrice.toFixed(2) }}
                 </p>
               </v-col>
+              <v-col cols="auto" class="pa-3">
+                <p class="mt-auto font-weight-bold text-center mb-1">
+                  Posiadane Akcje
+                </p>
+                <p class="my-auto text-center">
+                  {{ stock.amount }}
+                </p>
+              </v-col>
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content> Dummy content </v-expansion-panel-content>
@@ -55,11 +67,18 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { StocksService } from '../API/stocks';
+import { ChartData } from '@/models/StockModel';
 
 @Component
-export default class TraderStocksList extends Vue {
+export default class UserStocksList extends Vue {
+  private stocksService!: StocksService;
   @Prop({ required: true }) private stocks!: object[];
   @Prop({ required: true }) private search!: string;
+
+  private beforeCreate() {
+    this.stocksService = new StocksService();
+  }
 
   get Stocks() {
     return this.stocks;
@@ -81,10 +100,53 @@ export default class TraderStocksList extends Vue {
     this.$emit('selected', name);
   }
 
+  private getStockChart(id: number) {
+    this.stocksService
+      .getStockChart(id, {
+        interval: 5,
+      })
+      .then((resp) => {
+        const candles = resp.data.map((el: ChartData) => {
+          return [
+            new Date(el.timestamp),
+            el.open.toFixed(2),
+            el.max.toFixed(2),
+            el.min.toFixed(2),
+            el.close.toFixed(2),
+          ];
+        });
+        const min = new Date();
+        min.setHours(min.getHours() - 1);
+        this.$data.chart = [{ data: candles }];
+        this.$data.chartOptions = {
+          ...this.$data.chartOptions,
+          ...{
+            title: {
+              text: 'Akcje spółki ' + this.$data.selectedStock.stockInfo.name,
+            },
+            xaxis: {
+              min: min.getTime(),
+              max: new Date().getTime(),
+            },
+          },
+        };
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Błąd ' + err.response.status + ' podczas pobierania wykresu!',
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
   private data() {
     return {
       selectedItem: 0,
       currentPage: 1,
+      chart: [],
+      ownStockInspect: undefined,
     };
   }
 }
