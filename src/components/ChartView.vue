@@ -7,11 +7,14 @@
       :series="series"
     ></apexchart>
     <v-row no-gutters align="center">
-      <v-col cols="auto">
-        <p class="text-h6 font-weight-bold my-auto">Długość świec:</p>
-      </v-col>
       <v-col class="py-0">
-        <v-select :items="lengths" v-model="len"></v-select>
+        <v-select
+          :items="lengths"
+          hide-details
+          outlined
+          label="Długość świec w minutach"
+          v-model="len"
+        ></v-select>
       </v-col>
     </v-row>
   </div>
