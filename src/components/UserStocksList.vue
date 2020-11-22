@@ -41,7 +41,12 @@
             </v-row>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <chart-view :options="chartOptions" :series="chart"></chart-view>
+            <chart-view
+              :options="chartOptions"
+              :series="chart"
+              :length="length"
+              @lengthChanged="lengthChanged($event)"
+            ></chart-view>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -84,10 +89,9 @@ export default class UserStocksList extends Vue {
   private getStockChart(id: number, index: number) {
     this.stocksService
       .getStockChart(id, {
-        interval: 5,
+        interval: this.$data.length,
       })
       .then((resp) => {
-        console.log(new Date().getTime())
         const candles = resp.data.map((el: ChartData) => {
           return [
             new Date(el.timestamp),
@@ -127,11 +131,17 @@ export default class UserStocksList extends Vue {
     }
   }
 
+  private lengthChanged(val: number) {
+    this.$data.length = val;
+    this.getStockChart(this.stocks.content[this.$data.ownStockInspect].id, this.$data.ownStockInspect);
+  }
+
   private data() {
     return {
       type: 'datetime',
       currentPage: 1,
       chart: [],
+      length: 5,
       ownStockInspect: undefined,
       chartOptions: {
         chart: {
