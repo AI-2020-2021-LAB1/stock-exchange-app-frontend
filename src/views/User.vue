@@ -65,6 +65,7 @@
           :paginationEnum="3"
           :totalPages="pagesActiveOrders"
           @paginationByEnum="paginationByEnum($event)"
+          @cancelOrder="cancelOrder($event)"
         ></user-transactions>
       </v-col>
     </v-row>
@@ -301,6 +302,7 @@ export default class User extends Vue {
         this.$data.pagesActiveOrders = res.data.totalPages;
         for (const order of res.data.content) {
           this.$data.activeOrders.push({
+            id: order.id,
             price: order.price,
             amount: order.amount,
             sum: (order.price * order.amount).toFixed(2),
@@ -347,6 +349,35 @@ export default class User extends Vue {
             });
           }
         }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private cancelOrder(id: number) {
+    this.ordersService
+      .cancelUserOrder(id)
+      .then(() => {
+        this.getUserActiveOrders({
+          page: 0,
+          size: this.$data.pageSizeTrans,
+        });
+        this.getUserClosedOrders({
+          page: 0,
+          size: this.$data.pageSizeTrans,
+        });
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Zlecenie zostało anulowane',
+          color: 'success',
+          timeout: 5000,
+        });
       })
       .catch((err) => {
         this.$store.dispatch('setSnackbarState', {

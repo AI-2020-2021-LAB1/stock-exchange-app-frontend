@@ -42,7 +42,7 @@
         </template>
         <template v-slot:[`item.cancel`]="{ item }">
           <div>
-            <v-btn small color="error">
+            <v-btn small color="error" @click="cancelOrder(item.id)">
               <span>{{ item.cancel }}</span>
               <v-icon right>mdi-cancel</v-icon>
             </v-btn>
@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
 @Component
 export default class UserTransactions extends Vue {
@@ -89,6 +89,11 @@ export default class UserTransactions extends Vue {
     return {
       currentPage: 1,
     };
+  }
+
+  private cancelOrder(id: number) {
+    this.$emit('cancelOrder', id);
+    this.$data.currentPage = 1;
   }
 }
 </script>
