@@ -1,96 +1,86 @@
 <template>
-  <v-row no-gutters align="center">
-    <v-col cols="12">
-      <v-card width="600" class="mx-auto mt-2">
-        <v-img height="300px" src="@/assets/stock-exchange.jpeg">
-          <v-card-title class="white--text mt-8">
-            <v-avatar>
-              <v-icon class="white--text">mdi-account-circle</v-icon>
-            </v-avatar>
-            <p class="my-auto">John Doe</p>
-          </v-card-title>
-        </v-img>
-      </v-card>
-    </v-col>
-    <v-col cols="12" class="mx-2 mt-2">
-      <user-dialog-change-user-data></user-dialog-change-user-data>
-    </v-col>
-    <v-col cols="12">
-      <v-row no-gutters>
-        <v-col class="ma-2">
-          <user-stocks-list
-            :stocks="stocks"
-            :search="searchStocks"
-            @search="searchStocks = $event"
-            @pagination="paginationClicked($event)"
-            @selected="stockSelectionChanged($event)"
-          ></user-stocks-list>
-        </v-col>
-      </v-row>
-      <v-row no-gutters>
-        <v-col cols="12" class="px-2">
-          <v-row align="start">
-            <v-col class="py-0">
-              <user-transactions
-                title="Historia transakcji kupna"
-                :transactions="buyingTransactions"
-                colorClass="success--text"
-                :headers="headersBuyingTransactions"
-                :paginationEnum="2"
-                :totalPages="pagesBuyingTrans"
-                @paginationByEnum="paginationByEnum($event)"
-              ></user-transactions>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12" class="px-2">
-          <v-row align="start">
-            <v-col class="py-0">
-              <user-transactions
-                title="Historia transakcji sprzedaży"
-                :transactions="sellingTransactions"
-                colorClass="error--text"
-                :headers="headersSellingTransactions"
-                :paginationEnum="1"
-                :totalPages="pagesSellingTrans"
-                @paginationByEnum="paginationByEnum($event)"
-              ></user-transactions>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-row no-gutters class="mt-2">
-        <v-col cols="12" class="px-2">
-          <v-row align="start">
-            <v-col class="py-0">
-              <user-transactions
-                title="Zlecenia aktywne"
-                :transactions="activeOrders"
-                :headers="headersActiveOrders"
-                :paginationEnum="3"
-                :totalPages="pagesActiveOrders"
-                @paginationByEnum="paginationByEnum($event)"
-              ></user-transactions>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12" class="px-2">
-          <v-row align="start">
-            <v-col class="py-0">
-              <user-transactions
-                title="Zlecenia zamknięte"
-                :transactions="closedOrders"
-                :headers="headersClosedOrders"
-                :paginationEnum="4"
-                :totalPages="pagesClosedOrders"
-                @paginationByEnum="paginationByEnum($event)"
-              ></user-transactions>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-col>
-  </v-row>
+  <div class="mx-2">
+    <v-row no-gutters>
+      <v-col cols="12" class="my-1">
+        <v-card width="600" class="mx-auto">
+          <v-img height="300px" src="@/assets/stock-exchange.jpeg">
+            <v-card-title class="white--text mt-8">
+              <v-avatar>
+                <v-icon class="white--text">mdi-account-circle</v-icon>
+              </v-avatar>
+              <p class="my-auto">John Doe</p>
+            </v-card-title>
+          </v-img>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12" class="my-1">
+        <user-dialog-change-user-data></user-dialog-change-user-data>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12" class="my-1">
+        <user-stocks-list
+          :stocks="stocks"
+          :search="searchStocks"
+          @search="searchStocks = $event"
+          @pagination="paginationClicked($event)"
+          @selected="stockSelectionChanged($event)"
+        ></user-stocks-list>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12" class="my-1">
+        <user-transactions
+          title="Historia transakcji kupna"
+          :transactions="buyingTransactions"
+          colorClass="success--text"
+          :headers="headersBuyingTransactions"
+          :paginationEnum="2"
+          :totalPages="pagesBuyingTrans"
+          @paginationByEnum="paginationByEnum($event)"
+        ></user-transactions>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12" class="my-1">
+        <user-transactions
+          title="Historia transakcji sprzedaży"
+          :transactions="sellingTransactions"
+          colorClass="error--text"
+          :headers="headersSellingTransactions"
+          :paginationEnum="1"
+          :totalPages="pagesSellingTrans"
+          @paginationByEnum="paginationByEnum($event)"
+        ></user-transactions>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12" class="my-1">
+        <user-transactions
+          title="Zlecenia aktywne"
+          :transactions="activeOrders"
+          :headers="headersActiveOrders"
+          :paginationEnum="3"
+          :totalPages="pagesActiveOrders"
+          @paginationByEnum="paginationByEnum($event)"
+        ></user-transactions>
+      </v-col>
+    </v-row>
+    <v-row no-gutters>
+      <v-col cols="12" class="mt-1 mb-2">
+        <user-transactions
+          title="Zlecenia zamknięte"
+          :transactions="closedOrders"
+          :headers="headersClosedOrders"
+          :paginationEnum="4"
+          :totalPages="pagesClosedOrders"
+          @paginationByEnum="paginationByEnum($event)"
+        ></user-transactions>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts">

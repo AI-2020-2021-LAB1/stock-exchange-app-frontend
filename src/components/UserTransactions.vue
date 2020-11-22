@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <p class="text-h6 white--text text-center font-weight-bold primary ma-0">
-      {{ title }}
-    </p>
-    <v-container class="pa-0">
+  <v-card class="rounded-lg">
+    <v-card-title
+      class="text-h5 font-weight-bold justify-center white--text primary py-1"
+      >{{ title }}</v-card-title
+    >
+    <v-card-text class="pb-0">
       <v-data-table
         dense
         :headers="headers"
@@ -57,8 +58,8 @@
           </div>
         </template>
       </v-data-table>
-    </v-container>
-  </div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -71,7 +72,7 @@ export default class UserTransactions extends Vue {
   @Prop({ required: true }) private headers!: object[];
   @Prop({ required: true }) private paginationEnum!: number;
   @Prop({ required: true }) private totalPages!: number;
-  @Prop({}) private colorClass!: string;
+  @Prop() private colorClass!: string;
 
   get Transactions() {
     return this.transactions;
