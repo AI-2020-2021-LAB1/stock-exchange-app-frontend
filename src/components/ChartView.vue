@@ -6,7 +6,7 @@
       :options="options"
       :series="series"
     ></apexchart>
-    <v-row align="center">
+    <v-row no-gutters align="center">
       <v-col cols="auto">
         <p class="text-h6 font-weight-bold my-auto">Długość świec:</p>
       </v-col>

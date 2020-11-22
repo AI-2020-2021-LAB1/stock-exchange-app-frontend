@@ -27,8 +27,13 @@
         v-if="buyingOffers.length || sellingOffers.length"
       >
         <v-row no-gutters align="center">
-          <v-col>
-            <chart-view :options="chartOptions" :series="chart"></chart-view>
+          <v-col class="px-2">
+            <chart-view
+              :options="chartOptions"
+              :series="chart"
+              :length="length"
+              @lengthChanged="lengthChanged($event)"
+            ></chart-view>
           </v-col>
         </v-row>
         <v-row no-gutters align="center">
@@ -173,51 +178,50 @@ export default class Trader extends Vue {
           this.$data.selectedStock.stockInfo = { amount: 0 };
           this.$data.chart = [];
         }
-        this.stocksService
-          .getStockChart(this.$data.selectedStock.stockInfo.id, {
-            interval: 5,
-          })
-          .then((resp) => {
-            const candles = resp.data.map((el: ChartData) => {
-              return [
-                new Date(el.timestamp),
-                el.open.toFixed(2),
-                el.max.toFixed(2),
-                el.min.toFixed(2),
-                el.close.toFixed(2),
-              ];
-            });
-            const min = new Date();
-            min.setHours(min.getHours() - 1);
-            this.$data.chart = [{ data: candles }];
-            this.$data.chartOptions = {
-              ...this.$data.chartOptions,
-              ...{
-                title: {
-                  text:
-                    'Akcje spółki ' + this.$data.selectedStock.stockInfo.name,
-                },
-                xaxis: {
-                  min: min.getTime(),
-                  max: new Date().getTime(),
-                },
-              },
-            };
-          })
-          .catch((err) => {
-            this.$store.dispatch('setSnackbarState', {
-              state: true,
-              msg:
-                'Błąd ' + err.response.status + ' podczas pobierania wykresu!',
-              color: 'error',
-              timeout: 7500,
-            });
-          });
+        this.getStockChart();
       })
       .catch((err) => {
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getStockChart() {
+    this.stocksService
+      .getStockChart(this.$data.selectedStock.stockInfo.id, {
+        interval: this.$data.length,
+      })
+      .then((res) => {
+        const candles = res.data.map((el: ChartData) => {
+          return [
+            new Date(el.timestamp),
+            el.open.toFixed(2),
+            el.max.toFixed(2),
+            el.min.toFixed(2),
+            el.close.toFixed(2),
+          ];
+        });
+        const min = new Date();
+        min.setHours(min.getHours() - 1);
+        this.$data.chart = [{ data: candles }];
+        this.$data.chartOptions = {
+          ...this.$data.chartOptions,
+          ...{
+            title: {
+              text: 'Akcje spółki ' + this.$data.selectedStock.stockInfo.name,
+              align: 'center',
+            },
+          },
+        };
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Błąd ' + err.response.status + ' podczas pobierania wykresu!',
           color: 'error',
           timeout: 7500,
         });
@@ -296,6 +300,11 @@ export default class Trader extends Vue {
       });
   }
 
+  private lengthChanged(val: number) {
+    this.$data.length = val;
+    this.getStockChart();
+  }
+
   @Watch('sellingOffersTotalElements')
   private sellingOffersTotalElementsChanged(newVal: number, oldVal: number) {
     if (newVal !== oldVal) {
@@ -343,6 +352,7 @@ export default class Trader extends Vue {
         userPossession: { amountAvailableForSale: 0 },
       },
       chart: [],
+      length: 5,
       drawer: false,
       chartOptions: {
         chart: {
