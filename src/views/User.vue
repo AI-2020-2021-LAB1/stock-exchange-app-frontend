@@ -28,7 +28,7 @@
         </v-col>
       </v-row>
       <v-row no-gutters>
-        <v-col cols="12">
+        <v-col cols="12" class="px-2">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
@@ -43,7 +43,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="px-2">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
@@ -59,8 +59,8 @@
           </v-row>
         </v-col>
       </v-row>
-      <v-row no-gutters>
-        <v-col cols="12">
+      <v-row no-gutters class="mt-2">
+        <v-col cols="12" class="px-2">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
@@ -74,7 +74,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="px-2">
           <v-row align="start">
             <v-col class="py-0">
               <user-transactions
