@@ -34,4 +34,14 @@ export class OrdersService {
 
     return order;
   }
+
+  public async cancelUserOrder(id: number): Promise<AxiosResponse> {
+    const order = await axios.post('api/order/' + id + '/deactivation', {}, {
+      headers: {
+        Authorization: 'Bearer ' + store.getters.token,
+      },
+    });
+
+    return order;
+  }
 }

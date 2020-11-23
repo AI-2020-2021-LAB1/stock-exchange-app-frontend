@@ -8,6 +8,7 @@ import store from './store';
 import VueApexCharts from 'vue-apexcharts';
 
 const PasswordValidator = () => import(/* webpackChunkName: "ComponentPasswordValidator" */ '@/components/PasswordValidator.vue');
+const ChartView = () => import(/* webpackChunkName: "ComponentChartView" */ '@/components/ChartView.vue');
 
 Vue.config.productionTip = false;
 
@@ -22,3 +23,4 @@ new Vue({
 
 Vue.component('apexchart', VueApexCharts);
 Vue.component('password-validator', PasswordValidator);
+Vue.component('chart-view', ChartView);
