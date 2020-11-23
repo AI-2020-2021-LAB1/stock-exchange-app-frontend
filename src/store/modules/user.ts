@@ -6,7 +6,6 @@ const userModule: Module<any, any> = {
   state: {
     token: null,
     refreshToken: null,
-    user: { id: 0 },
     timeout: null,
   },
 
@@ -14,9 +13,6 @@ const userModule: Module<any, any> = {
     authUser(state, auth) {
       state.token = auth.token;
       state.refreshToken = auth.refreshToken;
-    },
-    storeUser(state, user) {
-      state.user = user;
     },
     clearAuthData(state) {
       state.token = null;
@@ -129,10 +125,17 @@ const userModule: Module<any, any> = {
           router.replace('/login');
         })
         .catch((error) => {
+          let info;
+          if (error.response.status === 409) {
+            info =
+              'Rejestracja nie powiodła się. Istenieje już użytkownik o podanym mailu.';
+          } else {
+            info =
+              'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.';
+          }
           dispatch('setSnackbarState', {
             state: true,
-            msg:
-              'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.',
+            msg: info,
             color: 'error',
             timeout: 7500,
           });
@@ -141,7 +144,6 @@ const userModule: Module<any, any> = {
   },
 
   getters: {
-    user: (state) => state.user,
     token: (state) => state.token,
     isAuthenticated: (state) => state.token !== null,
   },
