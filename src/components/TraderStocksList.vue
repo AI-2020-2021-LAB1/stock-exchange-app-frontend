@@ -68,7 +68,7 @@ export default class TraderStocksList extends Vue {
 
   private data() {
     return {
-      selectedItem: 0,
+      selectedItem: null,
       currentPage: 1,
     };
   }

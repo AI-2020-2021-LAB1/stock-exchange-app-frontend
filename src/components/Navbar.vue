@@ -16,6 +16,7 @@
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp">
         <v-btn text to="/login" v-if="!auth">Login</v-btn>
         <v-btn text to="/register" v-if="!auth">Rejestracja</v-btn>
+        <v-btn text to="/user" v-if="auth">Panel użytkownika</v-btn>
         <v-btn text @click="logout" v-if="auth">Wyloguj</v-btn>
       </v-toolbar-items>
     </v-app-bar>
