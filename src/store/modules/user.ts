@@ -125,10 +125,17 @@ const userModule: Module<any, any> = {
           router.replace('/login');
         })
         .catch((error) => {
+          let info;
+          if (error.response.status === 409) {
+            info =
+              'Rejestracja nie powiodła się. Istenieje już użytkownik o podanym mailu.';
+          } else {
+            info =
+              'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.';
+          }
           dispatch('setSnackbarState', {
             state: true,
-            msg:
-              'Wystąpił nieznany błąd podczas rejestracji. Skontaktuj się z administratorem lub spróbuj ponownie później.',
+            msg: info,
             color: 'error',
             timeout: 7500,
           });
