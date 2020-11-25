@@ -3,6 +3,7 @@
     <v-text-field
       solo-inverted
       text
+      id="searchStocks"
       clearable
       hide-details
       v-model="Search"
