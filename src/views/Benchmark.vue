@@ -39,6 +39,7 @@
                     label="liczba operacji"
                     color="primary"
                     type="number"
+                    class="my-2"
                   ></v-text-field>
                 </v-col>
                 <v-col class="py-0 pr-0">
@@ -49,17 +50,18 @@
                     label="kwota pojedynczej operacji"
                     color="primary"
                     type="number"
+                    class="my-2"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <!-- <v-col>
                   <v-checkbox
                     color="primary"
                     v-model="checkboxUser"
                     label="czy rejestrować nowego użytkownika?"
                   ></v-checkbox>
-                </v-col>
+                </v-col>-->
               </v-row>
             </v-card-text>
             <v-card-actions class="pt-0">
@@ -85,7 +87,7 @@ export default class Register extends Vue {
     return {
       opCount: 1,
       opPrice: 100,
-      checkboxUser: false,
+      // checkboxUser: false,
       selectConfiguration: null,
       selectDifficult: null,
       itemsConfiguration: [
