@@ -36,7 +36,11 @@
             ></chart-view>
           </v-col>
         </v-row>
-        <v-row no-gutters align="center">
+        <v-row
+          no-gutters
+          align="center"
+          v-if="user.tag === selectedStock.stockInfo.tag"
+        >
           <trader-inputs
             :selectedStock="selectedStock"
             @reload="getSelectedStockInfo($event)"
@@ -336,6 +340,10 @@ export default class Trader extends Vue {
     } else {
       this.getStocks({ page: 0 });
     }
+  }
+
+  get user() {
+    return this.$store.getters.user;
   }
 
   private data() {
