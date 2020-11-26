@@ -26,7 +26,7 @@
         xl="4"
         v-if="buyingOffers.length || sellingOffers.length"
       >
-        <v-row no-gutters align="center">
+        <v-row no-gutters align="center" class="pb-1">
           <v-col class="px-2">
             <chart-view
               :options="chartOptions"
@@ -46,7 +46,7 @@
             @reload="getSelectedStockInfo($event)"
           ></trader-inputs>
         </v-row>
-        <v-row no-gutters>
+        <v-row no-gutters class="pa-1">
           <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
             <v-row align="start">
               <v-col class="py-0">
