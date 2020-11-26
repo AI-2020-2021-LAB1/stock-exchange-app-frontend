@@ -161,7 +161,7 @@ export default class DialogChangeUserData extends Vue {
   private changeName() {
     this.$store.dispatch('changeName', {
       firstName: this.$data.first_name,
-      lastName: this.$data.lastName,
+      lastName: this.$data.last_name,
     });
     this.$data.dialog = false;
   }

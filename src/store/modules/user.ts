@@ -140,7 +140,10 @@ const userModule: Module<any, any> = {
     },
     changeName({ dispatch, state }, data) {
       axios
-        .put('/api/user/config/user-data', data, {
+        .put('/api/user/config/user-data', {
+          firstName: data.firstName,
+          lastName: data.lastName,
+        }, {
           headers: {
             Authorization: 'Bearer ' + state.token,
           },
