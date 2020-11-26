@@ -60,6 +60,21 @@
               <v-card-text class="pb-0">
                 <p class="text-h6 text-center">Zmiana hasła</p>
                 <v-row align="center" justify="center" class="mx-0">
+                  <v-col class="px-1 py-0">
+                    <v-text-field
+                      outlined
+                      v-model="passwordOld"
+                      prepend-icon="mdi-lock"
+                      :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="showPass = !showPass"
+                      :rules="[rules.required, passwdValid]"
+                      label="Stare hasło"
+                      color="primary"
+                      :type="showPass ? 'text' : 'password'"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row align="center" justify="center" class="mx-0">
                   <v-col cols="12" sm="6" class="px-1 py-0">
                     <v-text-field
                       outlined
@@ -68,7 +83,7 @@
                       :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
                       @click:append="showPass = !showPass"
                       :rules="[rules.required, passwdValid]"
-                      label="Zmień hasło"
+                      label="Podaj nowe hasło"
                       color="primary"
                       :type="showPass ? 'text' : 'password'"
                       @focus="passwdFocus = true"
@@ -131,6 +146,7 @@ export default class DialogChangeUserData extends Vue {
       last_name: '',
       password1: '',
       password2: '',
+      passwordOld: '',
       showPass: false,
       passwdFocus: false,
       passwdValid: false,
@@ -151,6 +167,10 @@ export default class DialogChangeUserData extends Vue {
   }
 
   private changePassword() {
+    this.$store.dispatch('changePassword', {
+      oldPassword: this.$data.passwordOld,
+      newPassword: this.$data.password1,
+    });
     this.$data.dialog = false;
   }
 }
