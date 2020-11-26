@@ -7,7 +7,7 @@
           <v-icon right>mdi-account-edit</v-icon>
         </v-btn>
       </template>
-      <v-row justify="center">
+      <v-row no-gutters justify="center">
         <v-col cols="auto" class="pa-0">
           <v-card class="ma-2" width="600">
             <v-card-title class="text-h5 font-weight-bold white--text primary"
@@ -15,6 +15,7 @@
             >
             <v-form v-model="inputValidatedName" @submit.prevent="changeName()">
               <v-card-text class="pb-0">
+                <p class="text-h6 text-center">Zmiana imienia i nazwiska</p>
                 <v-row align="center" justify="center" class="mx-0">
                   <v-col cols="12" sm="6" class="px-1 py-0">
                     <v-text-field
@@ -57,6 +58,22 @@
               @submit.prevent="changePassword()"
             >
               <v-card-text class="pb-0">
+                <p class="text-h6 text-center">Zmiana hasła</p>
+                <v-row align="center" justify="center" class="mx-0">
+                  <v-col class="px-1 py-0">
+                    <v-text-field
+                      outlined
+                      v-model="passwordOld"
+                      prepend-icon="mdi-lock"
+                      :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="showPass = !showPass"
+                      :rules="[rules.required, passwdValid]"
+                      label="Stare hasło"
+                      color="primary"
+                      :type="showPass ? 'text' : 'password'"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
                 <v-row align="center" justify="center" class="mx-0">
                   <v-col cols="12" sm="6" class="px-1 py-0">
                     <v-text-field
@@ -66,7 +83,7 @@
                       :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
                       @click:append="showPass = !showPass"
                       :rules="[rules.required, passwdValid]"
-                      label="Zmień hasło"
+                      label="Podaj nowe hasło"
                       color="primary"
                       :type="showPass ? 'text' : 'password'"
                       @focus="passwdFocus = true"
@@ -129,6 +146,7 @@ export default class DialogChangeUserData extends Vue {
       last_name: '',
       password1: '',
       password2: '',
+      passwordOld: '',
       showPass: false,
       passwdFocus: false,
       passwdValid: false,
@@ -141,10 +159,18 @@ export default class DialogChangeUserData extends Vue {
   }
 
   private changeName() {
+    this.$store.dispatch('changeName', {
+      firstName: this.$data.first_name,
+      lastName: this.$data.last_name,
+    });
     this.$data.dialog = false;
   }
 
   private changePassword() {
+    this.$store.dispatch('changePassword', {
+      oldPassword: this.$data.passwordOld,
+      newPassword: this.$data.password1,
+    });
     this.$data.dialog = false;
   }
 }

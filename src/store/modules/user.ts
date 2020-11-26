@@ -138,6 +138,53 @@ const userModule: Module<any, any> = {
           dispatch('setRefreshTimer');
         });
     },
+    changeName({ dispatch, state }, data) {
+      axios
+        .put('/api/user/config/user-data', {
+          firstName: data.firstName,
+          lastName: data.lastName,
+        }, {
+          headers: {
+            Authorization: 'Bearer ' + state.token,
+          },
+        })
+        .then(() => {
+          dispatch('getUserData');
+          dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Dane zostały zmienione!',
+            color: 'success',
+            timeout: 7500,
+          });
+        })
+        .catch((err) => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Błąd ' + err.response.status + ' przy zmianie danych!',
+            color: 'error',
+            timeout: 7500,
+          });
+        });
+    },
+    changePassword({ dispatch, state }, data) {
+      axios
+        .post('/api/user/config/change-password', data, {
+          headers: {
+            Authorization: 'Bearer ' + state.token,
+          },
+        })
+        .then(() => {
+          dispatch('logout');
+        })
+        .catch((err) => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Błąd ' + err.response.status + ' przy zmianie hasła!',
+            color: 'error',
+            timeout: 7500,
+          });
+        });
+    },
     register({ dispatch }, data) {
       axios
         .post('api/register/', data)

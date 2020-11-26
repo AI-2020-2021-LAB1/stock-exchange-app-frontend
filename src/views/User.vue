@@ -8,7 +8,7 @@
               <v-avatar>
                 <v-icon class="white--text">mdi-account-circle</v-icon>
               </v-avatar>
-              <p class="my-auto">John Doe</p>
+              <p class="my-auto">{{ user.firstName }} {{ user.lastName }}</p>
             </v-card-title>
           </v-img>
         </v-card>
@@ -403,6 +403,10 @@ export default class User extends Vue {
         size: this.$data.pageSize,
       });
     }
+  }
+
+  get user() {
+    return this.$store.getters.user;
   }
 
   private data() {
