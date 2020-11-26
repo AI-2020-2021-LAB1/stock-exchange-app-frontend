@@ -163,6 +163,7 @@ export default class DialogChangeUserData extends Vue {
       firstName: this.$data.first_name,
       lastName: this.$data.last_name,
     });
+    this.clean();
     this.$data.dialog = false;
   }
 
@@ -171,7 +172,16 @@ export default class DialogChangeUserData extends Vue {
       oldPassword: this.$data.passwordOld,
       newPassword: this.$data.password1,
     });
+    this.clean();
     this.$data.dialog = false;
+  }
+
+  private clean() {
+    this.$data.first_name = '';
+    this.$data.last_name = '';
+    this.$data.password1 = '';
+    this.$data.password2 = '';
+    this.$data.passwordOld = '';
   }
 }
 </script>
