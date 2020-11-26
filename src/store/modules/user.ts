@@ -7,6 +7,7 @@ const userModule: Module<any, any> = {
     token: null,
     refreshToken: null,
     timeout: null,
+    user: null,
   },
 
   mutations: {
@@ -21,6 +22,9 @@ const userModule: Module<any, any> = {
     },
     setTimeout(state, data) {
       state.timeout = data;
+    },
+    setUser(state, data) {
+      state.user = data;
     },
   },
 
@@ -62,11 +66,34 @@ const userModule: Module<any, any> = {
             timeout: 7500,
           });
           router.replace('/');
+          dispatch('getUserData');
         })
         .catch(() => {
           dispatch('setSnackbarState', {
             state: true,
             msg: 'Nieprawidłowy login lub hasło!',
+            color: 'error',
+            timeout: 7500,
+          });
+        });
+    },
+    getUserData({ dispatch, commit, state }) {
+      axios
+        .get('api/user/config/user-data', {
+          headers: {
+            Authorization: 'Bearer ' + state.token,
+          },
+        })
+        .then((res) => {
+          commit('setUser', res.data);
+        })
+        .catch((err) => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg:
+              'Błąd ' +
+              err.response.status +
+              ' przy pobieraniu danych użytkownika!',
             color: 'error',
             timeout: 7500,
           });
@@ -146,6 +173,7 @@ const userModule: Module<any, any> = {
   getters: {
     token: (state) => state.token,
     isAuthenticated: (state) => state.token !== null,
+    user: (state) => state.user,
   },
 };
 
