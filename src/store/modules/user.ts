@@ -138,6 +138,31 @@ const userModule: Module<any, any> = {
           dispatch('setRefreshTimer');
         });
     },
+    changeName({ dispatch, commit, state }, data) {
+      axios
+        .put('/api/user/config/user-data', data, {
+          headers: {
+            Authorization: 'Bearer ' + state.token,
+          },
+        })
+        .then(() => {
+          dispatch('getUserData');
+          dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Dane zostały zmienione!',
+            color: 'success',
+            timeout: 7500,
+          });
+        })
+        .catch((err) => {
+          dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Błąd ' + err.response.status + ' przy zmianie danych!',
+            color: 'error',
+            timeout: 7500,
+          });
+        });
+    },
     register({ dispatch }, data) {
       axios
         .post('api/register/', data)
