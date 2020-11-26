@@ -2,11 +2,10 @@
   <v-card class="mx-auto" max-width="300" tile>
     <v-text-field
       solo-inverted
-      text
       id="searchStocks"
       clearable
       hide-details
-      v-model="Search"
+      v-model="search"
       color="primary"
       label="Wyszukaj akcje"
       prepend-inner-icon="mdi-database-search"
@@ -40,27 +39,35 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
 @Component
 export default class TraderStocksList extends Vue {
   @Prop({ required: true }) private stocks!: object[];
-  @Prop({ required: true }) private search!: string;
+  // @Prop({ required: true }) private search!: string;
 
   get Stocks() {
     return this.stocks;
   }
 
-  get Search() {
-    return this.search;
-  }
+  // get Search() {
+  //   return this.search;
+  // }
 
-  set Search(val: string) {
-    this.$emit('search', val);
+  // set Search(val: string) {
+  //   this.$emit('search', val);
+  // }
+
+  @Watch('search')
+  private searchChanged(newVal: string, oldVal: string) {
+    if (newVal !== oldVal) {
+      this.$emit('search', newVal);
+      this.$data.currentPage = 1;
+    }
   }
 
   private paginationClicked(page: number) {
-    this.$emit('pagination', page);
+    this.$emit('pagination', { page, searchStocks: this.$data.search });
   }
 
   private stockClicked(name: string) {
@@ -71,6 +78,7 @@ export default class TraderStocksList extends Vue {
     return {
       selectedItem: null,
       currentPage: 1,
+      search: '',
     };
   }
 }

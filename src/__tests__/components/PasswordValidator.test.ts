@@ -120,120 +120,105 @@ describe('PasswordValidator.vue', () => {
   });
 
   test('should emit error if nothing is validated', async () => {
-    const $emit = jest.fn();
     wrapper = mount(PasswordValidator, {
       localVue,
       vuetify: new vuetify(),
       propsData: {
         password: '',
       },
-      mocks: {
-        $emit
-      }
     });
-    wrapper.setProps({ password: 'B' });
+    await wrapper.setProps({ password: 'B' });
+    await wrapper.setProps({ password: '' });
 
-    await localVue.nextTick();
+    expect(wrapper.emitted().validation).toBeTruthy();
 
-    wrapper.setProps({ password: '' });
+    expect(wrapper.emitted().validation).toHaveLength(2);
 
-    await localVue.nextTick();
-
-    expect($emit).not.toBeCalledWith('validation', true);
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań'], ['Hasło nie spełnia wymagań']]);
   });
 
   test('should emit error when uppercase is validated', async () => {
-    const $emit = jest.fn();
     wrapper = mount(PasswordValidator, {
       localVue,
       vuetify: new vuetify(),
       propsData: {
         password: '',
       },
-      mocks: {
-        $emit
-      }
     });
-    wrapper.setProps({ password: 'B' });
+    await wrapper.setProps({ password: 'B' });
 
-    await localVue.nextTick();
+    expect(wrapper.emitted().validation).toBeTruthy();
 
-    expect($emit).not.toBeCalledWith('validation', true);
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
   });
 
   test('should emit error when uppercase & lowercase are validated', async () => {
-    const $emit = jest.fn();
     wrapper = mount(PasswordValidator, {
       localVue,
       vuetify: new vuetify(),
       propsData: {
         password: '',
       },
-      mocks: {
-        $emit
-      }
     });
-    wrapper.setProps({ password: 'Bl' });
+    await wrapper.setProps({ password: 'Bl' });
 
-    await localVue.nextTick();
+    expect(wrapper.emitted().validation).toBeTruthy();
 
-    expect($emit).not.toBeCalledWith('validation', true);
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
   });
 
   test('should emit error when uppercase & lowercase & number are validated', async () => {
-    const $emit = jest.fn();
     wrapper = mount(PasswordValidator, {
       localVue,
       vuetify: new vuetify(),
       propsData: {
         password: '',
       },
-      mocks: {
-        $emit
-      }
     });
-    wrapper.setProps({ password: 'Blabl8' });
+    await wrapper.setProps({ password: 'Blabl8' });
 
-    await localVue.nextTick();
+    expect(wrapper.emitted().validation).toBeTruthy();
 
-    expect($emit).not.toBeCalledWith('validation', true);
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
   });
 
   test('should emit error when uppercase & lowercase & number & special are validated', async () => {
-    const $emit = jest.fn();
     wrapper = mount(PasswordValidator, {
       localVue,
       vuetify: new vuetify(),
       propsData: {
         password: '',
       },
-      mocks: {
-        $emit
-      }
     });
-    wrapper.setProps({ password: 'Blabl8!' });
+    await wrapper.setProps({ password: 'Blabl8!' });
 
-    await localVue.nextTick();
+    expect(wrapper.emitted().validation).toBeTruthy();
 
-    expect($emit).not.toBeCalledWith('validation', true);
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
   });
 
   test('should emit true when everything is validated', async () => {
-    const $emit = jest.fn();
     wrapper = mount(PasswordValidator, {
       localVue,
       vuetify: new vuetify(),
       propsData: {
         password: '',
       },
-      mocks: {
-        $emit
-      }
     });
-    wrapper.setProps({ password: 'Blabl8!a' });
+    await wrapper.setProps({ password: 'Blabl8!a' });
 
-    await localVue.nextTick();
+    expect(wrapper.emitted().validation).toBeTruthy();
 
-    expect($emit).not.toBeCalledWith('validation', 'Hasło nie spełnia wymagań');
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([[true]]);
   });
 });
