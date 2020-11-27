@@ -12,13 +12,13 @@ describe('TraderStocksList.vue', () => {
                 {
                     id: 1,
                     name: 'Stock1',
-                    currentPrice: 100
+                    currentPrice: 100,
                 },
                 {
                     id: 2,
                     name: 'Stock2',
-                    currentPrice: 200
-                }
+                    currentPrice: 200,
+                },
             ],
             totalPages: 1,
         },
@@ -43,10 +43,7 @@ describe('TraderStocksList.vue', () => {
             localVue,
             vuetify: new vuetify(),
             propsData: {
-                stocks: [{ content: [{ key: 1, name: "asas", currentPrice: 12 }, { key: 2, name: "asas", currentPrice: 12 }, { key: 3, name: "asas", currentPrice: 12 }] }
-                    , { totalPages: 12 }
-                ],
-                search: ""
+                stocks: props,
             },
         });
 
@@ -101,7 +98,7 @@ describe('TraderStocksList.vue', () => {
             localVue,
             vuetify: new vuetify(),
             propsData: props,
-            mocks: { stockClicked }
+            mocks: { stockClicked },
         });
 
         const searchInput = wrapper.find('[id="2"]');
@@ -114,6 +111,4 @@ describe('TraderStocksList.vue', () => {
 
         expect(wrapper.emitted().selected).toStrictEqual([['Stock2']]);
     });
-
-})
-
+});

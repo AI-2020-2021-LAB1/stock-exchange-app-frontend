@@ -12,6 +12,7 @@
           <v-row align="center" justify="center" class="mx-0">
             <v-col class="px-1 pb-0">
               <v-text-field
+                id="buyPrice"
                 outlined
                 hide-details
                 v-model.number="buyPrice"
@@ -22,6 +23,7 @@
             </v-col>
             <v-col class="px-1 pb-0">
               <v-text-field
+                id="buyAmount"
                 outlined
                 hide-details
                 v-model.number="buyAmount"
@@ -45,6 +47,7 @@
           <v-row no-gutters class="mx-2 mt-2">
             <v-col cols="12">
               <v-select
+                id="buyType"
                 dense
                 outlined
                 hide-details
@@ -144,6 +147,7 @@
           <v-row align="center" justify="center" class="mx-0">
             <v-col class="px-1 pb-0">
               <v-text-field
+                id="sellPrice"
                 outlined
                 hide-details
                 v-model.number="sellPrice"
@@ -154,6 +158,7 @@
             </v-col>
             <v-col class="px-1 pb-0">
               <v-text-field
+                id="sellAmount"
                 outlined
                 hide-details
                 v-model.number="sellAmount"
