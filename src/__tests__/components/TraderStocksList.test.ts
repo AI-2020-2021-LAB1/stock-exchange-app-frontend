@@ -22,4 +22,45 @@ describe('TraderStocksList.vue', () => {
         expect(wrapper.vm.Search).toBe('abc');
     });
 
+    test('should allow to click pagination', async () => {
+        wrapper = mount(TraderStocksList, {
+            localVue,
+            vuetify: new vuetify(),
+            propsData: {
+                stocks: [{ content: [{ key: 1, name: "asas", currentPrice: 12 }, { key: 2, name: "asas", currentPrice: 12 }, { key: 3, name: "asas", currentPrice: 12 }] }
+                    , { totalPages: 12 }
+                ],
+                search: ""
+            },
+        });
+
+        wrapper.vm.$emit('pagination', 1);
+
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.emitted().pagination).toBeTruthy();
+
+    });
+
+
+    test('should allow to click pagination', async () => {
+        wrapper = mount(TraderStocksList, {
+            localVue,
+            vuetify: new vuetify(),
+            propsData: {
+                stocks: [{ content: [{ key: 1, name: "asas", currentPrice: 12 }, { key: 2, name: "asas", currentPrice: 12 }, { key: 3, name: "asas", currentPrice: 12 }] }
+                    , { totalPages: 12 }
+                ],
+                search: ""
+            },
+        });
+
+        wrapper.vm.$emit('pagination', 1);
+
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.emitted().pagination).toBeTruthy();
+
+    });
+
 })
