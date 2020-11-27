@@ -14,8 +14,7 @@
       >
         <trader-stocks-list
           :stocks="stocks"
-          :search="searchStocks"
-          @search="searchStocks = $event"
+          @search="queryStocks($event)"
           @pagination="paginationClicked($event)"
           @selected="stockSelectionChanged($event)"
         ></trader-stocks-list>
@@ -87,8 +86,7 @@
     >
       <trader-stocks-list
         :stocks="stocks"
-        :search="searchStocks"
-        @search="searchStocks = $event"
+        @search="queryStocks($event)"
         @pagination="paginationClicked($event)"
         @selected="stockSelectionChanged($event)"
       ></trader-stocks-list>
@@ -127,11 +125,11 @@ export default class Trader extends Vue {
     this.$data.lastRequest = { page: 0 };
   }
 
-  private paginationClicked(pageNumber: number) {
-    if (this.$data.searchStocks) {
-      this.getStocks({ page: pageNumber - 1, name: this.$data.searchStocks });
+  private paginationClicked(params: { page: number; searchStocks: string; }) {
+    if (params.searchStocks) {
+      this.getStocks({ page: params.page - 1, name: params.searchStocks });
     } else {
-      this.getStocks({ page: pageNumber - 1 });
+      this.getStocks({ page: params.page - 1 });
     }
   }
 
@@ -329,7 +327,6 @@ export default class Trader extends Vue {
     }
   }
 
-  @Watch('searchStocks')
   private queryStocks(val: string) {
     if (val) {
       this.getStocks({ page: 0, name: val });
@@ -346,7 +343,7 @@ export default class Trader extends Vue {
       stockName: '',
       sellingOffersTotalElements: 0,
       buyingOffersTotalElements: 0,
-      searchStocks: '',
+      // searchStocks: '',
       selectedStock: {
         stockInfo: { amount: 0 },
         userPossession: { amountAvailableForSale: 0 },

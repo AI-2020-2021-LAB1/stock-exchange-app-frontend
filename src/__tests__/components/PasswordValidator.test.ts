@@ -118,4 +118,107 @@ describe('PasswordValidator.vue', () => {
     expect(wrapper.vm.passwdHasNumber).toBe(true);
     expect(wrapper.vm.passwdHasSpecialChar).toBe(true);
   });
+
+  test('should emit error if nothing is validated', async () => {
+    wrapper = mount(PasswordValidator, {
+      localVue,
+      vuetify: new vuetify(),
+      propsData: {
+        password: '',
+      },
+    });
+    await wrapper.setProps({ password: 'B' });
+    await wrapper.setProps({ password: '' });
+
+    expect(wrapper.emitted().validation).toBeTruthy();
+
+    expect(wrapper.emitted().validation).toHaveLength(2);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań'], ['Hasło nie spełnia wymagań']]);
+  });
+
+  test('should emit error when uppercase is validated', async () => {
+    wrapper = mount(PasswordValidator, {
+      localVue,
+      vuetify: new vuetify(),
+      propsData: {
+        password: '',
+      },
+    });
+    await wrapper.setProps({ password: 'B' });
+
+    expect(wrapper.emitted().validation).toBeTruthy();
+
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
+  });
+
+  test('should emit error when uppercase & lowercase are validated', async () => {
+    wrapper = mount(PasswordValidator, {
+      localVue,
+      vuetify: new vuetify(),
+      propsData: {
+        password: '',
+      },
+    });
+    await wrapper.setProps({ password: 'Bl' });
+
+    expect(wrapper.emitted().validation).toBeTruthy();
+
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
+  });
+
+  test('should emit error when uppercase & lowercase & number are validated', async () => {
+    wrapper = mount(PasswordValidator, {
+      localVue,
+      vuetify: new vuetify(),
+      propsData: {
+        password: '',
+      },
+    });
+    await wrapper.setProps({ password: 'Blabl8' });
+
+    expect(wrapper.emitted().validation).toBeTruthy();
+
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
+  });
+
+  test('should emit error when uppercase & lowercase & number & special are validated', async () => {
+    wrapper = mount(PasswordValidator, {
+      localVue,
+      vuetify: new vuetify(),
+      propsData: {
+        password: '',
+      },
+    });
+    await wrapper.setProps({ password: 'Blabl8!' });
+
+    expect(wrapper.emitted().validation).toBeTruthy();
+
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([['Hasło nie spełnia wymagań']]);
+  });
+
+  test('should emit true when everything is validated', async () => {
+    wrapper = mount(PasswordValidator, {
+      localVue,
+      vuetify: new vuetify(),
+      propsData: {
+        password: '',
+      },
+    });
+    await wrapper.setProps({ password: 'Blabl8!a' });
+
+    expect(wrapper.emitted().validation).toBeTruthy();
+
+    expect(wrapper.emitted().validation).toHaveLength(1);
+
+    expect(wrapper.emitted().validation).toStrictEqual([[true]]);
+  });
 });
