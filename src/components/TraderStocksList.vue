@@ -17,6 +17,7 @@
           v-for="stock in stocks.content"
           :key="stock.id"
           @click="stockClicked(stock.name)"
+          :id="stock.id"
         >
           <v-list-item-icon>
             <v-icon color="green">mdi-cash-usd-outline</v-icon>

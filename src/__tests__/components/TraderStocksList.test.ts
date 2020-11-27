@@ -57,47 +57,62 @@ describe('TraderStocksList.vue', () => {
         expect(wrapper.emitted().pagination).toBeTruthy();
 
     });
-    test('should emit search', async () => {
-        const searchChanged = jest.fn();
+    // test('should emit search', async () => {
+    //     const searchChanged = jest.fn();
+    //     wrapper = mount(TraderStocksList, {
+    //         localVue,
+    //         vuetify: new vuetify(),
+    //         propsData: props,
+    //         mocks: {
+    //             searchChanged,
+    //         },
+    //         watch: {
+    //             searchChanged
+    //         }
+    //     });
+
+    //     const searchInput = wrapper.find('#searchStocks');
+    //     await searchInput.setValue('abc');
+    //     console.log(wrapper.vm.$data.search)
+
+    //     expect(searchChanged).toBeCalledTimes(1);
+    //     expect(searchChanged).toBeCalledWith('abc', '');
+    // });
+
+
+    test('should allow to click on stock item', async () => {
         wrapper = mount(TraderStocksList, {
             localVue,
             vuetify: new vuetify(),
             propsData: props,
-            mocks: {
-                searchChanged,
-            },
-            watch: {
-                searchChanged
-            }
         });
 
-        const searchInput = wrapper.find('#searchStocks');
-        await searchInput.setValue('abc');
-        console.log(wrapper.vm.$data.search)
+        const searchInput = wrapper.find('[id="2"]');
 
-        expect(searchChanged).toBeCalledTimes(1);
-        expect(searchChanged).toBeCalledWith('abc', '');
+        await searchInput.trigger('click');
+
+        expect(wrapper.vm.$data.selectedItem).toBe(1);
     });
 
+    test('should emit selected item', async () => {
+        const stockClicked = jest.fn();
 
-    test('should allow to click pagination', async () => {
         wrapper = mount(TraderStocksList, {
             localVue,
             vuetify: new vuetify(),
-            propsData: {
-                stocks: [{ content: [{ key: 1, name: "asas", currentPrice: 12 }, { key: 2, name: "asas", currentPrice: 12 }, { key: 3, name: "asas", currentPrice: 12 }] }
-                    , { totalPages: 12 }
-                ],
-                search: ""
-            },
+            propsData: props,
+            mocks: { stockClicked }
         });
 
-        wrapper.vm.$emit('pagination', 1);
+        const searchInput = wrapper.find('[id="2"]');
 
-        await wrapper.vm.$nextTick();
+        await searchInput.trigger('click');
 
-        expect(wrapper.emitted().pagination).toBeTruthy();
+        expect(wrapper.emitted().selected).toBeTruthy();
 
+        expect(wrapper.emitted().selected).toHaveLength(1);
+
+        expect(wrapper.emitted().selected).toStrictEqual([['Stock2']]);
     });
 
 })
