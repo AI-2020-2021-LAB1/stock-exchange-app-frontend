@@ -102,6 +102,17 @@ export default new Router({
         }
       },
     },
+    {
+      path: '/403',
+      name: 'error403',
+      component: () => import(/* webpackChunkName: "eror403" */ '../views/403.vue'),
+    },
+    {
+      path: '/404',
+      name: 'error404',
+      component: () => import(/* webpackChunkName: "error404" */ '../views/404.vue'),
+    },
+    { path: '*', redirect: '/404' },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
