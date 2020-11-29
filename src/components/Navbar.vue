@@ -27,6 +27,9 @@
         <v-btn text to="/user" v-if="auth && user.role === 'USER'"
           >Panel użytkownika</v-btn
         >
+        <v-btn text to="/admin" v-if="auth && user.role === 'ADMIN'"
+          >Panel administratora</v-btn
+        >
         <v-btn text @click="logout" v-if="auth">Wyloguj</v-btn>
       </v-toolbar-items>
     </v-app-bar>

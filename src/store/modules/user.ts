@@ -7,7 +7,7 @@ const userModule: Module<any, any> = {
     token: null,
     refreshToken: null,
     timeout: null,
-    user: null,
+    user: { id: 0, role: undefined },
   },
 
   mutations: {
@@ -18,7 +18,7 @@ const userModule: Module<any, any> = {
     clearAuthData(state) {
       state.token = null;
       state.refreshToken = null;
-      state.user = { id: 0 };
+      state.user = { id: 0, role: undefined };
     },
     setTimeout(state, data) {
       state.timeout = data;
@@ -140,14 +140,18 @@ const userModule: Module<any, any> = {
     },
     changeName({ dispatch, state }, data) {
       axios
-        .put('/api/user/config/user-data', {
-          firstName: data.firstName,
-          lastName: data.lastName,
-        }, {
-          headers: {
-            Authorization: 'Bearer ' + state.token,
+        .put(
+          '/api/user/config/user-data',
+          {
+            firstName: data.firstName,
+            lastName: data.lastName,
           },
-        })
+          {
+            headers: {
+              Authorization: 'Bearer ' + state.token,
+            },
+          },
+        )
         .then(() => {
           dispatch('getUserData');
           dispatch('setSnackbarState', {

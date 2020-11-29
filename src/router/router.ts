@@ -26,6 +26,19 @@ export default new Router({
       },
     },
     {
+      path: '/admin',
+      name: 'admin',
+      component: () =>
+        import(/* webpackChunkName: "Admin" */ '../views/Admin.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          next();
+        }
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () =>
