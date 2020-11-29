@@ -39,7 +39,7 @@
         <v-row
           no-gutters
           align="center"
-          v-if="user.tag === selectedStock.stockInfo.tag"
+          v-if="user.role === 'USER' && user.tag === selectedStock.stockInfo.tag"
         >
           <trader-inputs
             :selectedStock="selectedStock"
