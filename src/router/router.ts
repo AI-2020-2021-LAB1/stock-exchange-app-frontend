@@ -39,6 +39,45 @@ export default new Router({
       },
     },
     {
+      path: '/admin/stocks',
+      name: 'admin-stocks',
+      component: () =>
+        import(/* webpackChunkName: "AdminStocks" */ '../views/AdminManageStocks.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          next();
+        }
+      },
+    },
+    {
+      path: '/admin/tags',
+      name: 'admin-tags',
+      component: () =>
+        import(/* webpackChunkName: "AdminTags" */ '../views/AdminManageTags.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          next();
+        }
+      },
+    },
+    {
+      path: '/admin/users',
+      name: 'admin-users',
+      component: () =>
+        import(/* webpackChunkName: "AdminUsers" */ '../views/AdminManageUsers.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          next();
+        }
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () =>

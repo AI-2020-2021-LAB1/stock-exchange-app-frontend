@@ -40,15 +40,15 @@ export default class Admin extends Vue {
       links: [
         {
           name: 'Zarządzanie użytkownikami',
-          link: '/',
+          link: '/admin/users',
         },
         {
           name: 'Zarządzanie akcjami',
-          link: '/',
+          link: '/admin/stocks',
         },
         {
           name: 'Zarządzanie tagami',
-          link: '/',
+          link: '/admin/tags',
         },
       ],
     };
