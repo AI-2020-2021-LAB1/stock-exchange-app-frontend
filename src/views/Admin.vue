@@ -19,6 +19,7 @@
               <v-col>
                 <v-card-title
                   class="white--text font-weight-black justify-center py-auto"
+                  style="word-break: break-word"
                   >{{ el.name }}</v-card-title
                 >
               </v-col>
