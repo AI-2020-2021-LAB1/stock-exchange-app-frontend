@@ -123,6 +123,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
+            id="buyBtn"
             block
             depressed
             :disabled="buyValue <= 0 || buyType === 0"

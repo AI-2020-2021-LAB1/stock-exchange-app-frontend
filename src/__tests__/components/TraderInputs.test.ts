@@ -162,7 +162,7 @@ describe('TraderInputs.vue', () => {
         expect(wrapper.vm.sellValue).toBe(6);
     });
 
-    test('enable buy button', () => {
+    test('should enable buy button', () => {
         wrapper = mount(TraderInputs, {
             localVue,
             vuetify: new vuetify(),
@@ -174,7 +174,7 @@ describe('TraderInputs.vue', () => {
         expect(wrapper.vm.buyValue <= 0 || wrapper.vm.buyType === 0).toBe(false);
     });
 
-    test('enable sell button', () => {
+    test('should enable sell button', () => {
         wrapper = mount(TraderInputs, {
             localVue,
             vuetify: new vuetify(),
@@ -185,4 +185,27 @@ describe('TraderInputs.vue', () => {
         
         expect(wrapper.vm.sellValue <= 0 || wrapper.vm.sellType === 0).toBe(false);
     });
+
+    // test('should enable buy button', async () => {
+    //     const buy = jest.fn();
+    //     const placeOrder = jest.fn();
+    //     wrapper = mount(TraderInputs, {
+    //         localVue,
+    //         vuetify: new vuetify(),
+    //         propsData: props,
+    //         mocks: {
+    //             buy,
+    //             placeOrder
+    //         }
+    //     });
+
+    //     wrapper.setData(data);
+        
+    //     const buyBtn = wrapper.find('#buyBtn');
+
+    //     await buyBtn.trigger('click');
+    //     console.log(wrapper.emitted())
+
+    //     expect(buy).toHaveBeenCalled();
+    // });
 });
