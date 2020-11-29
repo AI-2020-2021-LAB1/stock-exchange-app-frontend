@@ -39,7 +39,9 @@
         <v-row
           no-gutters
           align="center"
-          v-if="user.role === 'USER' && user.tag === selectedStock.stockInfo.tag"
+          v-if="
+            user.role === 'USER' && user.tag === selectedStock.stockInfo.tag
+          "
         >
           <trader-inputs
             :selectedStock="selectedStock"
@@ -159,7 +161,9 @@ export default class Trader extends Vue {
   private stockSelectionChanged(name: string) {
     this.$data.stockName = name;
     this.getSelectedStockInfo(name);
-    this.getUserStocks(name);
+    if (this.user.role === 'USER') {
+      this.getUserStocks(name);
+    }
     this.getBuyingOrders({
       page: 0,
       orderType: OrderType.BuyingOrder,
