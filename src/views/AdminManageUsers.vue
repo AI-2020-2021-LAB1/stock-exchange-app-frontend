@@ -1,22 +1,27 @@
 <template>
   <v-row no-gutters align="center" justify="center" class="ma-2 fill-height">
     <v-col lg="9" xl="6">
-      <admin-users-list :users="users" :search="searchUsers" @search="searchUsers = $event" @pagination="paginationClicked($event)"></admin-users-list>
+      <detailed-list
+        title="Lista użytkowników"
+        :list="users"
+        :listElements="userElems"
+        :search="searchUsers"
+        searchLabel="Wyszukaj użytkowników po e-mailu"
+        objIcon="mdi-account"
+        @search="searchUsers = $event"
+        @pagination="paginationClicked($event)"
+        >Test</detailed-list
+      >
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
-import AdminUsersList from '../components/AdminUsersList.vue';
 import { UsersService } from '../API/users';
 import { Role } from '../models/UserModel';
 
-@Component({
-  components: {
-    AdminUsersList,
-  },
-})
+@Component
 export default class AdminManageUsers extends Vue {
   private usersService!: UsersService;
 
@@ -66,6 +71,32 @@ export default class AdminManageUsers extends Vue {
     return {
       users: [],
       searchUsers: '',
+      userElems: [
+        {
+          text: 'Imie',
+          value: 'firstName',
+        },
+        {
+          text: 'Nazwisko',
+          value: 'lastName',
+        },
+        {
+          text: 'E-mail',
+          value: 'email',
+        },
+        {
+          text: 'Posiadane środki',
+          value: 'money',
+        },
+        {
+          text: 'Tag',
+          value: 'tag',
+        },
+        {
+          text: 'Konto aktywne?',
+          value: 'isActive',
+        },
+      ],
     };
   }
 }
