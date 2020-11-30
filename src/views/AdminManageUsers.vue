@@ -1,21 +1,20 @@
 <template>
-  <users-list
-    :users="users"
-    :search="searchUsers"
-    @search="searchUsers = $event"
-    @pagination="paginationClicked($event)"
-  ></users-list>
+  <v-row no-gutters align="center" justify="center" class="ma-2 fill-height">
+    <v-col lg="9" xl="6">
+      <admin-users-list :users="users" :search="searchUsers" @search="searchUsers = $event" @pagination="paginationClicked($event)"></admin-users-list>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
-import UsersList from '../components/UsersList.vue';
+import AdminUsersList from '../components/AdminUsersList.vue';
 import { UsersService } from '../API/users';
 import { Role } from '../models/UserModel';
 
 @Component({
   components: {
-    UsersList,
+    AdminUsersList,
   },
 })
 export default class AdminManageUsers extends Vue {
