@@ -15,7 +15,7 @@
         :label="searchLabel"
         prepend-inner-icon="mdi-database-search"
       ></v-text-field>
-      <v-expansion-panels class="mt-4">
+      <v-expansion-panels class="mt-4" v-model="openedPanel">
         <v-expansion-panel v-for="obj in list.content" :key="obj.id">
           <v-expansion-panel-header hide-actions>
             <v-row no-gutters align="center" justify="start">
@@ -80,9 +80,17 @@ export default class DetailedList extends Vue {
     this.$emit('pagination', page);
   }
 
+  @Watch('openedPanel')
+  private openPanel(val: number) {
+    if (val !== undefined) {
+      this.$emit('panelChanged', val);
+    }
+  }
+
   private data() {
     return {
       currentPage: 1,
+      openedPanel: undefined,
     };
   }
 }
