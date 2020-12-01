@@ -10,8 +10,27 @@
         objIcon="mdi-account"
         @search="searchUsers = $event"
         @pagination="paginationClicked($event)"
-        >Test</detailed-list
+        @panelChanged="editedUser = users.content[$event].id"
       >
+        <v-card class="mt-2">
+          <v-card-title
+            class="text-h5 font-weight-bold white--text primary py-1"
+            >Edycja danych użytkownika</v-card-title
+          >
+          <v-card-text>Formularz</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn class="error">
+              <span>Resetuj formularz</span>
+              <v-icon right>mdi-reload</v-icon>
+            </v-btn>
+            <v-btn class="success">
+              <span>Edytuj użytkownika</span>
+              <v-icon right>mdi-account-edit</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </detailed-list>
     </v-col>
   </v-row>
 </template>
@@ -71,6 +90,7 @@ export default class AdminManageUsers extends Vue {
     return {
       users: [],
       searchUsers: '',
+      editedUser: undefined,
       userElems: [
         {
           text: 'Imie',
