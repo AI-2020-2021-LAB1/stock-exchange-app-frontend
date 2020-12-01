@@ -33,7 +33,17 @@
                     <p class="mt-auto font-weight-bold text-center mb-1">
                       {{ el.text }}
                     </p>
+
                     <p class="my-auto text-center">{{ obj[el.value] }}</p>
+                    <v-col v-if="remove" class="pa-3">
+                      <v-btn
+                        @click="removeClicked(obj[el.value])"
+                        color="error"
+                      >
+                        <span class="font-weight-bold">Usuń</span>
+                        <v-icon right>mdi-database-plus</v-icon>
+                      </v-btn>
+                    </v-col>
                   </v-col>
                 </v-row>
               </v-col>
@@ -66,6 +76,7 @@ export default class DetailedList extends Vue {
   @Prop({ required: true }) private search!: string;
   @Prop({ default: 'Wyszukaj' }) private searchLabel!: string;
   @Prop({ default: undefined }) private objIcon!: string;
+  @Prop({ required: false }) private remove!: string;
 
   get Search() {
     return this.search;
@@ -74,6 +85,10 @@ export default class DetailedList extends Vue {
   set Search(val: string) {
     this.$emit('search', val);
     this.$data.currentPage = 1;
+  }
+
+  private removeClicked(name: string) {
+    this.$emit('remove', { name });
   }
 
   private paginationClicked(page: number) {

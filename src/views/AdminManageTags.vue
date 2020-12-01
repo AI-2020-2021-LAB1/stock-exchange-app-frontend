@@ -1,14 +1,95 @@
 <template>
-
+  <v-row no-gutters align="center" justify="center" class="ma-2 fill-height">
+    <v-col lg="9" xl="6">
+      <detailed-list
+        title="Lista użytkowników"
+        :list="tags"
+        :listElements="tagElems"
+        :search="searchTags"
+        remove="true"
+        searchLabel="Wyszukaj tag po nazwie"
+        objIcon="mdi-account"
+        @search="searchTags = $event"
+        @remove="deleteTag($event)"
+        @pagination="paginationClicked($event)"
+        >Test</detailed-list
+      >
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
+import { TagsService } from '../API/tags';
 
 @Component
 export default class AdminManageTags extends Vue {
+  private tagService!: TagsService;
+
+  private beforeCreate() {
+    this.tagService = new TagsService();
+  }
+
+  private created() {
+    this.getTags({ page: 0 });
+  }
+
+  private paginationClicked(pageNumber: number) {
+    if (this.$data.searchTags) {
+      this.getTags({ page: pageNumber - 1, name: this.$data.searchTags });
+    } else {
+      this.getTags({ page: pageNumber - 1 });
+    }
+  }
+
+  @Watch('searchTags')
+  private queryTags(val: string) {
+    if (val) {
+      this.getTags({ page: 0, name: val });
+    } else {
+      this.getTags({ page: 0 });
+    }
+  }
+
+  private getTags(params: object) {
+    this.tagService
+      .getTags(params)
+      .then((res) => {
+        this.$data.tags = [];
+        this.$data.tags = res.data;
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private deleteTag(params: object) {
+    console.log(params);
+    this.tagService.deleteTag(params).catch((err) => {
+      this.$store.dispatch('setSnackbarState', {
+        state: true,
+        msg: 'Error ' + err.response.status,
+        color: 'error',
+        timeout: 7500,
+      });
+    });
+  }
+
   private data() {
     return {
+      tags: [],
+      searchTags: '',
+      tagElems: [
+        {
+          text: 'Nazwa',
+          value: 'name',
+        },
+      ],
     };
   }
 }
