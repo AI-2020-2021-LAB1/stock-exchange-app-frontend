@@ -109,6 +109,6 @@ export default class DetailedList extends Vue {
 
 <style>
 .v-expansion-panel-content__wrap {
-  padding: 0;
+  padding: 0 !important;
 }
 </style>
