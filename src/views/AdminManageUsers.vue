@@ -10,26 +10,9 @@
         objIcon="mdi-account"
         @search="searchUsers = $event"
         @pagination="paginationClicked($event)"
-        @panelChanged="editedUser = users.content[$event].id"
+        @panelChanged="panelChanged($event)"
       >
-        <v-card class="mt-2">
-          <v-card-title
-            class="text-h5 font-weight-bold white--text primary py-1"
-            >Edycja danych użytkownika</v-card-title
-          >
-          <v-card-text>Formularz</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn class="error">
-              <span>Resetuj formularz</span>
-              <v-icon right>mdi-reload</v-icon>
-            </v-btn>
-            <v-btn class="success">
-              <span>Edytuj użytkownika</span>
-              <v-icon right>mdi-account-edit</v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <admin-edit-user :userData="editedUserData"></admin-edit-user>
       </detailed-list>
     </v-col>
   </v-row>
@@ -37,10 +20,15 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
+import AdminEditUser from '../components/AdminEditUser.vue';
 import { UsersService } from '../API/users';
 import { Role } from '../models/UserModel';
 
-@Component
+@Component({
+  components: {
+    AdminEditUser,
+  },
+})
 export default class AdminManageUsers extends Vue {
   private usersService!: UsersService;
 
@@ -57,15 +45,6 @@ export default class AdminManageUsers extends Vue {
       this.getUsers({ page: pageNumber - 1, email: this.$data.searchUsers });
     } else {
       this.getUsers({ page: pageNumber - 1 });
-    }
-  }
-
-  @Watch('searchUsers')
-  private queryUsers(val: string) {
-    if (val) {
-      this.getUsers({ page: 0, email: val });
-    } else {
-      this.getUsers({ page: 0 });
     }
   }
 
@@ -86,11 +65,26 @@ export default class AdminManageUsers extends Vue {
       });
   }
 
+  private panelChanged(panelId: number) {
+    this.$data.editedUser = panelId;
+    this.$data.editedUserData = this.$data.users.content[panelId];
+  }
+
+  @Watch('searchUsers')
+  private queryUsers(val: string) {
+    if (val) {
+      this.getUsers({ page: 0, email: val });
+    } else {
+      this.getUsers({ page: 0 });
+    }
+  }
+
   private data() {
     return {
       users: [],
       searchUsers: '',
       editedUser: undefined,
+      editedUserData: undefined,
       userElems: [
         {
           text: 'Imie',
