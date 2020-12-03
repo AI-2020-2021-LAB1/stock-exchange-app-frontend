@@ -109,7 +109,7 @@ import { User } from '../models/UserModel';
 export default class AdmineditUser extends Vue {
   @Prop({ required: true }) private userData!: User;
 
-  private created() {
+  private mounted() {
     this.$data.firstName = this.userData.firstName;
     this.$data.lastName = this.userData.lastName;
     this.$data.email = this.userData.email;
@@ -128,7 +128,11 @@ export default class AdmineditUser extends Vue {
 
   @Watch('userData', { deep: true })
   private newData(data: User) {
-    this.$data.data = data;
+    this.$data.firstName = data.firstName;
+    this.$data.lastName = data.lastName;
+    this.$data.email = data.email;
+    this.$data.money = data.money;
+    this.$data.tag = data.tag;
   }
 
   private data() {
