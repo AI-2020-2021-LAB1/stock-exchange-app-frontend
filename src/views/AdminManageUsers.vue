@@ -83,8 +83,17 @@ export default class AdminManageUsers extends Vue {
     return {
       users: [],
       searchUsers: '',
-      editedUser: undefined,
-      editedUserData: undefined,
+      editedUser: 0,
+      editedUserData: {
+        id: 0,
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: '',
+        money: 0,
+        tag: '',
+        isActive: false,
+      },
       userElems: [
         {
           text: 'Imie',

@@ -12,9 +12,9 @@
             <v-text-field
               autofocus
               outlined
-              v-model="data.firstName"
+              v-model="firstName"
               prepend-icon="mdi-rename-box"
-              :rules="[rules.required, rules.counter(data.firstName, 2, 'i')]"
+              :rules="[rules.required, rules.counter(firstName, 2, 'i')]"
               label="Imię"
               color="primary"
               type="text"
@@ -24,8 +24,8 @@
           <v-col cols="12" md="6" class="py-0">
             <v-text-field
               outlined
-              v-model="data.lastName"
-              :rules="[rules.required, rules.counter(data.lastName, 2, 'i')]"
+              v-model="lastName"
+              :rules="[rules.required, rules.counter(lastName, 2, 'i')]"
               label="Nazwisko"
               color="primary"
               type="text"
@@ -35,9 +35,9 @@
         </v-row>
         <v-text-field
           outlined
-          v-model="data.email"
+          v-model="email"
           prepend-icon="mdi-at"
-          :rules="[rules.required, rules.counter(data.email, 3, 'i')]"
+          :rules="[rules.required, rules.counter(email, 3, 'i')]"
           label="E-mail"
           color="primary"
           type="text"
@@ -45,7 +45,7 @@
         ></v-text-field>
         <v-text-field
           outlined
-          v-model.number="data.money"
+          v-model.number="money"
           prepend-icon="mdi-cash-multiple"
           :rules="[rules.required]"
           label="Saldo"
@@ -55,7 +55,7 @@
         ></v-text-field>
         <v-select
           outlined
-          v-model="data.tag"
+          v-model="tag"
           prepend-icon="mdi-tag"
           :rules="[rules.required]"
           label="Tag użytkownika"
@@ -70,11 +70,11 @@
         <v-col cols="12" md="auto" class="pa-2">
           <v-btn
             block
-            :class="data.isActive ? 'error' : 'warning'"
-            @click="data.isActive = !data.isActive"
+            :class="isActive ? 'error' : 'warning'"
+            @click="isActive = !isActive"
           >
             <span>{{
-              data.isActive ? 'Zbanuj użytkownika' : 'Odbanuj użytkownika'
+              isActive ? 'Zbanuj użytkownika' : 'Odbanuj użytkownika'
             }}</span>
             <v-icon right>mdi-gavel</v-icon>
           </v-btn>
@@ -110,11 +110,20 @@ export default class AdmineditUser extends Vue {
   @Prop({ required: true }) private userData!: User;
 
   private created() {
-    this.$data.data = this.userData;
+    this.$data.firstName = this.userData.firstName;
+    this.$data.lastName = this.userData.lastName;
+    this.$data.email = this.userData.email;
+    this.$data.money = this.userData.money;
+    this.$data.tag = this.userData.tag;
+    this.$data.isActive = this.userData.isActive;
   }
 
   private resetForm() {
-    this.$data.data = this.userData;
+    this.$data.firstName = this.userData.firstName;
+    this.$data.lastName = this.userData.lastName;
+    this.$data.email = this.userData.email;
+    this.$data.money = this.userData.money;
+    this.$data.tag = this.userData.tag;
   }
 
   @Watch('userData', { deep: true })
@@ -124,7 +133,12 @@ export default class AdmineditUser extends Vue {
 
   private data() {
     return {
-      data: {},
+      firstName: '',
+      lastName: '',
+      email: '',
+      money: 0,
+      tag: '',
+      isActive: false,
       inputValidated: false,
       rules: {
         required: (value: string) => !!value || 'Pole wymagane',
