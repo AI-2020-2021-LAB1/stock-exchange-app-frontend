@@ -1,18 +1,17 @@
 <template>
   <v-row no-gutters align="center" justify="center" class="ma-2 fill-height">
     <v-col lg="9" xl="6">
-      <detailed-list
-        title="Lista użytkowników"
+      <AdminTagsList
+        title="Lista Tagów"
         :list="tags"
         :listElements="tagElems"
         :search="searchTags"
-        remove="true"
         searchLabel="Wyszukaj tag po nazwie"
-        objIcon="mdi-account"
+        objIcon="mdi-database"
         @search="searchTags = $event"
         @remove="deleteTag($event)"
         @pagination="paginationClicked($event)"
-        >Test</detailed-list
+        >Test</AdminTagsList
       >
     </v-col>
   </v-row>
@@ -21,8 +20,13 @@
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
 import { TagsService } from '../API/tags';
+import AdminTagsList from '../components/AdminTagsList.vue';
 
-@Component
+@Component({
+  components: {
+    AdminTagsList,
+  },
+})
 export default class AdminManageTags extends Vue {
   private tagService!: TagsService;
 
@@ -70,14 +74,14 @@ export default class AdminManageTags extends Vue {
 
   private deleteTag(params: object) {
     console.log(params);
-    this.tagService.deleteTag(params).catch((err) => {
-      this.$store.dispatch('setSnackbarState', {
-        state: true,
-        msg: 'Error ' + err.response.status,
-        color: 'error',
-        timeout: 7500,
-      });
-    });
+    // this.tagService.deleteTag(params).catch((err) => {
+    //   this.$store.dispatch('setSnackbarState', {
+    //     state: true,
+    //     msg: 'Error ' + err.response.status,
+    //     color: 'error',
+    //     timeout: 7500,
+    //   });
+    // });
   }
 
   private data() {
