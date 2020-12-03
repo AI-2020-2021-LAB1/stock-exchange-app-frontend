@@ -50,13 +50,35 @@
           :rules="[rules.required]"
           label="Saldo"
           color="primary"
-          type="text"
+          type="number"
           class="my-2"
         ></v-text-field>
+        <v-select
+          outlined
+          v-model="data.tag"
+          prepend-icon="mdi-tag"
+          :rules="[rules.required]"
+          label="Tag użytkownika"
+          color="primary"
+          type="text"
+          class="my-2"
+        ></v-select>
       </v-form>
     </v-card-text>
     <v-card-actions class="py-0">
       <v-row justify="end" no-gutters>
+        <v-col cols="12" md="auto" class="pa-2">
+          <v-btn
+            block
+            :class="data.isActive ? 'error' : 'warning'"
+            @click="data.isActive = !data.isActive"
+          >
+            <span>{{
+              data.isActive ? 'Zbanuj użytkownika' : 'Odbanuj użytkownika'
+            }}</span>
+            <v-icon right>mdi-gavel</v-icon>
+          </v-btn>
+        </v-col>
         <v-col cols="12" md="auto" class="pa-2">
           <v-btn block class="error" @click="resetForm()">
             <span>Resetuj formularz</span>
