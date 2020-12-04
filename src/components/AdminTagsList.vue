@@ -90,7 +90,7 @@ export default class DetailedList extends Vue {
   }
 
   private removeClicked(name: string) {
-    this.$emit('remove', { name });
+    this.$emit('remove', name);
   }
 
   private paginationClicked(page: number) {

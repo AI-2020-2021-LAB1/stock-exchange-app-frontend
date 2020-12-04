@@ -72,16 +72,30 @@ export default class AdminManageTags extends Vue {
       });
   }
 
-  private deleteTag(params: object) {
-    console.log(params);
-    // this.tagService.deleteTag(params).catch((err) => {
-    //   this.$store.dispatch('setSnackbarState', {
-    //     state: true,
-    //     msg: 'Error ' + err.response.status,
-    //     color: 'error',
-    //     timeout: 7500,
-    //   });
-    // });
+  private deleteTag(params: string) {
+    this.tagService
+      .deleteTag(params)
+      .then(() => {
+        if (this.$data.searchTags) {
+          this.getTags({ page: 0, name: this.$data.searchTags });
+        } else {
+          this.getTags({ page: 0 });
+        }
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Tag został usunięty',
+          color: 'success',
+          timeout: 5000,
+        });
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
   }
 
   private data() {
