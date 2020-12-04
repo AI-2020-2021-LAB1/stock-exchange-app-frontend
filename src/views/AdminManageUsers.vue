@@ -12,7 +12,10 @@
         @pagination="paginationClicked($event)"
         @panelChanged="panelChanged($event)"
       >
-        <admin-edit-user :userData="editedUserData"></admin-edit-user>
+        <admin-edit-user
+          :userData="editedUserData"
+          @userEdited="editUser($event)"
+        ></admin-edit-user>
       </detailed-list>
     </v-col>
   </v-row>
@@ -22,7 +25,7 @@
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
 import AdminEditUser from '../components/AdminEditUser.vue';
 import { UsersService } from '../API/users';
-import { Role } from '../models/UserModel';
+import { Role, User } from '../models/UserModel';
 
 @Component({
   components: {
@@ -68,6 +71,39 @@ export default class AdminManageUsers extends Vue {
   private panelChanged(panelId: number) {
     this.$data.editedUser = panelId;
     this.$data.editedUserData = this.$data.users.content[panelId];
+  }
+
+  private editUser(data: User) {
+    this.usersService
+      .editUserById(this.$data.users.content[this.$data.editedUser].id, data)
+      .then((res) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Dane zostaly zmienione',
+          color: 'success',
+          timeout: 7500,
+        });
+        this.$data.editedUserData.firstName = data.firstName;
+        this.$data.editedUserData.lastName = data.lastName;
+        this.$data.editedUserData.role = data.role;
+        this.$data.editedUserData.isActive = data.isActive;
+
+        this.$data.users.content[this.$data.editedUser].firstName =
+          data.firstName;
+        this.$data.users.content[this.$data.editedUser].lastName =
+          data.lastName;
+        this.$data.users.content[this.$data.editedUser].role = data.role;
+        this.$data.users.content[this.$data.editedUser].isActive =
+          data.isActive;
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
   }
 
   @Watch('searchUsers')

@@ -37,7 +37,6 @@
           outlined
           v-model="role"
           prepend-icon="mdi-clipboard-account"
-          :rules="[rules.required]"
           :items="['USER', 'ADMIN']"
           label="Rola użytkownika"
           color="primary"
@@ -69,7 +68,7 @@
         <v-col cols="12" md="auto" class="pa-2">
           <v-btn
             block
-            :disabled="!inputValidated"
+            :disabled="!inputValidated || !anyEdits"
             class="success"
             @click="editUser()"
             type="submit"
@@ -112,6 +111,15 @@ export default class AdmineditUser extends Vue {
       role: this.$data.role,
       isActive: this.$data.isActive,
     });
+  }
+
+  get anyEdits() {
+    return (
+      this.$data.firstName !== this.userData.firstName ||
+      this.$data.lastName !== this.userData.lastName ||
+      this.$data.role !== this.userData.role ||
+      this.$data.isActive !== this.userData.isActive
+    );
   }
 
   @Watch('userData', { deep: true })
