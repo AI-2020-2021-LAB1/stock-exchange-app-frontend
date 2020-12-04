@@ -90,6 +90,7 @@
             block
             :disabled="!inputValidated"
             class="success"
+            @click="editUser()"
             type="submit"
           >
             <span>Edytuj użytkownika</span>
@@ -124,6 +125,18 @@ export default class AdmineditUser extends Vue {
     this.$data.email = this.userData.email;
     this.$data.money = this.userData.money;
     this.$data.tag = this.userData.tag;
+    this.$data.isActive = this.userData.isActive;
+  }
+
+  private editUser() {
+    this.$emit('userEdited', {
+      firstName: this.$data.firstName,
+      lastName: this.$data.lastName,
+      email: this.$data.email,
+      money: this.$data.money,
+      tag: this.$data.tag,
+      isActive: this.$data.isActive,
+    });
   }
 
   @Watch('userData', { deep: true })
@@ -133,6 +146,7 @@ export default class AdmineditUser extends Vue {
     this.$data.email = data.email;
     this.$data.money = data.money;
     this.$data.tag = data.tag;
+    this.$data.isActive = data.isActive;
   }
 
   private data() {
