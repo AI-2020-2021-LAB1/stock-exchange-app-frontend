@@ -1,17 +1,17 @@
 <template>
   <v-row no-gutters align="center" justify="center" class="ma-2 fill-height">
     <v-col lg="9" xl="6">
-      <AdminTagsList
+      <admin-tags-list
         title="Lista Tagów"
         :list="tags"
         :listElements="tagElems"
         :search="searchTags"
         searchLabel="Wyszukaj tag po nazwie"
-        objIcon="mdi-database"
+        objIcon="mdi-tag"
         @search="searchTags = $event"
         @remove="deleteTag($event)"
         @pagination="paginationClicked($event)"
-        >Test</AdminTagsList
+        >Test</admin-tags-list
       >
     </v-col>
   </v-row>

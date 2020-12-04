@@ -7,7 +7,7 @@
     <v-card-text class="pt-2 pb-0"
       ><v-text-field
         class="pt-2 pb-2"
-        prepend-inner-icon="mdi-link-variant-plus"
+        prepend-inner-icon="mdi-tag-plus"
         solo-inverted
         text
         clearable
@@ -15,7 +15,7 @@
         hide-details
       ></v-text-field>
       <v-btn block color="primary">
-        <v-icon left>mdi-link-variant-plus</v-icon>
+        <v-icon left>mdi-tag-plus</v-icon>
         <span>Dodaj tag</span>
       </v-btn>
     </v-card-text>
@@ -43,7 +43,7 @@
             class="pa-3"
           >
             <v-col
-              ><p class="my-auto text-center ">Tag:</p>
+              ><p class="my-auto text-center">Tag:</p>
               <p class="my-auto text-center font-weight-bold">
                 {{ obj[el.value] }}
               </p></v-col
@@ -51,7 +51,7 @@
             <v-col>
               <v-btn @click="removeClicked(obj[el.value])" color="error">
                 <span class="font-weight-bold">Usuń</span>
-                <v-icon right>mdi-database-minus</v-icon>
+                <v-icon right>mdi-tag-off</v-icon>
               </v-btn></v-col
             >
           </v-row>
