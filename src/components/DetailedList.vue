@@ -17,9 +17,12 @@
       ></v-text-field>
       <v-expansion-panels class="mt-4" v-model="openedPanel">
         <v-expansion-panel v-for="obj in list.content" :key="obj.id">
-          <v-expansion-panel-header hide-actions>
+          <v-expansion-panel-header
+            :class="!$vuetify.breakpoint.smAndUp ? 'pa-0' : ''"
+            :hide-actions="!$vuetify.breakpoint.smAndUp"
+          >
             <v-row no-gutters align="center" justify="start">
-              <v-col cols="auto" v-if="objIcon">
+              <v-col cols="auto" v-if="objIcon && $vuetify.breakpoint.smAndUp">
                 <v-icon large class="primary--text">{{ objIcon }}</v-icon>
               </v-col>
               <v-col>
@@ -27,29 +30,27 @@
                   <v-col
                     v-for="el in listElements"
                     :key="el.text"
-                    cols="auto"
+                    :cols="$vuetify.breakpoint.smAndUp ? 'auto' : 12"
                     class="pa-3"
                   >
-                    <p class="mt-auto font-weight-bold text-center mb-1">
+                    <p
+                      class="mt-auto font-weight-bold mb-1"
+                      :class="$vuetify.breakpoint.smAndUp ? 'text-center' : ''"
+                    >
                       {{ el.text }}
                     </p>
-
-                    <p class="my-auto text-center">{{ obj[el.value] }}</p>
-                    <v-col v-if="remove" class="pa-3">
-                      <v-btn
-                        @click="removeClicked(obj[el.value])"
-                        color="error"
-                      >
-                        <span class="font-weight-bold">Usuń</span>
-                        <v-icon right>mdi-database-plus</v-icon>
-                      </v-btn>
-                    </v-col>
+                    <p
+                      class="my-auto"
+                      :class="$vuetify.breakpoint.smAndUp ? 'text-center' : ''"
+                    >
+                      {{ obj[el.value] }}
+                    </p>
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
           </v-expansion-panel-header>
-          <v-expansion-panel-content>
+          <v-expansion-panel-content class="px-2 pb-2">
             <v-divider></v-divider>
             <slot></slot>
           </v-expansion-panel-content>
@@ -76,7 +77,6 @@ export default class DetailedList extends Vue {
   @Prop({ required: true }) private search!: string;
   @Prop({ default: 'Wyszukaj' }) private searchLabel!: string;
   @Prop({ default: undefined }) private objIcon!: string;
-  @Prop({ required: false }) private remove!: string;
 
   get Search() {
     return this.search;
@@ -85,10 +85,6 @@ export default class DetailedList extends Vue {
   set Search(val: string) {
     this.$emit('search', val);
     this.$data.currentPage = 1;
-  }
-
-  private removeClicked(name: string) {
-    this.$emit('remove', { name });
   }
 
   private paginationClicked(page: number) {
@@ -110,3 +106,9 @@ export default class DetailedList extends Vue {
   }
 }
 </script>
+
+<style>
+.v-expansion-panel-content__wrap {
+  padding: 0 !important;
+}
+</style>
