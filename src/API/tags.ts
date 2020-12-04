@@ -14,12 +14,11 @@ export class TagsService {
         return tags;
     }
 
-    public async deleteTag(body: object): Promise<AxiosResponse<any>> {
-        const tags = await axios.delete('api/tag', {
+    public async deleteTag(name: string): Promise<AxiosResponse> {
+        const tags = await axios.delete('api/tag/' + name, {
             headers: {
                 Authorization: 'Bearer ' + store.getters.token,
             },
-            params: body,
         });
         return tags;
     }
