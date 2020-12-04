@@ -53,7 +53,7 @@ export default class AdminManageUsers extends Vue {
 
   private getUsers(params: object) {
     this.usersService
-      .getUsers({ ...params, role: Role.User })
+      .getUsers({ ...params })
       .then((res) => {
         this.$data.users = [];
         this.$data.users = res.data;
@@ -150,6 +150,10 @@ export default class AdminManageUsers extends Vue {
         {
           text: 'Tag',
           value: 'tag',
+        },
+        {
+          text: 'Rola',
+          value: 'role',
         },
         {
           text: 'Konto aktywne?',
