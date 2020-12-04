@@ -17,9 +17,12 @@
       ></v-text-field>
       <v-expansion-panels class="mt-4" v-model="openedPanel">
         <v-expansion-panel v-for="obj in list.content" :key="obj.id">
-          <v-expansion-panel-header hide-actions>
+          <v-expansion-panel-header
+            :class="!$vuetify.breakpoint.smAndUp ? 'pa-0' : ''"
+            :hide-actions="!$vuetify.breakpoint.smAndUp"
+          >
             <v-row no-gutters align="center" justify="start">
-              <v-col cols="auto" v-if="objIcon">
+              <v-col cols="auto" v-if="objIcon && $vuetify.breakpoint.smAndUp">
                 <v-icon large class="primary--text">{{ objIcon }}</v-icon>
               </v-col>
               <v-col>
@@ -27,19 +30,27 @@
                   <v-col
                     v-for="el in listElements"
                     :key="el.text"
-                    cols="auto"
+                    :cols="$vuetify.breakpoint.smAndUp ? 'auto' : 12"
                     class="pa-3"
                   >
-                    <p class="mt-auto font-weight-bold text-center mb-1">
+                    <p
+                      class="mt-auto font-weight-bold mb-1"
+                      :class="$vuetify.breakpoint.smAndUp ? 'text-center' : ''"
+                    >
                       {{ el.text }}
                     </p>
-                    <p class="my-auto text-center">{{ obj[el.value] }}</p>
+                    <p
+                      class="my-auto"
+                      :class="$vuetify.breakpoint.smAndUp ? 'text-center' : ''"
+                    >
+                      {{ obj[el.value] }}
+                    </p>
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
           </v-expansion-panel-header>
-          <v-expansion-panel-content>
+          <v-expansion-panel-content class="px-2 pb-2">
             <v-divider></v-divider>
             <slot></slot>
           </v-expansion-panel-content>
@@ -95,3 +106,9 @@ export default class DetailedList extends Vue {
   }
 }
 </script>
+
+<style>
+.v-expansion-panel-content__wrap {
+  padding: 0 !important;
+}
+</style>
