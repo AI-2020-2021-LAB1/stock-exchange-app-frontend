@@ -33,32 +33,13 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-text-field
-          outlined
-          v-model="email"
-          prepend-icon="mdi-at"
-          :rules="[rules.required, rules.counter(email, 3, 'i')]"
-          label="E-mail"
-          color="primary"
-          type="text"
-          class="my-2"
-        ></v-text-field>
-        <v-text-field
-          outlined
-          v-model.number="money"
-          prepend-icon="mdi-cash-multiple"
-          :rules="[rules.required]"
-          label="Saldo"
-          color="primary"
-          type="number"
-          class="my-2"
-        ></v-text-field>
         <v-select
           outlined
-          v-model="tag"
-          prepend-icon="mdi-tag"
+          v-model="role"
+          prepend-icon="mdi-clipboard-account"
           :rules="[rules.required]"
-          label="Tag użytkownika"
+          :items="['USER', 'ADMIN']"
+          label="Rola użytkownika"
           color="primary"
           type="text"
           class="my-2"
@@ -113,18 +94,14 @@ export default class AdmineditUser extends Vue {
   private mounted() {
     this.$data.firstName = this.userData.firstName;
     this.$data.lastName = this.userData.lastName;
-    this.$data.email = this.userData.email;
-    this.$data.money = this.userData.money;
-    this.$data.tag = this.userData.tag;
+    this.$data.role = this.userData.role;
     this.$data.isActive = this.userData.isActive;
   }
 
   private resetForm() {
     this.$data.firstName = this.userData.firstName;
     this.$data.lastName = this.userData.lastName;
-    this.$data.email = this.userData.email;
-    this.$data.money = this.userData.money;
-    this.$data.tag = this.userData.tag;
+    this.$data.role = this.userData.role;
     this.$data.isActive = this.userData.isActive;
   }
 
@@ -132,9 +109,7 @@ export default class AdmineditUser extends Vue {
     this.$emit('userEdited', {
       firstName: this.$data.firstName,
       lastName: this.$data.lastName,
-      email: this.$data.email,
-      money: this.$data.money,
-      tag: this.$data.tag,
+      role: this.$data.role,
       isActive: this.$data.isActive,
     });
   }
@@ -143,9 +118,7 @@ export default class AdmineditUser extends Vue {
   private newData(data: User) {
     this.$data.firstName = data.firstName;
     this.$data.lastName = data.lastName;
-    this.$data.email = data.email;
-    this.$data.money = data.money;
-    this.$data.tag = data.tag;
+    this.$data.role = data.role;
     this.$data.isActive = data.isActive;
   }
 
@@ -153,9 +126,7 @@ export default class AdmineditUser extends Vue {
     return {
       firstName: '',
       lastName: '',
-      email: '',
-      money: 0,
-      tag: '',
+      role: 'USER',
       isActive: false,
       inputValidated: false,
       rules: {
