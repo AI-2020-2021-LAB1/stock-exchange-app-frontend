@@ -49,7 +49,7 @@ export default class TraderOffers extends Vue {
         },
         {
           text: 'Ilość',
-          value: 'amount',
+          value: 'remainingAmount',
           class: this.colorClass,
         },
         {

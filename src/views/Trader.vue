@@ -163,11 +163,13 @@ export default class Trader extends Vue {
     this.getBuyingOrders({
       page: 0,
       orderType: OrderType.BuyingOrder,
+      active: true,
       name,
     });
     this.getSellingOrders({
       page: 0,
       orderType: OrderType.SellingOrder,
+      active: true,
       name,
     });
   }
@@ -265,7 +267,7 @@ export default class Trader extends Vue {
         for (const offer of res.data.content) {
           this.$data.buyingOffers.push({
             price: offer.price,
-            amount: offer.amount,
+            remainingAmount: offer.remainingAmount,
             sum: (offer.price * offer.amount).toFixed(2),
           });
         }
@@ -289,7 +291,7 @@ export default class Trader extends Vue {
         for (const offer of res.data.content) {
           this.$data.sellingOffers.push({
             price: offer.price,
-            amount: offer.amount,
+            remainingAmount: offer.remainingAmount,
             sum: (offer.price * offer.amount).toFixed(2),
           });
         }
@@ -315,6 +317,7 @@ export default class Trader extends Vue {
       this.getSellingOrders({
         page: 0,
         orderType: OrderType.SellingOrder,
+        active: true,
         size: newVal,
         name: this.$data.stockName,
       });
@@ -327,6 +330,7 @@ export default class Trader extends Vue {
       this.getBuyingOrders({
         page: 0,
         orderType: OrderType.BuyingOrder,
+        active: true,
         size: newVal,
         name: this.$data.stockName,
       });
