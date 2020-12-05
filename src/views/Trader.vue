@@ -262,7 +262,6 @@ export default class Trader extends Vue {
     this.orderService
       .getOrders(params)
       .then((res) => {
-        console.log(res);
         this.$data.buyingOffers = [];
         this.$data.buyingOffersTotalElements = res.data.totalElements;
         for (const offer of res.data.content) {
