@@ -305,6 +305,8 @@ export default class User extends Vue {
             id: order.id,
             price: order.price,
             amount: order.amount,
+            traded: order.amount - order.remainingAmount,
+            remainingAmount: order.remainingAmount,
             sum: (order.price * order.amount).toFixed(2),
             dateCreated: this._formatDate(order.dateCreation),
             dateExpiring: this._formatDate(order.dateExpiration),
@@ -337,6 +339,8 @@ export default class User extends Vue {
             this.$data.closedOrders.push({
               price: order.price,
               amount: order.amount,
+              traded: order.amount - order.remainingAmount,
+              remainingAmount: order.remainingAmount,
               sum: (order.price * order.amount).toFixed(2),
               dateCreated: this._formatDate(order.dateCreation),
               dateExpiring: this._formatDate(order.dateExpiration),
@@ -509,6 +513,16 @@ export default class User extends Vue {
           class: 'primary--text',
         },
         {
+          text: 'Skonsumowane',
+          value: 'traded',
+          class: 'primary--text',
+        },
+        {
+          text: 'Pozostałe',
+          value: 'remainingAmount',
+          class: 'primary--text',
+        },
+        {
           text: 'Cena',
           value: 'price',
           class: 'primary--text',
@@ -548,6 +562,16 @@ export default class User extends Vue {
         {
           text: 'Ilość',
           value: 'amount',
+          class: 'primary--text',
+        },
+        {
+          text: 'Skonsumowane',
+          value: 'traded',
+          class: 'primary--text',
+        },
+        {
+          text: 'Pozostałe',
+          value: 'remainingAmount',
           class: 'primary--text',
         },
         {
