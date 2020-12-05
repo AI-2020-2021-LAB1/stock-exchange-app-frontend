@@ -163,11 +163,13 @@ export default class Trader extends Vue {
     this.getBuyingOrders({
       page: 0,
       orderType: OrderType.BuyingOrder,
+      active: true,
       name,
     });
     this.getSellingOrders({
       page: 0,
       orderType: OrderType.SellingOrder,
+      active: true,
       name,
     });
   }
@@ -316,6 +318,7 @@ export default class Trader extends Vue {
       this.getSellingOrders({
         page: 0,
         orderType: OrderType.SellingOrder,
+        active: true,
         size: newVal,
         name: this.$data.stockName,
       });
@@ -328,6 +331,7 @@ export default class Trader extends Vue {
       this.getBuyingOrders({
         page: 0,
         orderType: OrderType.BuyingOrder,
+        active: true,
         size: newVal,
         name: this.$data.stockName,
       });
