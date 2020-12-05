@@ -2,7 +2,7 @@
   <v-card class="rounded-lg">
     <v-card-title
       class="text-h5 font-weight-bold justify-center white--text primary py-1"
-      >{{ title }}</v-card-title
+       style="word-break: break-word;">{{ title }}</v-card-title
     >
     <v-card-text class="pb-0">
       <v-data-table
