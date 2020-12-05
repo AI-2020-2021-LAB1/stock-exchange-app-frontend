@@ -260,12 +260,13 @@ export default class Trader extends Vue {
     this.orderService
       .getOrders(params)
       .then((res) => {
+        console.log(res);
         this.$data.buyingOffers = [];
         this.$data.buyingOffersTotalElements = res.data.totalElements;
         for (const offer of res.data.content) {
           this.$data.buyingOffers.push({
             price: offer.price,
-            amount: offer.amount,
+            remainingAmount: offer.remainingAmount,
             sum: (offer.price * offer.amount).toFixed(2),
           });
         }
@@ -289,7 +290,7 @@ export default class Trader extends Vue {
         for (const offer of res.data.content) {
           this.$data.sellingOffers.push({
             price: offer.price,
-            amount: offer.amount,
+            remainingAmount: offer.remainingAmount,
             sum: (offer.price * offer.amount).toFixed(2),
           });
         }
