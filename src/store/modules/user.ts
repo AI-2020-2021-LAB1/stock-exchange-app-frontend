@@ -68,13 +68,30 @@ const userModule: Module<any, any> = {
           router.replace('/');
           dispatch('getUserData');
         })
-        .catch(() => {
-          dispatch('setSnackbarState', {
-            state: true,
-            msg: 'Nieprawidłowy login lub hasło!',
-            color: 'error',
-            timeout: 7500,
-          });
+        .catch((err) => {
+          if (err.response.status === 400) {
+            dispatch('setSnackbarState', {
+              state: true,
+              msg: 'Nieprawidłowy login lub hasło!',
+              color: 'error',
+              timeout: 7500,
+            });
+          } else if (err.response.status === 401) {
+            dispatch('setSnackbarState', {
+              state: true,
+              msg: 'Konto zostało zbanowane!',
+              color: 'error',
+              timeout: 7500,
+            });
+          } else {
+            dispatch('setSnackbarState', {
+              state: true,
+              msg:
+                'Wystąpił niezidentyfikowany błąd! Skontaktuj się z administratorem lub spróbuj później.',
+              color: 'error',
+              timeout: 7500,
+            });
+          }
         });
     },
     getUserData({ dispatch, commit, state }) {
