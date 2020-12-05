@@ -42,9 +42,14 @@
         </template>
         <template v-slot:[`item.cancel`]="{ item }">
           <div>
-            <v-btn small color="error" @click="cancelOrder(item.id)">
-              <span>{{ item.cancel }}</span>
-              <v-icon right>mdi-cancel</v-icon>
+            <v-btn
+              small
+              depressed
+              fab
+              color="error"
+              @click="cancelOrder(item.id)"
+            >
+              <v-icon>mdi-close</v-icon>
             </v-btn>
           </div>
         </template>
