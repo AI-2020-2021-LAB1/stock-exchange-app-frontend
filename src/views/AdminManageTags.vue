@@ -127,7 +127,34 @@ export default class AdminManageTags extends Vue {
   }
 
   private addTag() {
-    this.$data.tags.content.push({name: this.$data.newTagName});
+    this.tagService
+      .addTag({ name: this.$data.newTagName })
+      .then(() => {
+        this.getTags({ page: 0 });
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Tag został dodany',
+          color: 'success',
+          timeout: 5000,
+        });
+      })
+      .catch((err) => {
+        if (err.response.status === 409) {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Istnieje już tag z taką nazwą!',
+            color: 'error',
+            timeout: 7500,
+          });
+        } else {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Error ' + err.response.status,
+            color: 'error',
+            timeout: 7500,
+          });
+        }
+      });
     this.$data.newTagName = '';
     this.$data.addNew = false;
   }
