@@ -9,7 +9,7 @@
         hide-details
         v-model="Search"
         color="primary"
-        :label="searchLabel"
+        label="Wyszukaj tag po nazwie"
         prepend-inner-icon="mdi-database-search"
       ></v-text-field>
       <v-row class="fill-height" align="center" justify="center">
@@ -83,12 +83,8 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
 @Component
 export default class AdminTagsList extends Vue {
-  @Prop({ required: true }) private title!: string;
   @Prop({ required: true }) private list!: object;
-  @Prop({ required: true }) private listElements!: object[];
   @Prop({ required: true }) private search!: string;
-  @Prop({ default: 'Wyszukaj' }) private searchLabel!: string;
-  @Prop({ default: undefined }) private objIcon!: string;
 
   get Search() {
     return this.search;
@@ -107,17 +103,9 @@ export default class AdminTagsList extends Vue {
     this.$emit('pagination', page);
   }
 
-  @Watch('openedPanel')
-  private openPanel(val: number) {
-    if (val !== undefined) {
-      this.$emit('panelChanged', val);
-    }
-  }
-
   private data() {
     return {
       currentPage: 1,
-      openedPanel: undefined,
     };
   }
 }

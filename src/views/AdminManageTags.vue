@@ -28,12 +28,8 @@
       >
         <v-col lg="9">
           <admin-tags-list
-            title="Lista Tagów"
             :list="tags"
-            :listElements="tagElems"
             :search="searchTags"
-            searchLabel="Wyszukaj tag po nazwie"
-            objIcon="mdi-tag"
             @search="searchTags = $event"
             @remove="deleteTag($event)"
             @pagination="paginationClicked($event)"
@@ -174,12 +170,6 @@ export default class AdminManageTags extends Vue {
       newTagName: '',
       tags: [],
       searchTags: '',
-      tagElems: [
-        {
-          text: 'Nazwa',
-          value: 'name',
-        },
-      ],
     };
   }
 }
