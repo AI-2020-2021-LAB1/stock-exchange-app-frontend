@@ -12,7 +12,7 @@
           hide-details
           v-model="newTagName"
         ></v-text-field>
-        <v-btn block color="primary" @click="addTag">
+        <v-btn block color="primary" :disabled="!newTagName" @click="addTag">
           <v-icon left>mdi-tag-plus</v-icon>
           <span>Dodaj tag</span>
         </v-btn>
