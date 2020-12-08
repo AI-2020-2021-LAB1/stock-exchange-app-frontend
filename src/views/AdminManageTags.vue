@@ -117,12 +117,21 @@ export default class AdminManageTags extends Vue {
         });
       })
       .catch((err) => {
-        this.$store.dispatch('setSnackbarState', {
-          state: true,
-          msg: 'Error ' + err.response.status,
-          color: 'error',
-          timeout: 7500,
-        });
+        if (err.response.status === 400) {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Nie można usunąć tego tagu!',
+            color: 'error',
+            timeout: 7500,
+          });
+        } else {
+          this.$store.dispatch('setSnackbarState', {
+            state: true,
+            msg: 'Error ' + err.response.status,
+            color: 'error',
+            timeout: 7500,
+          });
+        }
       });
   }
 
