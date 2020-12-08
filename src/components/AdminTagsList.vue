@@ -1,25 +1,7 @@
 <template>
-  <v-card class="rounded-lg mx-auto mx-2" tile>
-    <v-card-title
-      class="text-h5 font-weight-bold justify-center white--text primary py-1"
-      >{{ title }}</v-card-title
-    >
-    <v-card-text class="pt-2 pb-0"
-      ><v-text-field
-        class="pt-2 pb-2"
-        prepend-inner-icon="mdi-tag-plus"
-        solo-inverted
-        text
-        clearable
-        label="Dodaj tag"
-        hide-details
-      ></v-text-field>
-      <v-btn block color="primary">
-        <v-icon left>mdi-tag-plus</v-icon>
-        <span>Dodaj tag</span>
-      </v-btn>
-    </v-card-text>
-    <v-card-text class="pt-12 pb-0">
+  <v-card outlined class="rounded-lg">
+    <v-card-title class="text-h4 white--text justify-center font-weight-bold primary pa-0">Lista tagów</v-card-title>
+    <v-card-text class="pt-2 pb-0">
       <v-text-field
         solo-inverted
         text
@@ -30,40 +12,68 @@
         :label="searchLabel"
         prepend-inner-icon="mdi-database-search"
       ></v-text-field>
-
-      <v-list v-for="obj in list.content" :key="obj.id">
-        <v-row no-gutters align="center" justify="start">
-          <v-col cols="auto" v-if="objIcon">
-            <v-icon large class="primary--text">{{ objIcon }}</v-icon>
-          </v-col>
-          <v-row
-            v-for="el in listElements"
-            :key="el.text"
-            cols="auto"
-            class="pa-3"
-          >
-            <v-col
-              ><p class="my-auto text-center">Tag:</p>
-              <p class="my-auto text-center font-weight-bold">
-                {{ obj[el.value] }}
-              </p></v-col
-            >
-            <v-col>
-              <v-btn @click="removeClicked(obj[el.value])" color="error">
-                <span class="font-weight-bold">Usuń</span>
-                <v-icon right>mdi-tag-off</v-icon>
-              </v-btn></v-col
-            >
-          </v-row>
-          <v-col> </v-col>
-        </v-row>
-      </v-list>
+      <v-row class="fill-height" align="center" justify="center">
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
+          xl="2"
+          v-for="el in list.content"
+          :key="el.id"
+        >
+          <v-hover>
+            <template v-slot:default="{ hover }">
+              <v-card height="auto">
+                <v-row class="fill-height" align="center" justify="center">
+                  <v-col cols="auto">
+                    <v-icon x-large class="primary--text">mdi-tag</v-icon>
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-card-title
+                      class="text-h4 font-weight-thin justify-center"
+                      >{{ el.name }}</v-card-title
+                    >
+                  </v-col>
+                </v-row>
+                <v-fade-transition>
+                  <v-overlay
+                    v-if="hover"
+                    absolute
+                    color="error"
+                    opacity="0.8"
+                    @click.native="removeClicked(el.name)"
+                    style="cursor: pointer"
+                  >
+                    <v-row
+                      no-gutters
+                      class="fill-height"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-col cols="auto">
+                        <v-icon x-large class="white--text pa-0 ma-0"
+                          >mdi-delete</v-icon
+                        >
+                      </v-col>
+                    </v-row>
+                  </v-overlay>
+                </v-fade-transition>
+              </v-card>
+            </template>
+          </v-hover>
+        </v-col>
+      </v-row>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
       <v-pagination
         v-model="currentPage"
         :length="list.totalPages"
         @input="paginationClicked"
       ></v-pagination>
-    </v-card-text>
+      <v-spacer></v-spacer>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -72,7 +82,7 @@ import { Users } from '@/models/UserModel';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
 @Component
-export default class DetailedList extends Vue {
+export default class AdminTagsList extends Vue {
   @Prop({ required: true }) private title!: string;
   @Prop({ required: true }) private list!: object;
   @Prop({ required: true }) private listElements!: object[];

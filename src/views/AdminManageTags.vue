@@ -1,18 +1,46 @@
 <template>
-  <v-row no-gutters align="center" justify="center" class="ma-2 fill-height">
-    <v-col lg="9" xl="6">
-      <admin-tags-list
-        title="Lista Tagów"
-        :list="tags"
-        :listElements="tagElems"
-        :search="searchTags"
-        searchLabel="Wyszukaj tag po nazwie"
-        objIcon="mdi-tag"
-        @search="searchTags = $event"
-        @remove="deleteTag($event)"
-        @pagination="paginationClicked($event)"
-        >Test</admin-tags-list
+  <v-row align="center" class="fill-height">
+    <v-col>
+      <v-dialog v-model="addNew">
+        <v-text-field
+          class="pt-2 pb-2"
+          prepend-inner-icon="mdi-tag-plus"
+          solo
+          text
+          clearable
+          label="Dodaj tag"
+          hide-details
+          v-model="newTagName"
+        ></v-text-field>
+        <v-btn block color="primary" @click="addTag">
+          <v-icon left>mdi-tag-plus</v-icon>
+          <span>Dodaj tag</span>
+        </v-btn>
+      </v-dialog>
+      <v-btn fab fixed bottom right class="success" @click="addNew = true">
+        <v-icon large>mdi-plus</v-icon>
+      </v-btn>
+      <v-row
+        no-gutters
+        align="center"
+        justify="center"
+        class="ma-2 fill-height"
       >
+        <v-col lg="9">
+          <admin-tags-list
+            title="Lista Tagów"
+            :list="tags"
+            :listElements="tagElems"
+            :search="searchTags"
+            searchLabel="Wyszukaj tag po nazwie"
+            objIcon="mdi-tag"
+            @search="searchTags = $event"
+            @remove="deleteTag($event)"
+            @pagination="paginationClicked($event)"
+            >Test</admin-tags-list
+          >
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -98,8 +126,16 @@ export default class AdminManageTags extends Vue {
       });
   }
 
+  private addTag() {
+    this.$data.tags.content.push({name: this.$data.newTagName});
+    this.$data.newTagName = '';
+    this.$data.addNew = false;
+  }
+
   private data() {
     return {
+      addNew: false,
+      newTagName: '',
       tags: [],
       searchTags: '',
       tagElems: [
