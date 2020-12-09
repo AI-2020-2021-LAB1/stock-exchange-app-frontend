@@ -1,7 +1,7 @@
 <template>
-  <v-card class="mt-2">
+  <v-card class="mb-2">
     <v-card-title
-      class="text-h5 font-weight-bold white--text primary py-1"
+      class="text-h5 font-weight-bold justify-center white--text primary py-1"
       style="word-break: break-word"
       >Dodaj akcję</v-card-title
     >
@@ -65,7 +65,7 @@
           class="my-2"
         ></v-text-field>
         <v-row align="center" justify="center" class="mx-0">
-          <v-col class="pa-0">
+          <v-col cols="12" md="4" class="px-2 py-1">
             <v-select
               dense
               outlined
@@ -76,7 +76,7 @@
               v-model="selectedUser"
             ></v-select>
           </v-col>
-          <v-col class="py-0 pr-0">
+          <v-col cols="12" md="4" class="px-2 py-1">
             <v-text-field
               dense
               outlined
@@ -88,7 +88,7 @@
               class="my-2"
             ></v-text-field>
           </v-col>
-          <v-col class="py-0 pr-0">
+          <v-col cols="12" md="4" class="px-2 py-1">
             <v-btn block :class="`success margin-bottom`" @click="addOwner()">
               <span>Dodaj właściciela</span>
               <v-icon right>mdi-account-cash</v-icon>
