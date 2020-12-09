@@ -276,9 +276,15 @@ export default class AdminCreateStock extends Vue {
           value.length <= num || 'Maximum ' + num + ' znak' + end,
         minValue: (value: number, min: number) =>
           value >= min || 'Minimalna wartość to ' + min,
-        amountsEqual: (stockAmount: number, ownersAmount: number) =>
-          stockAmount === ownersAmount ||
-          'Ilość akcji musi być rozdzielona właścicielom',
+        amountsEqual: (stockAmount: number, ownersAmount: number) => {
+          if (stockAmount === ownersAmount) {
+            return true;
+          } else if (stockAmount < ownersAmount) {
+            return 'Wprowadzono mniejszą ilość akcji niż rozdzielono właścicielom';
+          } else {
+            return 'Ilość akcji musi być rozdzielona właścicielom';
+          }
+        },
       },
     };
   }
