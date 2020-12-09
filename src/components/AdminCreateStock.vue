@@ -155,7 +155,7 @@ export default class AdminCreateStock extends Vue {
   }
 
   private created() {
-    this.getUsers({ page: 0 });
+    this.getUsers({ page: 0, role: 'USER' });
   }
 
   private getUsers(params: object) {
