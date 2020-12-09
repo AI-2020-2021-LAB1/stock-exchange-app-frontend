@@ -16,9 +16,8 @@
         <v-col
           cols="12"
           sm="6"
-          md="4"
-          lg="3"
-          xl="2"
+          lg="4"
+          xl="3"
           v-for="el in list.content"
           :key="el.id"
         >
