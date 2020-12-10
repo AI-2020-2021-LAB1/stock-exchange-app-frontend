@@ -43,7 +43,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters v-if="activeOrders.length">
-          <v-col cols="12" class="my-1" >
+          <v-col cols="12" class="my-1">
             <user-transactions
               title="Zlecenia aktywne"
               :transactions="activeOrders"
@@ -121,6 +121,36 @@ export default class AdminManageUsers extends Vue {
     } else {
       this.getUsers({ page: pageNumber - 1 });
     }
+  }
+
+  private cancelOrder(id: number) {
+    console.log(id);
+    this.ordersService
+      .cancelUserOrder(id)
+      .then(() => {
+        this.getUserActiveOrders({
+          page: 0,
+          size: this.$data.pageSizeTrans,
+        });
+        this.getUserClosedOrders({
+          page: 0,
+          size: this.$data.pageSizeTrans,
+        });
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Zlecenie zostało anulowane',
+          color: 'success',
+          timeout: 5000,
+        });
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
   }
 
   private getUsers(params: object) {
