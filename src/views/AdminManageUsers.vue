@@ -124,7 +124,6 @@ export default class AdminManageUsers extends Vue {
   }
 
   private cancelOrder(id: number) {
-    console.log(id);
     this.ordersService
       .cancelUserOrder(id)
       .then(() => {
