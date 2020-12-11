@@ -14,4 +14,15 @@ export class TransactionsService {
 
         return transactions;
     }
+
+    public async getUserTransactionsById(id: number, body: object): Promise<AxiosResponse<Transactions>> {
+        const transactions = await axios.get('api/user/' + id + '/transaction', {
+            headers: {
+                Authorization: 'Bearer ' + store.getters.token,
+            },
+            params: body,
+        });
+
+        return transactions;
+    }
 }

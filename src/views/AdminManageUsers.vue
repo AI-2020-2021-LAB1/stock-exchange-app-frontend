@@ -30,6 +30,57 @@
             />
           </v-col>
         </v-row>
+        <v-row no-gutters v-if="buyingTransactions.length">
+          <v-col cols="12" class="my-1">
+            <user-transactions
+              title="Historia transakcji kupna"
+              :transactions="buyingTransactions"
+              colorClass="success--text"
+              :headers="headersBuyingTransactions"
+              :paginationEnum="2"
+              :totalPages="pagesBuyingTrans"
+              @paginationByEnum="paginationByEnum($event)"
+            ></user-transactions>
+          </v-col>
+        </v-row>
+        <v-row no-gutters v-if="sellingTransactions.length">
+          <v-col cols="12" class="my-1">
+            <user-transactions
+              title="Historia transakcji sprzedaży"
+              :transactions="sellingTransactions"
+              colorClass="error--text"
+              :headers="headersSellingTransactions"
+              :paginationEnum="1"
+              :totalPages="pagesSellingTrans"
+              @paginationByEnum="paginationByEnum($event)"
+            ></user-transactions>
+          </v-col>
+        </v-row>
+        <v-row no-gutters v-if="activeOrders.length">
+          <v-col cols="12" class="my-1">
+            <user-transactions
+              title="Zlecenia aktywne"
+              :transactions="activeOrders"
+              :headers="headersActiveOrders"
+              :paginationEnum="3"
+              :totalPages="pagesActiveOrders"
+              @paginationByEnum="paginationByEnum($event)"
+              @cancelOrder="cancelOrder($event)"
+            ></user-transactions>
+          </v-col>
+        </v-row>
+        <v-row no-gutters v-if="closedOrders.length">
+          <v-col cols="12" class="mt-1 mb-2">
+            <user-transactions
+              title="Zlecenia zamknięte"
+              :transactions="closedOrders"
+              :headers="headersClosedOrders"
+              :paginationEnum="4"
+              :totalPages="pagesClosedOrders"
+              @paginationByEnum="paginationByEnum($event)"
+            ></user-transactions>
+          </v-col>
+        </v-row>
       </detailed-list>
     </v-col>
   </v-row>
@@ -38,22 +89,43 @@
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
 import AdminEditUser from '../components/AdminEditUser.vue';
+import UserTransactions from '../components/UserTransactions.vue';
 import { UsersService } from '../API/users';
 import { StocksService } from '../API/stocks';
+import { TransactionsService } from '../API/transactions';
+import { OrdersService } from '../API/orders';
+import { OrderType } from '../models/OrderModel';
 import { Role, User } from '../models/UserModel';
+import { formatDate } from '../helpers';
+
+enum PaginationEnum {
+  SellingTrans = 1,
+  BuyingTrans = 2,
+  ActiveOrders = 3,
+  ClosedOrders = 4,
+}
 
 @Component({
   components: {
     AdminEditUser,
+    UserTransactions,
   },
 })
 export default class AdminManageUsers extends Vue {
   private usersService!: UsersService;
   private stocksService!: StocksService;
+  private transactionsService!: TransactionsService;
+  private ordersService!: OrdersService;
+
+  public _formatDate(date: string) {
+    return formatDate(date);
+  }
 
   private beforeCreate() {
     this.usersService = new UsersService();
     this.stocksService = new StocksService();
+    this.transactionsService = new TransactionsService();
+    this.ordersService = new OrdersService();
   }
 
   private created() {
@@ -81,6 +153,35 @@ export default class AdminManageUsers extends Vue {
         size: this.$data.stocksPageSize,
       });
     }
+  }
+
+  private cancelOrder(id: number) {
+    this.ordersService
+      .cancelUserOrder(id)
+      .then(() => {
+        this.getUserActiveOrders({
+          page: 0,
+          size: this.$data.pageSizeTrans,
+        });
+        this.getUserClosedOrders({
+          page: 0,
+          size: this.$data.pageSizeTrans,
+        });
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Zlecenie zostało anulowane',
+          color: 'success',
+          timeout: 5000,
+        });
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
   }
 
   private getUsers(params: object) {
@@ -116,12 +217,215 @@ export default class AdminManageUsers extends Vue {
       });
   }
 
+  private getUserSellingTransactions(params: object) {
+    this.transactionsService
+      .getUserTransactionsById(this.$data.editedUserData.id, params)
+      .then((res) => {
+        this.$data.sellingTransactions = [];
+        this.$data.pagesSellingTrans = res.data.totalPages;
+        for (const transaction of res.data.content) {
+          this.$data.sellingTransactions.push({
+            price: transaction.sellingOrder.price,
+            amount: transaction.sellingOrder.amount,
+            sum: (
+              transaction.sellingOrder.price * transaction.sellingOrder.amount
+            ).toFixed(2),
+            dateCreated: this._formatDate(
+              transaction.sellingOrder.dateCreation,
+            ),
+            dateExpiring: this._formatDate(
+              transaction.sellingOrder.dateExpiration,
+            ),
+            dateClosing: transaction.sellingOrder.dateClosing
+              ? this._formatDate(transaction.sellingOrder.dateClosing)
+              : '',
+            stock: transaction.sellingOrder.stock.abbreviation,
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getUserBuyingTransactions(params: object) {
+    this.transactionsService
+      .getUserTransactionsById(this.$data.editedUserData.id, params)
+      .then((res) => {
+        this.$data.buyingTransactions = [];
+        this.$data.pagesBuyingTrans = res.data.totalPages;
+        for (const transaction of res.data.content) {
+          this.$data.buyingTransactions.push({
+            price: transaction.buyingOrder.price,
+            amount: transaction.buyingOrder.amount,
+            sum: (
+              transaction.buyingOrder.price * transaction.buyingOrder.amount
+            ).toFixed(2),
+            dateCreated: this._formatDate(transaction.buyingOrder.dateCreation),
+            dateExpiring: this._formatDate(
+              transaction.buyingOrder.dateExpiration,
+            ),
+            dateClosing: transaction.buyingOrder.dateClosing
+              ? this._formatDate(transaction.buyingOrder.dateClosing)
+              : '',
+            stock: transaction.buyingOrder.stock.abbreviation,
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getUserActiveOrders(params: object) {
+    this.ordersService
+      .getUserOrdersById(this.$data.editedUserData.id, {
+        ...params,
+        active: true,
+      })
+      .then((res) => {
+        this.$data.activeOrders = [];
+        this.$data.pagesActiveOrders = res.data.totalPages;
+        for (const order of res.data.content) {
+          this.$data.activeOrders.push({
+            id: order.id,
+            price: order.price,
+            amount: order.amount,
+            sum: (order.price * order.amount).toFixed(2),
+            dateCreated: this._formatDate(order.dateCreation),
+            dateExpiring: this._formatDate(order.dateExpiration),
+            dateClosing: '',
+            stock: order.stock.abbreviation,
+            cancel: 'Anuluj',
+            type:
+              order.orderType === OrderType.BuyingOrder ? 'kupna' : 'sprzedaży',
+          });
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getUserClosedOrders(params: object) {
+    this.ordersService
+      .getUserOrdersById(this.$data.editedUserData.id, {
+        ...params,
+        active: false,
+      })
+      .then((res) => {
+        this.$data.closedOrders = [];
+        this.$data.pagesClosedOrders = res.data.totalPages;
+        for (const order of res.data.content) {
+          if (order.dateClosing) {
+            this.$data.closedOrders.push({
+              price: order.price,
+              amount: order.amount,
+              sum: (order.price * order.amount).toFixed(2),
+              dateCreated: this._formatDate(order.dateCreation),
+              dateExpiring: this._formatDate(order.dateExpiration),
+              dateClosing: this._formatDate(order.dateClosing),
+              stock: order.stock.abbreviation,
+              type:
+                order.orderType === OrderType.BuyingOrder
+                  ? 'kupna'
+                  : 'sprzedaży',
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
   private panelChanged(panelId: number) {
     this.$data.editedUser = panelId;
     this.$data.editedUserData = this.$data.users.content[panelId];
     this.getUserStocksById({
       page: 0,
       size: this.$data.stocksPageSize,
+    });
+    this.getUserSellingTransactions({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
+    this.getUserBuyingTransactions({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
+    this.getUserActiveOrders({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
+    this.getUserClosedOrders({
+      page: 0,
+      size: this.$data.pageSizeTrans,
+    });
+  }
+
+  private paginationByEnum(params: { page: number; paginationEnum: number }) {
+    switch (params.paginationEnum) {
+      case PaginationEnum.SellingTrans:
+        this.paginationSellingTransClicked(params.page);
+        break;
+      case PaginationEnum.BuyingTrans:
+        this.paginationBuyingTransClicked(params.page);
+        break;
+      case PaginationEnum.ActiveOrders:
+        this.paginationActiveOrdersClicked(params.page);
+        break;
+      case PaginationEnum.ClosedOrders:
+        this.paginationClosedOrdersClicked(params.page);
+        break;
+    }
+  }
+
+  private paginationSellingTransClicked(pageNumber: number) {
+    this.getUserSellingTransactions({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
+    });
+  }
+
+  private paginationBuyingTransClicked(pageNumber: number) {
+    this.getUserBuyingTransactions({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
+    });
+  }
+
+  private paginationActiveOrdersClicked(pageNumber: number) {
+    this.getUserActiveOrders({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
+    });
+  }
+
+  private paginationClosedOrdersClicked(pageNumber: number) {
+    this.getUserClosedOrders({
+      page: pageNumber - 1,
+      size: this.$data.pageSizeTrans,
     });
   }
 
@@ -187,6 +491,15 @@ export default class AdminManageUsers extends Vue {
     return {
       users: [],
       userStocks: [],
+      pagesSellingTrans: 1,
+      pagesBuyingTrans: 1,
+      pagesActiveOrders: 1,
+      pagesClosedOrders: 1,
+      closedOrders: [],
+      activeOrders: [],
+      sellingTransactions: [],
+      buyingTransactions: [],
+      pageSizeTrans: 20,
       searchUsers: '',
       searchStocks: '',
       stocksPageSize: 5,
@@ -251,6 +564,164 @@ export default class AdminManageUsers extends Vue {
         {
           text: 'Akcje możliwe do sprzedania',
           value: 'amountAvailableForSale',
+        },
+      ],
+      headersSellingTransactions: [
+        {
+          text: 'Suma',
+          value: 'sum',
+          class: 'error--text',
+        },
+        {
+          text: 'Ilość',
+          value: 'amount',
+          class: 'error--text',
+        },
+        {
+          text: 'Cena',
+          value: 'price',
+          class: 'error--text',
+        },
+        {
+          text: 'Spółka',
+          value: 'stock',
+          class: 'error--text',
+        },
+        {
+          text: 'Data stw.',
+          value: 'dateCreated',
+          class: 'error--text',
+        },
+        {
+          text: 'Data wyg.',
+          value: 'dateExpiring',
+          class: 'error--text',
+        },
+        {
+          text: 'Data zam.',
+          value: 'dateClosing',
+          class: 'error--text',
+        },
+      ],
+      headersBuyingTransactions: [
+        {
+          text: 'Suma',
+          value: 'sum',
+          class: 'success--text',
+        },
+        {
+          text: 'Ilość',
+          value: 'amount',
+          class: 'success--text',
+        },
+        {
+          text: 'Cena',
+          value: 'price',
+          class: 'success--text',
+        },
+        {
+          text: 'Spółka',
+          value: 'stock',
+          class: 'success--text',
+        },
+        {
+          text: 'Data stw.',
+          value: 'dateCreated',
+          class: 'success--text',
+        },
+        {
+          text: 'Data wyg.',
+          value: 'dateExpiring',
+          class: 'success--text',
+        },
+        {
+          text: 'Data zam.',
+          value: 'dateClosing',
+          class: 'success--text',
+        },
+      ],
+      headersActiveOrders: [
+        {
+          text: 'Suma',
+          value: 'sum',
+          class: 'primary--text',
+        },
+        {
+          text: 'Ilość',
+          value: 'amount',
+          class: 'primary--text',
+        },
+        {
+          text: 'Cena',
+          value: 'price',
+          class: 'primary--text',
+        },
+        {
+          text: 'Typ',
+          value: 'type',
+          class: 'primary--text',
+        },
+        {
+          text: 'Spółka',
+          value: 'stock',
+          class: 'primary--text',
+        },
+        {
+          text: 'Data stw.',
+          value: 'dateCreated',
+          class: 'primary--text',
+        },
+        {
+          text: 'Data wyg.',
+          value: 'dateExpiring',
+          class: 'primary--text',
+        },
+        {
+          text: 'Anulacja',
+          value: 'cancel',
+          class: 'primary--text',
+        },
+      ],
+      headersClosedOrders: [
+        {
+          text: 'Suma',
+          value: 'sum',
+          class: 'primary--text',
+        },
+        {
+          text: 'Ilość',
+          value: 'amount',
+          class: 'primary--text',
+        },
+        {
+          text: 'Cena',
+          value: 'price',
+          class: 'primary--text',
+        },
+        {
+          text: 'Typ',
+          value: 'type',
+          class: 'primary--text',
+        },
+        {
+          text: 'Spółka',
+          value: 'stock',
+          class: 'primary--text',
+        },
+        {
+          text: 'Data stw.',
+          value: 'dateCreated',
+          class: 'primary--text',
+        },
+        {
+          text: 'Data wyg.',
+          value: 'dateExpiring',
+          class: 'primary--text',
+        },
+        {
+          text: 'Data zam.',
+          value: 'dateClosing',
+          class: 'primary--text',
         },
       ],
     };
