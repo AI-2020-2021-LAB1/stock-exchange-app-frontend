@@ -1,5 +1,5 @@
 <template>
-  <v-card class="rounded-lg mx-auto mx-2" tile>
+  <v-card class="rounded-lg" tile>
     <v-card-title
       class="text-h5 font-weight-bold justify-center white--text primary py-1"
       >{{ title }}</v-card-title

@@ -64,51 +64,54 @@
           type="number"
           class="my-2"
         ></v-text-field>
-        <v-row align="center" justify="center" class="mx-0">
-          <v-col cols="12" md="4" class="px-2 py-1">
-            <v-select
-              dense
-              outlined
-              label="Wybierz właściciela..."
-              :items="selectUsers"
-              item-text="text"
-              item-value="value"
+        <v-card tile class="rounded-lg">
+          <v-card-title
+            class="text-h5 font-weight-bold justify-center white--text primary py-1"
+            >Właściciele</v-card-title
+          >
+          <v-card-text class="pa-2">
+            <element-selector
               v-model="selectedUser"
-            ></v-select>
-          </v-col>
-          <v-col cols="12" md="4" class="px-2 py-1">
-            <v-text-field
-              dense
-              outlined
-              v-model.number="amountOwner"
-              :rules="[rules.minValue(amountOwner, 1)]"
-              label="Ilość"
-              color="primary"
-              type="number"
-              class="my-2"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4" class="px-2 py-1">
-            <v-btn block :class="`success margin-bottom`" @click="addOwner()">
-              <span>Dodaj właściciela</span>
-              <v-icon right>mdi-account-cash</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row
-          no-gutters
-          align="center"
-          justify="center"
-          class="ma-2 fill-height"
-        >
-          <v-col lg="9" xl="6">
-            <admin-create-stock-owner-list
-              title="Właściciele"
-              :list="owners"
-              @remove="removeOwner($event)"
-            />
-          </v-col>
-        </v-row>
+              :items="selectUsers"
+              itemtext="text"
+              itemvalue="value"
+              label="Wyszukaj i wybierz właścicieli"
+            ></element-selector>
+            <v-row justify="center" class="mx-0">
+              <v-col cols="12" md="6" class="px-2">
+                <v-text-field
+                  dense
+                  outlined
+                  v-model.number="amountOwner"
+                  :rules="[rules.minValue(amountOwner, 1)]"
+                  label="Ilość"
+                  color="primary"
+                  type="number"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6" class="px-2">
+                <v-btn block class="success" @click="addOwner()">
+                  <span>Dodaj właściciela</span>
+                  <v-icon right>mdi-account-cash</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row
+              no-gutters
+              align="center"
+              justify="center"
+              class="ma-2 fill-height"
+            >
+              <v-col lg="9" xl="6">
+                <admin-create-stock-owner-list
+                  title="List właścicieli"
+                  :list="owners"
+                  @remove="removeOwner($event)"
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
       </v-form>
     </v-card-text>
     <v-card-actions class="py-0">
@@ -267,6 +270,7 @@ export default class AdminCreateStock extends Vue {
       users: [],
       selectedUser: 0,
       owners: [],
+      ownersId: [],
       inputValidated: false,
       rules: {
         required: (value: string) => !!value || 'Pole wymagane',
@@ -290,9 +294,3 @@ export default class AdminCreateStock extends Vue {
   }
 }
 </script>
-
-<style scoped>
-.margin-bottom {
-  margin-bottom: 26px;
-}
-</style>
