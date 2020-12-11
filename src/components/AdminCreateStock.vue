@@ -142,7 +142,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { UsersService } from '../API/users';
-import { Content } from '../models/UserModel';
+import { User } from '../models/UserModel';
 import AdminCreateStockOwnerList from './AdminCreateStockOwnerList.vue';
 
 @Component({
@@ -190,7 +190,7 @@ export default class AdminCreateStock extends Vue {
   get ownersIDs(): number[] {
     if (this.$data.owners) {
       return this.$data.owners.map(
-        (owner: { amount: number; user: Content }) => owner.user.id,
+        (owner: { amount: number; user: User }) => owner.user.id,
       );
     } else {
       return [];
@@ -213,15 +213,15 @@ export default class AdminCreateStock extends Vue {
 
   get selectUsers(): Array<{ value: number; text: string }> {
     if (this.$data.users) {
-      let users: Content[] = this.$data.users;
+      let users: User[] = this.$data.users;
 
       if (this.ownersIDs) {
         users = users.filter(
-          (user: Content) => !this.ownersIDs.includes(user.id),
+          (user: User) => !this.ownersIDs.includes(user.id),
         );
       }
 
-      return users.map((user: Content) => ({
+      return users.map((user: User) => ({
         value: user.id,
         text: `${user.firstName} ${user.lastName} ${user.email}`,
       }));
@@ -231,8 +231,8 @@ export default class AdminCreateStock extends Vue {
   }
 
   private addOwner() {
-    const owner: Content = this.$data.users.find(
-      (user: Content) => user.id === this.$data.selectedUser,
+    const owner: User = this.$data.users.find(
+      (user: User) => user.id === this.$data.selectedUser,
     );
 
     this.$data.owners.push({
@@ -245,7 +245,7 @@ export default class AdminCreateStock extends Vue {
 
   private removeOwner(id: number) {
     this.$data.owners = this.$data.owners.filter(
-      (owner: { amount: number; user: Content }) => owner.user.id !== id,
+      (owner: { amount: number; user: User }) => owner.user.id !== id,
     );
   }
 
