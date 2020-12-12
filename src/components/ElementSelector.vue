@@ -13,7 +13,9 @@
     :multiple="multiple"
   >
     <template v-slot:selection="data">
-      <v-chip small close @click:close="remove(data.item)">{{ data.item[itemtext] }}</v-chip>
+      <v-chip small close @click:close="remove(data.item)">{{
+        data.item[itemtext]
+      }}</v-chip>
     </template>
     <template v-slot:item="data">
       <v-list-item-content>

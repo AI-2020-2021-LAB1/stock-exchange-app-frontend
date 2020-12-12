@@ -21,7 +21,7 @@
               label="Nazwa"
               color="primary"
               type="text"
-              class="my-2"
+              class="my-1"
             ></v-text-field>
           </v-col>
           <v-col class="py-0 pr-0">
@@ -36,7 +36,7 @@
               label="Skrót"
               color="primary"
               type="text"
-              class="my-2"
+              class="my-1"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -48,7 +48,7 @@
           label="Aktualna cena"
           color="primary"
           type="number"
-          class="my-2"
+          class="my-1"
         ></v-text-field>
         <v-text-field
           outlined
@@ -62,7 +62,7 @@
           label="Ilość"
           color="primary"
           type="number"
-          class="my-2"
+          class="mt-1"
         ></v-text-field>
         <v-card tile class="rounded-lg">
           <v-card-title
@@ -70,26 +70,17 @@
             >Właściciele</v-card-title
           >
           <v-card-text class="pa-2">
-            <element-selector
-              v-model="selectedUser"
-              :items="selectUsers"
-              itemtext="text"
-              itemvalue="value"
-              label="Wyszukaj i wybierz właścicieli"
-            ></element-selector>
-            <v-row justify="center" class="mx-0">
-              <v-col cols="12" md="6" class="px-2">
-                <v-text-field
-                  dense
-                  outlined
-                  v-model.number="amountOwner"
-                  :rules="[rules.minValue(amountOwner, 1)]"
-                  label="Ilość"
-                  color="primary"
-                  type="number"
-                ></v-text-field>
+            <v-row align="center" class="mx-0">
+              <v-col>
+                <element-selector
+                  v-model="selectedUser"
+                  :items="selectUsers"
+                  itemtext="text"
+                  itemvalue="value"
+                  label="Wyszukaj i wybierz właścicieli"
+                ></element-selector>
               </v-col>
-              <v-col cols="12" md="6" class="px-2">
+              <v-col cols="12" sm="auto" class="px-2">
                 <v-btn block class="success" @click="addOwner()">
                   <span>Dodaj właściciela</span>
                   <v-icon right>mdi-account-cash</v-icon>
@@ -105,7 +96,7 @@
               <v-col lg="9" xl="6">
                 <admin-create-stock-owner-list
                   title="List właścicieli"
-                  :list="owners"
+                  v-model="owners"
                   @remove="removeOwner($event)"
                 />
               </v-col>
@@ -114,15 +105,15 @@
         </v-card>
       </v-form>
     </v-card-text>
-    <v-card-actions class="py-0">
+    <v-card-actions>
       <v-row justify="end" no-gutters>
-        <v-col cols="12" md="auto" class="pa-2">
+        <v-col cols="12" md="auto" class="px-2 py-1">
           <v-btn block class="error" @click="resetForm()">
             <span>Resetuj formularz</span>
             <v-icon right>mdi-reload</v-icon>
           </v-btn>
         </v-col>
-        <v-col cols="12" md="auto" class="pa-2">
+        <v-col cols="12" md="auto" class="px-2 py-1">
           <v-btn
             block
             :disabled="!inputValidated"
@@ -216,9 +207,7 @@ export default class AdminCreateStock extends Vue {
       let users: User[] = this.$data.users;
 
       if (this.ownersIDs) {
-        users = users.filter(
-          (user: User) => !this.ownersIDs.includes(user.id),
-        );
+        users = users.filter((user: User) => !this.ownersIDs.includes(user.id));
       }
 
       return users.map((user: User) => ({
@@ -236,7 +225,7 @@ export default class AdminCreateStock extends Vue {
     );
 
     this.$data.owners.push({
-      amount: this.$data.amountOwner,
+      amount: 1,
       user: owner,
     });
 
@@ -266,7 +255,6 @@ export default class AdminCreateStock extends Vue {
       abbreviation: '',
       currentPrice: 0,
       amount: 1,
-      amountOwner: 1,
       users: [],
       selectedUser: 0,
       owners: [],
