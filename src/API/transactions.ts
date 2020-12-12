@@ -4,8 +4,19 @@ import { Transactions } from '../models/TransactionModel';
 import store from '../store';
 
 export class TransactionsService {
-    public async getTransactions(body: object): Promise<AxiosResponse<Transactions>> {
+    public async getUserTransactions(body: object): Promise<AxiosResponse<Transactions>> {
         const transactions = await axios.get('api/user/transaction/owned', {
+            headers: {
+                Authorization: 'Bearer ' + store.getters.token,
+            },
+            params: body,
+        });
+
+        return transactions;
+    }
+
+    public async getTransactions(body: object): Promise<AxiosResponse<Transactions>> {
+        const transactions = await axios.get('api/transaction', {
             headers: {
                 Authorization: 'Bearer ' + store.getters.token,
             },
