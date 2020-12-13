@@ -48,7 +48,6 @@ export default class UserSelector extends Vue {
   }
 
   set selected(data: any) {
-    console.log(data);
     this.$emit('input', data);
   }
 

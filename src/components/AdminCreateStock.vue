@@ -44,7 +44,7 @@
           outlined
           v-model.number="currentPrice"
           prepend-icon="mdi-cash-usd"
-          :rules="[rules.required]"
+          :rules="[rules.minValue(currentPrice, 1)]"
           label="Aktualna cena"
           color="primary"
           type="number"
@@ -81,7 +81,12 @@
                 ></user-selector>
               </v-col>
               <v-col cols="12" sm="auto" class="px-2">
-                <v-btn block class="success" @click="addOwner()">
+                <v-btn
+                  block
+                  :disabled="selectedUser === 0"
+                  class="success"
+                  @click="addOwner()"
+                >
                   <span>Dodaj właściciela</span>
                   <v-icon right>mdi-account-cash</v-icon>
                 </v-btn>
@@ -177,10 +182,9 @@ export default class AdminCreateStock extends Vue {
   }
 
   private addOwner() {
-    const owner: User = this.$data.users.find(
+    const owner: User = this.$data.fetchedUsers.find(
       (user: User) => user.id === this.$data.selectedUser,
     );
-
     this.$data.owners.push({
       amount: 1,
       user: owner,
@@ -233,6 +237,9 @@ export default class AdminCreateStock extends Vue {
 
   @Watch('search')
   private searchUsers(val: string) {
+    if (this.$data.selectedUser !== 0) {
+      return;
+    }
     this.getUsers({
       page: 0,
       role: 'USER',
