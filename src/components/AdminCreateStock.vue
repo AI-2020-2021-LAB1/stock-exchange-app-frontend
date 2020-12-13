@@ -72,13 +72,13 @@
           <v-card-text class="pa-2">
             <v-row align="center" class="mx-0">
               <v-col>
-                <element-selector
+                <user-selector
                   v-model="selectedUser"
                   :items="selectUsers"
                   itemtext="text"
                   itemvalue="value"
                   label="Wyszukaj i wybierz właścicieli"
-                ></element-selector>
+                ></user-selector>
               </v-col>
               <v-col cols="12" sm="auto" class="px-2">
                 <v-btn block class="success" @click="addOwner()">

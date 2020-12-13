@@ -11,7 +11,7 @@ const PasswordValidator = () => import(/* webpackChunkName: "ComponentPasswordVa
 const ChartView = () => import(/* webpackChunkName: "ComponentChartView" */ '@/components/ChartView.vue');
 const DetailedList = () => import(/* webpackChunkName: "ComponentDetailedList" */ '@/components/DetailedList.vue');
 const DataCard = () => import(/* webpackChunkName: "ComponentDetailedList" */ '@/components/DataCard.vue');
-const ElementSelector = () => import(/* webpackChunkName: "ComponentElementSelector" */ '@/components/ElementSelector.vue');
+const UserSelector = () => import(/* webpackChunkName: "ComponentUserSelector" */ '@/components/UserSelector.vue');
 
 Vue.config.productionTip = false;
 
@@ -29,4 +29,4 @@ Vue.component('password-validator', PasswordValidator);
 Vue.component('chart-view', ChartView);
 Vue.component('detailed-list', DetailedList);
 Vue.component('data-card', DataCard);
-Vue.component('element-selector', ElementSelector);
+Vue.component('user-selector', UserSelector);

@@ -32,7 +32,7 @@
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
 
 @Component
-export default class ElementSelector extends Vue {
+export default class UserSelector extends Vue {
   @Prop({ default: '' }) public readonly label!: string;
   @Prop({ required: true }) public readonly value!: any;
   @Prop({ required: true }) public readonly items!: object[];
