@@ -74,9 +74,9 @@
               <v-col>
                 <user-selector
                   v-model="selectedUser"
-                  :items="selectUsers"
-                  itemtext="text"
-                  itemvalue="value"
+                  :users="foundUsers"
+                  :search="search"
+                  @search="search = $event"
                   label="Wyszukaj i wybierz właścicieli"
                 ></user-selector>
               </v-col>
@@ -132,8 +132,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { UsersService } from '../API/users';
 import { User } from '../models/UserModel';
+import { UsersService } from '../API/users';
 import AdminCreateStockOwnerList from './AdminCreateStockOwnerList.vue';
 
 @Component({
@@ -149,23 +149,7 @@ export default class AdminCreateStock extends Vue {
   }
 
   private created() {
-    this.getUsers({ page: 0, role: 'USER' });
-  }
-
-  private getUsers(params: object) {
-    this.usersService
-      .getUsers({ ...params })
-      .then((res) => {
-        this.$data.users = res.data.content;
-      })
-      .catch((err) => {
-        this.$store.dispatch('setSnackbarState', {
-          state: true,
-          msg: 'Error ' + err.response.status,
-          color: 'error',
-          timeout: 7500,
-        });
-      });
+    this.getUsers({ page: 0, role: 'USER' }, false);
   }
 
   private resetForm() {
@@ -176,16 +160,6 @@ export default class AdminCreateStock extends Vue {
     this.$data.amountOwner = 1;
     this.$data.selectedUser = 0;
     this.$data.owners = [];
-  }
-
-  get ownersIDs(): number[] {
-    if (this.$data.owners) {
-      return this.$data.owners.map(
-        (owner: { amount: number; user: User }) => owner.user.id,
-      );
-    } else {
-      return [];
-    }
   }
 
   get ownersAmountsSum(): number {
@@ -199,23 +173,6 @@ export default class AdminCreateStock extends Vue {
       return amountSum;
     } else {
       return -1;
-    }
-  }
-
-  get selectUsers(): Array<{ value: number; text: string }> {
-    if (this.$data.users) {
-      let users: User[] = this.$data.users;
-
-      if (this.ownersIDs) {
-        users = users.filter((user: User) => !this.ownersIDs.includes(user.id));
-      }
-
-      return users.map((user: User) => ({
-        value: user.id,
-        text: `${user.firstName} ${user.lastName} ${user.email}`,
-      }));
-    } else {
-      return [];
     }
   }
 
@@ -249,6 +206,60 @@ export default class AdminCreateStock extends Vue {
     this.resetForm();
   }
 
+  get ownersIDs(): number[] {
+    if (this.$data.owners) {
+      return this.$data.owners.map(
+        (owner: { amount: number; user: User }) => owner.user.id,
+      );
+    } else {
+      return [];
+    }
+  }
+
+  get foundUsers() {
+    if (this.$data.fetchedUsers) {
+      let users: User[] = this.$data.fetchedUsers;
+      if (this.ownersIDs) {
+        users = users.filter((user: User) => !this.ownersIDs.includes(user.id));
+      }
+      return users.map((user: User) => ({
+        value: user.id,
+        text: `${user.firstName} ${user.lastName} ${user.email}`,
+      }));
+    } else {
+      return [];
+    }
+  }
+
+  @Watch('search')
+  private searchUsers(val: string) {
+    this.getUsers({
+      page: 0,
+      role: 'USER',
+      email: val,
+    });
+  }
+
+  private getUsers(params: object, search: boolean = true) {
+    this.usersService
+      .getUsers({ ...params })
+      .then((res) => {
+        if (search) {
+          this.$data.fetchedUsers = res.data.content;
+        } else {
+          this.$data.users = res.data.content;
+        }
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
   private data() {
     return {
       name: '',
@@ -260,6 +271,8 @@ export default class AdminCreateStock extends Vue {
       owners: [],
       ownersId: [],
       inputValidated: false,
+      fetchedUsers: [],
+      search: '',
       rules: {
         required: (value: string) => !!value || 'Pole wymagane',
         counter: (value: string, num: number, end: string) =>
