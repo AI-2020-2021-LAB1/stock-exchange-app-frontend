@@ -389,7 +389,6 @@ export default class AdminManageStocks extends Vue {
   }
 
   private cancelOrder(id: number) {
-    console.log(id);
     this.ordersService
       .cancelUserOrder(id)
       .then(() => {
@@ -540,11 +539,6 @@ export default class AdminManageStocks extends Vue {
           class: 'error--text',
         },
         {
-          text: 'Spółka',
-          value: 'stock',
-          class: 'error--text',
-        },
-        {
           text: 'Data stw.',
           value: 'dateCreated',
           class: 'error--text',
@@ -574,11 +568,6 @@ export default class AdminManageStocks extends Vue {
         {
           text: 'Cena',
           value: 'price',
-          class: 'success--text',
-        },
-        {
-          text: 'Spółka',
-          value: 'stock',
           class: 'success--text',
         },
         {
@@ -619,11 +608,6 @@ export default class AdminManageStocks extends Vue {
           class: 'primary--text',
         },
         {
-          text: 'Spółka',
-          value: 'stock',
-          class: 'primary--text',
-        },
-        {
           text: 'Data stw.',
           value: 'dateCreated',
           class: 'primary--text',
@@ -658,11 +642,6 @@ export default class AdminManageStocks extends Vue {
         {
           text: 'Typ',
           value: 'type',
-          class: 'primary--text',
-        },
-        {
-          text: 'Spółka',
-          value: 'stock',
           class: 'primary--text',
         },
         {
