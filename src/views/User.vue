@@ -237,7 +237,7 @@ export default class User extends Vue {
 
   private getUserSellingTransactions(params: object) {
     this.transactionsService
-      .getTransactions(params)
+      .getUserTransactions(params)
       .then((res) => {
         this.$data.sellingTransactions = [];
         this.$data.pagesSellingTrans = res.data.totalPages;
@@ -273,7 +273,7 @@ export default class User extends Vue {
 
   private getUserBuyingTransactions(params: object) {
     this.transactionsService
-      .getTransactions(params)
+      .getUserTransactions(params)
       .then((res) => {
         this.$data.buyingTransactions = [];
         this.$data.pagesBuyingTrans = res.data.totalPages;
