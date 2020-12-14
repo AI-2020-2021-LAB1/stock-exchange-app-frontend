@@ -100,7 +100,7 @@
             >
               <v-col lg="9" xl="6">
                 <admin-create-stock-owner-list
-                  title="List właścicieli"
+                  title="Lista właścicieli"
                   v-model="owners"
                   @remove="removeOwner($event)"
                 />
