@@ -51,7 +51,7 @@
                       <v-text-field
                         v-model="timeTest"
                         label="Wybierz Godzine"
-                        prepend-icon="mdi-calendar-edit"
+                        prepend-icon="mdi-clock-time-four-outline"
                         readonly
                         hide-details
                         v-bind="attrs"
