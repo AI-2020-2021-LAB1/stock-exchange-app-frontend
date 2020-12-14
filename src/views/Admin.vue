@@ -51,6 +51,10 @@ export default class Admin extends Vue {
           name: 'Zarządzanie tagami',
           link: '/admin/tags',
         },
+        {
+          name: 'Panel benchmarka',
+          link: '/admin/benchmark',
+        },
       ],
     };
   }

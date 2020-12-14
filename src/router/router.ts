@@ -98,7 +98,7 @@ export default new Router({
       },
     },
     {
-      path: '/benchmark',
+      path: '/admin/benchmark',
       name: 'benchmark',
       component: () =>
         import(/* webpackChunkName: "index" */ '../views/Benchmark.vue'),
@@ -106,7 +106,11 @@ export default new Router({
         if (!store.getters.isAuthenticated) {
           next('/login');
         } else {
-          next();
+          if (store.getters.user.role === 'ADMIN') {
+            next();
+          } else {
+            next('/403');
+          }
         }
       },
     },

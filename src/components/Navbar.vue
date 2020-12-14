@@ -51,7 +51,6 @@ import Vue from 'vue';
 export default class Navbar extends Vue {
   private toolbarItems = [
     { link: '/', title: 'Strona główna', icon: 'mdi-home' },
-    { link: '/benchmark', title: 'Benchmark', icon: 'mdi-database-check' },
     { link: '/trader', title: 'Giełda', icon: 'mdi-finance' },
   ];
 
