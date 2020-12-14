@@ -7,7 +7,7 @@ const userModule: Module<any, any> = {
     token: null,
     refreshToken: null,
     timeout: null,
-    user: null,
+    user: { id: 0, role: undefined },
   },
 
   mutations: {
@@ -18,7 +18,7 @@ const userModule: Module<any, any> = {
     clearAuthData(state) {
       state.token = null;
       state.refreshToken = null;
-      state.user = { id: 0 };
+      state.user = { id: 0, role: undefined };
     },
     setTimeout(state, data) {
       state.timeout = data;
@@ -68,13 +68,30 @@ const userModule: Module<any, any> = {
           router.replace('/');
           dispatch('getUserData');
         })
-        .catch(() => {
-          dispatch('setSnackbarState', {
-            state: true,
-            msg: 'Nieprawidłowy login lub hasło!',
-            color: 'error',
-            timeout: 7500,
-          });
+        .catch((err) => {
+          if (err.response.status === 400) {
+            dispatch('setSnackbarState', {
+              state: true,
+              msg: 'Nieprawidłowy login lub hasło!',
+              color: 'error',
+              timeout: 7500,
+            });
+          } else if (err.response.status === 401) {
+            dispatch('setSnackbarState', {
+              state: true,
+              msg: 'Konto zostało zbanowane!',
+              color: 'error',
+              timeout: 7500,
+            });
+          } else {
+            dispatch('setSnackbarState', {
+              state: true,
+              msg:
+                'Wystąpił niezidentyfikowany błąd! Skontaktuj się z administratorem lub spróbuj później.',
+              color: 'error',
+              timeout: 7500,
+            });
+          }
         });
     },
     getUserData({ dispatch, commit, state }) {
@@ -140,14 +157,18 @@ const userModule: Module<any, any> = {
     },
     changeName({ dispatch, state }, data) {
       axios
-        .put('/api/user/config/user-data', {
-          firstName: data.firstName,
-          lastName: data.lastName,
-        }, {
-          headers: {
-            Authorization: 'Bearer ' + state.token,
+        .put(
+          '/api/user/config/user-data',
+          {
+            firstName: data.firstName,
+            lastName: data.lastName,
           },
-        })
+          {
+            headers: {
+              Authorization: 'Bearer ' + state.token,
+            },
+          },
+        )
         .then(() => {
           dispatch('getUserData');
           dispatch('setSnackbarState', {

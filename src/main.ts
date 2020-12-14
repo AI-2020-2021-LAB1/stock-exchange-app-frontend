@@ -9,6 +9,9 @@ import VueApexCharts from 'vue-apexcharts';
 
 const PasswordValidator = () => import(/* webpackChunkName: "ComponentPasswordValidator" */ '@/components/PasswordValidator.vue');
 const ChartView = () => import(/* webpackChunkName: "ComponentChartView" */ '@/components/ChartView.vue');
+const DetailedList = () => import(/* webpackChunkName: "ComponentDetailedList" */ '@/components/DetailedList.vue');
+const DataCard = () => import(/* webpackChunkName: "ComponentDetailedList" */ '@/components/DataCard.vue');
+const UserSelector = () => import(/* webpackChunkName: "ComponentUserSelector" */ '@/components/UserSelector.vue');
 
 Vue.config.productionTip = false;
 
@@ -24,3 +27,6 @@ new Vue({
 Vue.component('apexchart', VueApexCharts);
 Vue.component('password-validator', PasswordValidator);
 Vue.component('chart-view', ChartView);
+Vue.component('detailed-list', DetailedList);
+Vue.component('data-card', DataCard);
+Vue.component('user-selector', UserSelector);

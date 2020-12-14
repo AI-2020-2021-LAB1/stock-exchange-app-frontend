@@ -49,7 +49,25 @@
           <v-list-item-title>Rejestracja</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item @click="drawer = false" router to="/user" v-if="auth">
+      <v-list-item
+        @click="drawer = false"
+        router
+        to="/admin"
+        v-if="auth && user.role === 'ADMIN'"
+      >
+        <v-list-item-action>
+          <v-icon large class="primary--text">mdi-crown</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Panel administratora</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item
+        @click="drawer = false"
+        router
+        to="/user"
+        v-if="auth && user.role === 'USER'"
+      >
         <v-list-item-action>
           <v-icon large class="primary--text">mdi-account-circle</v-icon>
         </v-list-item-action>
