@@ -119,12 +119,26 @@ export default new Router({
       name: 'login',
       component: () =>
         import(/* webpackChunkName: "login" */ '../views/Login.vue'),
+      beforeEnter: (to, from, next) => {
+        if (store.getters.isAuthenticated) {
+          next('/');
+        } else {
+          next();
+        }
+      },
     },
     {
       path: '/register',
       name: 'register',
       component: () =>
         import(/* webpackChunkName: "register" */ '../views/Register.vue'),
+      beforeEnter: (to, from, next) => {
+        if (store.getters.isAuthenticated) {
+          next('/');
+        } else {
+          next();
+        }
+      },
     },
     {
       path: '/trader',
