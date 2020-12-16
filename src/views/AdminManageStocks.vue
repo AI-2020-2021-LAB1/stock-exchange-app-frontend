@@ -145,6 +145,7 @@ export default class AdminManageStocks extends Vue {
               ? this._formatDate(transaction.sellingOrder.dateClosing)
               : '',
             stock: transaction.sellingOrder.stock.abbreviation,
+            user: transaction.sellingOrder.user.id,
           });
         }
       })
@@ -181,6 +182,7 @@ export default class AdminManageStocks extends Vue {
               ? this._formatDate(transaction.buyingOrder.dateClosing)
               : '',
             stock: transaction.buyingOrder.stock.abbreviation,
+            user: transaction.buyingOrder.user.id,
           });
         }
       })
@@ -216,6 +218,7 @@ export default class AdminManageStocks extends Vue {
             cancel: 'Anuluj',
             type:
               order.orderType === OrderType.BuyingOrder ? 'kupna' : 'sprzedaży',
+            user: order.user.id,
           });
         }
       })
@@ -252,6 +255,7 @@ export default class AdminManageStocks extends Vue {
                 order.orderType === OrderType.BuyingOrder
                   ? 'kupna'
                   : 'sprzedaży',
+              user: order.user.id,
             });
           }
         }
@@ -539,6 +543,11 @@ export default class AdminManageStocks extends Vue {
           class: 'error--text',
         },
         {
+          text: 'Użytkownik',
+          value: 'user',
+          class: 'error--text',
+        },
+        {
           text: 'Data stw.',
           value: 'dateCreated',
           class: 'error--text',
@@ -571,6 +580,11 @@ export default class AdminManageStocks extends Vue {
           class: 'success--text',
         },
         {
+          text: 'Użytkownik',
+          value: 'user',
+          class: 'success--text',
+        },
+        {
           text: 'Data stw.',
           value: 'dateCreated',
           class: 'success--text',
@@ -600,6 +614,11 @@ export default class AdminManageStocks extends Vue {
         {
           text: 'Cena',
           value: 'price',
+          class: 'primary--text',
+        },
+        {
+          text: 'Użytkownik',
+          value: 'user',
           class: 'primary--text',
         },
         {
@@ -637,6 +656,11 @@ export default class AdminManageStocks extends Vue {
         {
           text: 'Cena',
           value: 'price',
+          class: 'primary--text',
+        },
+        {
+          text: 'Użytkownik',
+          value: 'user',
           class: 'primary--text',
         },
         {
