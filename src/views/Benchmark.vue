@@ -50,7 +50,7 @@
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
                         v-model="timeTest"
-                        label="Wybierz Godzine"
+                        label="Wybierz godzinę"
                         prepend-icon="mdi-clock-time-four-outline"
                         readonly
                         hide-details
