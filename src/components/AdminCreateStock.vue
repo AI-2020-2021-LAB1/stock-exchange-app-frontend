@@ -243,7 +243,7 @@ export default class AdminCreateStock extends Vue {
     this.getUsers({
       page: 0,
       role: 'USER',
-      email: val,
+      search: val,
     });
   }
 
