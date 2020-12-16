@@ -170,17 +170,26 @@ export default class Benchmark extends Vue {
   }
 
   private startTest() {
-    const dataConfiguration = `${this.$data.startDate}T${this.$data.timeTest}:00.766Z`;
-    const configurationObject = this.$data.configurations.content.find(
-      (item: Content) => item.id === this.$data.selectedConfiguration,
-    );
+    const dt = new Date(this.$data.startDate + ', ' + this.$data.timeTest);
+    if (Date.now() >= dt.getTime()) {
+      this.$store.dispatch('setSnackbarState', {
+        state: true,
+        msg: 'Wprowadzono nieprawidłową datę lub czas uruchomienia testu!',
+        color: 'error',
+        timeout: 7500,
+      });
+      return;
+    }
 
     const body = {
-      configuration: configurationObject,
+      status: 'NEW',
       iterations: this.$data.numberOfIterations,
-      startDate: dataConfiguration,
+      startDate: dt.toISOString(),
       stockCount: this.$data.numberOfStocks,
       userCount: this.$data.numberOfUsers,
+      configuration: {
+        id: this.$data.selectedConfiguration,
+      },
     };
 
     this.testService
@@ -188,7 +197,7 @@ export default class Benchmark extends Vue {
       .then(() => {
         this.$store.dispatch('setSnackbarState', {
           state: true,
-          msg: 'Test został uruchomiony',
+          msg: 'Test został zaplanowany',
           color: 'success',
           timeout: 5000,
         });
