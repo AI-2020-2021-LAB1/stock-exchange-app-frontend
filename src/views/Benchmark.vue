@@ -246,6 +246,16 @@ export default class Benchmark extends Vue {
       startTimePicker: false,
       selectConfiguration: null,
       configurations: [],
+      links: [
+        {
+          text: 'Edytor konfiguracji',
+          link: '/admin/benchmark/configurations',
+        },
+        {
+          text: 'Wyniki testów',
+          link: '/admin/benchmark/charts',
+        },
+      ],
     };
   }
 }

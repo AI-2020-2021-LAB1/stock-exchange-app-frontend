@@ -101,7 +101,41 @@ export default new Router({
       path: '/admin/benchmark',
       name: 'benchmark',
       component: () =>
-        import(/* webpackChunkName: "index" */ '../views/Benchmark.vue'),
+        import(/* webpackChunkName: "Benchmark" */ '../views/Benchmark.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          if (store.getters.user.role === 'ADMIN') {
+            next();
+          } else {
+            next('/403');
+          }
+        }
+      },
+    },
+    {
+      path: '/admin/benchmark/configurations',
+      name: 'benchmark-configurations',
+      component: () =>
+        import(/* webpackChunkName: "Benchmark" */ '../views/BenchmarkConfigurations.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          if (store.getters.user.role === 'ADMIN') {
+            next();
+          } else {
+            next('/403');
+          }
+        }
+      },
+    },
+    {
+      path: '/admin/benchmark/charts',
+      name: 'benchmark-charts',
+      component: () =>
+        import(/* webpackChunkName: "Benchmark" */ '../views/BenchmarkCharts.vue'),
       beforeEnter: (to, from, next) => {
         if (!store.getters.isAuthenticated) {
           next('/login');
