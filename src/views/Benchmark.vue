@@ -120,7 +120,16 @@
             </v-card-text>
             <v-card-actions class="pt-0">
               <v-spacer></v-spacer>
-              <v-btn color="primary" type="submit">
+              <v-btn
+                color="primary"
+                type="submit"
+                :disabled="
+                  !selectedConfiguration > 0 ||
+                  !numberOfIterations > 0 ||
+                  !numberOfStocks > 0 ||
+                  !numberOfUsers > 0
+                "
+              >
                 <span class="font-weight-bold">rozpocznij test</span>
                 <v-icon right>mdi-database-check</v-icon>
               </v-btn>
