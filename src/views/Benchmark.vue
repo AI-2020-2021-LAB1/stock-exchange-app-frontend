@@ -10,8 +10,8 @@
           </v-toolbar>
           <v-form @submit.prevent="startTest()">
             <v-card-text class="pb-0">
-              <v-row align="center" justify="center" class="mx-0 my-4">
-                <v-col class="pa-0">
+              <v-row align="center" justify="center" class="mx-0 mb-2">
+                <v-col class="pl-0 pr-1 py-0">
                   <v-menu
                     ref="startDatePickerRef"
                     v-model="startDatePicker"
@@ -39,7 +39,7 @@
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
-                <v-col class="py-0 pr-0">
+                <v-col class="pl-1 pr-0 py-0">
                   <v-menu
                     ref="startTimePickerRef"
                     v-model="startTimePicker"
@@ -67,8 +67,8 @@
                   </v-menu>
                 </v-col>
               </v-row>
-              <v-row align="center" justify="center" class="mx-0">
-                <v-col class="pa-0">
+              <v-row align="center" justify="center" class="ma-0">
+                <v-col class="pa-1" cols="12" sm="6">
                   <v-select
                     outlined
                     :items="configurationsArray"
@@ -80,7 +80,7 @@
                     label="Wybierz konfiguracje"
                   ></v-select>
                 </v-col>
-                <v-col class="py-0 pr-0">
+                <v-col class="pa-1" cols="12" sm="6">
                   <v-text-field
                     outlined
                     hide-details
@@ -92,8 +92,8 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row align="center" justify="center" class="mx-0">
-                <v-col class="pa-0">
+              <v-row align="center" justify="center" class="ma-0">
+                <v-col class="pa-1" cols="12" sm="6">
                   <v-text-field
                     outlined
                     hide-details
@@ -104,7 +104,7 @@
                     class="my-2"
                   ></v-text-field>
                 </v-col>
-                <v-col class="py-0 pr-0">
+                <v-col class="pa-1" cols="12" sm="6">
                   <v-text-field
                     outlined
                     hide-details
@@ -116,7 +116,6 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row> </v-row>
             </v-card-text>
             <v-card-actions class="pt-0">
               <v-spacer></v-spacer>
