@@ -29,7 +29,7 @@
 
                 <v-slider
                   class="mt-10"
-                  :v-model="slide.model"
+                  v-model="$data[slide.model]"
                   :track-color="slide.color"
                   :color="slide.color"
                   thumb-label
