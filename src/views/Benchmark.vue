@@ -168,12 +168,12 @@ export default class Benchmark extends Vue {
   }
 
   private created() {
-    this.getConfigurations();
+    this.getConfigurations({page: 0});
   }
 
-  private getConfigurations() {
+  private getConfigurations(params: object) {
     this.configurationsService
-      .getConfigurations()
+      .getConfigurations(params)
       .then((res) => {
         this.$data.configurations = res.data;
       })

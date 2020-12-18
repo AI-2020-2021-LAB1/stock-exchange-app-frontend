@@ -1,70 +1,12 @@
 <template>
   <div>
     <v-row class="mx-1 my-2" justify="center">
-      <v-col class="pa-0" cols="12" md="10" lg="8" xl="6">
-        <v-expansion-panels dark>
-          <v-expansion-panel class="warning">
-            <v-expansion-panel-header class="text-h6 font-weight-bold pa-4"
-              >Instrukcja obsługi edytora</v-expansion-panel-header
-            >
-            <v-expansion-panel-content>
-              <p>
-                <b>
-                  Konfiguracja oparta jest o logikę drzewa decyzyjnego co
-                  oznacza, iż algorytm obciążnika dokonuje kolejnych wyborów
-                  symulujących działania użytkownika. Wartości poszczególnych
-                  ustawień o tym samym kolorze reprezentują opcje dostępne w
-                  ramach konkretnego wyboru. Suma wartości procentowych o tym
-                  samym kolorze musi być równa 100%.
-                </b>
-              </p>
-              <ul>
-                <li>
-                  Pierwsze cztery wartości reprezentują opcje możliwe do
-                  podjęcia przez użytkownika (w tym przypadku symulowanego przez
-                  obciążnik) po zalogowaniu. Są to kolejno: sprawdzenie listy
-                  dostępnych akcji, sprawdzenie listy posiadanych akcji,
-                  sprawdzenie aktualnych zleceń lub przejście bezpośrednio do
-                  utworzenia zlecenia. Opcje z tej grupy oznaczone są kolorem
-                  żółtym.
-                </li>
-                <li>
-                  Kolejne dwie wartości oznaczają opcje, które użytkownik może
-                  podjąć po sprawdzeniu listy wszystkich dostępnych aukcji. Są
-                  to: utworzenie zlecenia lub powrót do strony głównej.
-                  Oznaczone są kolorem zielonym.
-                </li>
-                <li>
-                  Kolejne dwie wartości dotyczą działań, które symulowany
-                  użytkownik może podjąć po sprawdzeniu listy posiadanych akcji.
-                  Ponownie są to: utworzenie zlecenia lub powrót do strony
-                  głównej. Oznaczone są kolorem niebieskim.
-                </li>
-                <li>
-                  Kolejne trzy wartości dotyczą opcji dostępnych po sprawdzeniu
-                  aktualnych zleceń. W tym przypadku obciążnik może utworzyć
-                  nowe zlecenie, usunąć jedno z już istniejących lub wrócić do
-                  strony głównej. Oznaczone są kolorem brązowym.
-                </li>
-                <li>
-                  Ostatnie dwa parametry dotyczą sytuacji w której symulowany
-                  użytkownik zdecyduje się na utworzenie zlecenia. Dostępne są
-                  tu dwie opcje: zlecenie kupna oraz zlecenie sprzedaży.
-                  Oznaczone są kolorem czerwonym.
-                </li>
-              </ul>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-col>
-    </v-row>
-    <v-row class="mx-1 my-2" justify="center">
       <v-col cols="12" md="10" lg="8" xl="6" class="pa-0">
         <v-card>
           <v-card-title class="text-h6 white--text font-weight-bold primary"
-            >Nowa konfiguracja</v-card-title
+            >Edytuj konfigurację</v-card-title
           >
-          <v-form @submit.prevent="createConfiguration()">
+          <v-form v-model="inputValidated" @submit.prevent="editConf()">
             <v-card-text class="pt-1 pb-0 px-2">
               <v-text-field
                 outlined
@@ -97,8 +39,12 @@
                             :color="group.color"
                             thumb-label
                             thumb-size="25"
-                            hide-details
                             step="1"
+                            :rules="[
+                              rules.percentegesCounter(
+                                getValidationArray(slider.model),
+                              ),
+                            ]"
                           >
                           </v-slider>
                         </v-col>
@@ -139,10 +85,24 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn type="submit" color="primary">
-                <span class="font-weight-bold">Utwórz konfiguracje</span>
-                <v-icon right>mdi-database-plus</v-icon>
-              </v-btn>
+              <v-row justify="end" no-gutters>
+                <v-col cols="12" md="auto" class="pa-2">
+                  <v-btn block class="error" @click="resetForm()">
+                    <span>Resetuj formularz</span>
+                    <v-icon right>mdi-reload</v-icon>
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" md="auto" class="pa-2">
+                  <v-btn
+                    :disabled="!inputValidated || !anyEdits"
+                    type="submit"
+                    color="primary"
+                  >
+                    <span class="font-weight-bold">Edytuj konfiguracje</span>
+                    <v-icon right>mdi-database-edit</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -152,10 +112,130 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Content } from '../models/ConfigurationModel';
 
 @Component
 export default class BenchmarkConfigurationEditor extends Vue {
+  @Prop({ required: true }) private confData!: Content;
+
+  private mounted() {
+    this.resetForm();
+  }
+
+  private resetForm() {
+    this.$data.nameConfiguration = this.confData.name;
+    this.$data.loginAllStocks = this.confData.loginAllStocks;
+    this.$data.loginOwnedStocks = this.confData.loginOwnedStocks;
+    this.$data.loginUserOrders = this.confData.loginUserOrders;
+    this.$data.loginMakeOrder = this.confData.loginMakeOrder;
+    this.$data.allStocksMakeOrder = this.confData.allStocksMakeOrder;
+    this.$data.allStocksEnd = this.confData.allStocksEnd;
+    this.$data.ownedStocksMakeOrder = this.confData.ownedStocksMakeOrder;
+    this.$data.ownedStocksEnd = this.confData.ownedStocksEnd;
+    this.$data.userOrdersMakeOrder = this.confData.userOrdersMakeOrder;
+    this.$data.userOrdersEnd = this.confData.userOrdersEnd;
+    this.$data.userOrderDeleteOrder = this.confData.userOrderDeleteOrder;
+    this.$data.makeOrderBuyOrder = this.confData.makeOrderBuyOrder;
+    this.$data.makeOrderSellOrder = this.confData.makeOrderSellOrder;
+    this.$data.numberOfOperations = this.confData.noOfOperations;
+  }
+
+  private editConf() {
+    this.$emit('confEdited', {
+      id: this.confData.id,
+      name: this.$data.nameConfiguration,
+      loginAllStocks: this.$data.loginAllStocks,
+      loginOwnedStocks: this.$data.loginOwnedStocks,
+      loginUserOrders: this.$data.loginUserOrders,
+      loginMakeOrder: this.$data.loginMakeOrder,
+      allStocksMakeOrder: this.$data.allStocksMakeOrder,
+      allStocksEnd: this.$data.allStocksEnd,
+      ownedStocksMakeOrder: this.$data.ownedStocksMakeOrder,
+      ownedStocksEnd: this.$data.ownedStocksEnd,
+      userOrdersMakeOrder: this.$data.userOrdersMakeOrder,
+      userOrdersEnd: this.$data.userOrdersEnd,
+      userOrderDeleteOrder: this.$data.userOrderDeleteOrder,
+      makeOrderBuyOrder: this.$data.makeOrderBuyOrder,
+      makeOrderSellOrder: this.$data.makeOrderSellOrder,
+      noOfOperations: parseInt(this.$data.numberOfOperations, 10),
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  get anyEdits() {
+    return (
+      this.$data.nameConfiguration !== this.confData.name ||
+      this.$data.loginAllStocks !== this.confData.loginAllStocks ||
+      this.$data.loginOwnedStocks !== this.confData.loginOwnedStocks ||
+      this.$data.loginUserOrders !== this.confData.loginUserOrders ||
+      this.$data.loginMakeOrder !== this.confData.loginMakeOrder ||
+      this.$data.allStocksMakeOrder !== this.confData.allStocksMakeOrder ||
+      this.$data.allStocksEnd !== this.confData.allStocksEnd ||
+      this.$data.ownedStocksMakeOrder !== this.confData.ownedStocksMakeOrder ||
+      this.$data.ownedStocksEnd !== this.confData.ownedStocksEnd ||
+      this.$data.userOrdersMakeOrder !== this.confData.userOrdersMakeOrder ||
+      this.$data.userOrdersEnd !== this.confData.userOrdersEnd ||
+      this.$data.userOrderDeleteOrder !== this.confData.userOrderDeleteOrder ||
+      this.$data.makeOrderBuyOrder !== this.confData.makeOrderBuyOrder ||
+      this.$data.makeOrderSellOrder !== this.confData.makeOrderSellOrder ||
+      this.$data.numberOfOperations !== this.confData.noOfOperations
+    );
+  }
+
+  @Watch('confData', { deep: true })
+  private newData(data: Content) {
+    this.$data.nameConfiguration = data.name;
+    this.$data.loginAllStocks = data.loginAllStocks;
+    this.$data.loginOwnedStocks = data.loginOwnedStocks;
+    this.$data.loginUserOrders = data.loginUserOrders;
+    this.$data.loginMakeOrder = data.loginMakeOrder;
+    this.$data.allStocksMakeOrder = data.allStocksMakeOrder;
+    this.$data.allStocksEnd = data.allStocksEnd;
+    this.$data.ownedStocksMakeOrder = data.ownedStocksMakeOrder;
+    this.$data.ownedStocksEnd = data.ownedStocksEnd;
+    this.$data.userOrdersMakeOrder = data.userOrdersMakeOrder;
+    this.$data.userOrdersEnd = data.userOrdersEnd;
+    this.$data.userOrderDeleteOrder = data.userOrderDeleteOrder;
+    this.$data.makeOrderBuyOrder = data.makeOrderBuyOrder;
+    this.$data.makeOrderSellOrder = data.makeOrderSellOrder;
+    this.$data.numberOfOperations = data.noOfOperations;
+  }
+
+  private getValidationArray(model: string): number[] {
+    if (
+      [
+        'loginAllStocks',
+        'loginOwnedStocks',
+        'loginUserOrders',
+        'loginMakeOrder',
+      ].includes(model)
+    ) {
+      return [
+        this.$data.loginAllStocks,
+        this.$data.loginOwnedStocks,
+        this.$data.loginUserOrders,
+        this.$data.loginMakeOrder,
+      ];
+    } else if (['allStocksMakeOrder', 'allStocksEnd'].includes(model)) {
+      return [this.$data.allStocksMakeOrder, this.$data.allStocksEnd];
+    } else if (['ownedStocksMakeOrder', 'ownedStocksEnd'].includes(model)) {
+      return [this.$data.ownedStocksMakeOrder, this.$data.ownedStocksEnd];
+    } else if (
+      ['userOrdersMakeOrder', 'userOrdersEnd', 'userOrderDeleteOrder'].includes(
+        model,
+      )
+    ) {
+      return [
+        this.$data.userOrdersMakeOrder,
+        this.$data.userOrdersEnd,
+        this.$data.userOrderDeleteOrder,
+      ];
+    } else {
+      return [this.$data.makeOrderBuyOrder, this.$data.makeOrderSellOrder];
+    }
+  }
+
   private data() {
     return {
       groups: [
@@ -270,6 +350,22 @@ export default class BenchmarkConfigurationEditor extends Vue {
       makeOrderBuyOrder: 0,
       makeOrderSellOrder: 0,
       numberOfOperations: 0,
+      inputValidated: false,
+      rules: {
+        percentegesCounter: (values: number[]) => {
+          let percentege = 0;
+
+          for (const v of values) {
+            percentege += v;
+          }
+
+          if (percentege === 100) {
+            return true;
+          } else {
+            return 'Liczba procentów nie jest równa 100%';
+          }
+        },
+      },
     };
   }
 }
