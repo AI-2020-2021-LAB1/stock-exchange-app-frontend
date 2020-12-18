@@ -92,18 +92,18 @@ export default class BenchmarkConfigurations extends Vue {
           ],
         },
         {
-          text: 'Przejścia z procesu pobrania posiadanych stocków',
+          text: 'Przejścia z procesu pobrania wszystkich stocków',
           sliders: [
             {
               model: 'allStocksMakeOrder',
               label:
-                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do procesu tworzenia zlecenia',
+                'Prawdopodobieństwo przejścia z procesu pobrania wszystkch stocków do procesu tworzenia zlecenia',
               color: 'green',
             },
             {
               model: 'allStocksEnd',
               label:
-                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do zakończenia',
+                'Prawdopodobieństwo przejścia z procesu pobrania wszystkich stocków do zakończenia',
               color: 'green',
             },
           ],
@@ -114,7 +114,7 @@ export default class BenchmarkConfigurations extends Vue {
             {
               model: 'ownedStocksMakeOrder',
               label:
-                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do stworzenia zlecenia',
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do tworzenia zlecenia',
               color: 'blue',
             },
             {
