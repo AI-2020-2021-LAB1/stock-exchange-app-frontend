@@ -8,7 +8,7 @@ export function formatDate(date: string): string {
 
 export function formatTime(): string {
     const time = new Date();
-    return `${time.getHours()}:${time.getMinutes()}`;
+    return `${time.getHours()}:${time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()} `;
 }
 
 export function formatDateBenchmark(): string {
