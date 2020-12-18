@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-row justify="center">
-      <v-col cols="12" md="10" lg="8" xl="6">
-        <v-expansion-panels dark class="pa-0">
-          <v-expansion-panel class="white--text warning">
-            <v-expansion-panel-header class="text-h6 font-weight-bold"
+    <v-row class="mx-1 my-2" justify="center">
+      <v-col class="pa-0" cols="12" md="10" lg="8" xl="6">
+        <v-expansion-panels dark>
+          <v-expansion-panel class="warning">
+            <v-expansion-panel-header class="text-h6 font-weight-bold pa-4"
               >Instrukcja obsługi edytora</v-expansion-panel-header
             >
             <v-expansion-panel-content>
@@ -58,61 +58,58 @@
         </v-expansion-panels>
       </v-col>
     </v-row>
-    <v-row justify="center">
+    <v-row class="mx-1 my-2" justify="center">
       <v-col cols="12" md="10" lg="8" xl="6" class="pa-0">
-        <v-row justify="center" class="mx-2">
-          <v-card class="elevation-5 ma-2">
-            <v-toolbar color="primary">
-              <v-toolbar-title class="white--text font-weight-bold"
-                >Nowa konfiguracja</v-toolbar-title
-              >
-            </v-toolbar>
-            <v-form @submit.prevent="createConfiguration()">
-              <v-card-text class="pt-1 pb-0 px-2">
-                <v-text-field
-                  outlined
-                  dense
-                  v-model="nameConfiguration"
-                  label="Nazwa konfigurcji"
-                  color="primary"
-                  class="mt-2 mb-0"
-                ></v-text-field>
-                <v-card v-for="group in groups" :key="group.text" class="my-2">
-                  <v-card-title
-                    class="text-h5 font-weight-bold white--text py-1"
-                    :class="group.color"
-                    >{{ group.text }}</v-card-title
+        <v-card>
+          <v-card-title class="text-h6 white--text font-weight-bold primary"
+            >Nowa konfiguracja</v-card-title
+          >
+          <v-form @submit.prevent="createConfiguration()">
+            <v-card-text class="pt-1 pb-0 px-2">
+              <v-text-field
+                outlined
+                dense
+                v-model="nameConfiguration"
+                label="Nazwa konfigurcji"
+                color="primary"
+                class="mt-2 mb-0"
+              ></v-text-field>
+              <v-card v-for="group in groups" :key="group.text" class="my-2">
+                <v-card-title
+                  class="text-h5 font-weight-bold white--text py-1"
+                  :class="group.color"
+                  >{{ group.text }}</v-card-title
+                >
+                <v-card-text class="pa-2">
+                  <v-card
+                    outlined
+                    v-for="slider in group.sliders"
+                    :key="slider.model"
+                    class="rounded-lg my-1"
                   >
-                  <v-card-text class="pa-2">
-                    <v-card
-                      outlined
-                      v-for="slider in group.sliders"
-                      :key="slider.model"
-                      class="rounded-lg my-1"
-                    >
-                      <v-card-text>
-                        <p>{{ slider.label }}</p>
-                        <v-slider
-                          v-model="$data[slider.model]"
-                          :track-color="group.color"
-                          :color="group.color"
-                          thumb-label
-                          hide-details
-                        ></v-slider>
-                      </v-card-text>
-                    </v-card>
-                  </v-card-text>
-                </v-card>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn type="submit" color="primary">
-                  <span class="font-weight-bold">Utwórz konfiguracje</span>
-                </v-btn>
-              </v-card-actions>
-            </v-form>
-          </v-card>
-        </v-row>
+                    <v-card-text>
+                      <p>{{ slider.label }}</p>
+                      <v-slider
+                        v-model="$data[slider.model]"
+                        :track-color="group.color"
+                        :color="group.color"
+                        thumb-label
+                        hide-details
+                      >
+                      </v-slider>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+              </v-card>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn type="submit" color="primary">
+                <span class="font-weight-bold">Utwórz konfiguracje</span>
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
       </v-col>
     </v-row>
   </div>
