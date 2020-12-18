@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="mx-1 my-2" justify="center">
-      <v-col cols="12" md="10" lg="8" xl="6" class="pa-0">
+      <v-col class="pa-0">
         <v-card>
           <v-card-title class="text-h6 white--text font-weight-bold primary"
             >Edytuj konfigurację</v-card-title

@@ -58,20 +58,24 @@
         </v-expansion-panels>
       </v-col>
     </v-row>
-    <detailed-list
-      title="Lista konfiguracji"
-      :list="configurations"
-      :listElements="confElems"
-      objIcon="mdi-database-settings"
-      @pagination="paginationClicked($event)"
-      @panelChanged="panelChanged($event)"
-    >
-      <configuration-editor
-        :confData="editedConfData"
-        @confEdited="editConf($event)"
-      >
-      </configuration-editor>
-    </detailed-list>
+    <v-row no-gutters justify="center">
+      <v-col class="pa-0" cols="12" md="10" lg="8" xl="6">
+        <detailed-list
+          title="Lista konfiguracji"
+          :list="configurations"
+          :listElements="confElems"
+          objIcon="mdi-database-settings"
+          @pagination="paginationClicked($event)"
+          @panelChanged="panelChanged($event)"
+        >
+          <configuration-editor
+            :confData="editedConfData"
+            @confEdited="editConf($event)"
+          >
+          </configuration-editor>
+        </detailed-list>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
