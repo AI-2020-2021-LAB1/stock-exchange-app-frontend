@@ -1,57 +1,121 @@
 <template>
-  <v-row class="fill-height" align="center">
-    <v-col cols="12" class="pa-0">
-      <v-row justify="center" class="mx-2">
-        <v-card class="elevation-12 ma-2" width="900">
-          <v-toolbar color="primary">
-            <v-toolbar-title class="white--text font-weight-bold"
-              >Nowa konfiguracja</v-toolbar-title
+  <div>
+    <v-row justify="center">
+      <v-col cols="12" md="10" lg="8" xl="6">
+        <v-expansion-panels dark class="pa-0">
+          <v-expansion-panel class="white--text warning">
+            <v-expansion-panel-header class="text-h6 font-weight-bold"
+              >Instrukcja obsługi edytora</v-expansion-panel-header
             >
-          </v-toolbar>
-          <v-card-text class="p-3">
+            <v-expansion-panel-content>
+              <p>
+                <b>
+                  Konfiguracja oparta jest o logikę drzewa decyzyjnego co
+                  oznacza, iż algorytm obciążnika dokonuje kolejnych wyborów
+                  symulujących działania użytkownika. Wartości poszczególnych
+                  ustawień o tym samym kolorze reprezentują opcje dostępne w
+                  ramach konkretnego wyboru. Suma wartości procentowych o tym
+                  samym kolorze musi być równa 100%.
+                </b>
+              </p>
+              <ul>
+                <li>
+                  Pierwsze cztery wartości reprezentują opcje możliwe do
+                  podjęcia przez użytkownika (w tym przypadku symulowanego przez
+                  obciążnik) po zalogowaniu. Są to kolejno: sprawdzenie listy
+                  dostępnych akcji, sprawdzenie listy posiadanych akcji,
+                  sprawdzenie aktualnych zleceń lub przejście bezpośrednio do
+                  utworzenia zlecenia. Opcje z tej grupy oznaczone są kolorem
+                  żółtym.
+                </li>
+                <li>
+                  Kolejne dwie wartości oznaczają opcje, które użytkownik może
+                  podjąć po sprawdzeniu listy wszystkich dostępnych aukcji. Są
+                  to: utworzenie zlecenia lub powrót do strony głównej.
+                  Oznaczone są kolorem zielonym.
+                </li>
+                <li>
+                  Kolejne dwie wartości dotyczą działań, które symulowany
+                  użytkownik może podjąć po sprawdzeniu listy posiadanych akcji.
+                  Ponownie są to: utworzenie zlecenia lub powrót do strony
+                  głównej. Oznaczone są kolorem niebieskim.
+                </li>
+                <li>
+                  Kolejne trzy wartości dotyczą opcji dostępnych po sprawdzeniu
+                  aktualnych zleceń. W tym przypadku obciążnik może utworzyć
+                  nowe zlecenie, usunąć jedno z już istniejących lub wrócić do
+                  strony głównej. Oznaczone są kolorem brązowym.
+                </li>
+                <li>
+                  Ostatnie dwa parametry dotyczą sytuacji w której symulowany
+                  użytkownik zdecyduje się na utworzenie zlecenia. Dostępne są
+                  tu dwie opcje: zlecenie kupna oraz zlecenie sprzedaży.
+                  Oznaczone są kolorem czerwonym.
+                </li>
+              </ul>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="12" md="10" lg="8" xl="6" class="pa-0">
+        <v-row justify="center" class="mx-2">
+          <v-card class="elevation-5 ma-2">
+            <v-toolbar color="primary">
+              <v-toolbar-title class="white--text font-weight-bold"
+                >Nowa konfiguracja</v-toolbar-title
+              >
+            </v-toolbar>
             <v-form @submit.prevent="createConfiguration()">
-              <v-text-field
-                outlined
-                dense
-                v-model="nameConfiguration"
-                label="Nazwa konfigurcji"
-                color="primary"
-                class="my-0"
-              ></v-text-field>
-              <v-card v-for="group in groups" :key="group.text" class="my-2">
-                <v-card-title class="text-h5 font-weight-bold white--text secondary py-1">{{ group.text }}</v-card-title>
-                <v-card-text class="pa-2">
-                  <v-card
-                    outlined
-                    v-for="slider in group.sliders"
-                    :key="slider.model"
-                    class="rounded-lg my-1"
+              <v-card-text class="pt-1 pb-0 px-2">
+                <v-text-field
+                  outlined
+                  dense
+                  v-model="nameConfiguration"
+                  label="Nazwa konfigurcji"
+                  color="primary"
+                  class="mt-2 mb-0"
+                ></v-text-field>
+                <v-card v-for="group in groups" :key="group.text" class="my-2">
+                  <v-card-title
+                    class="text-h5 font-weight-bold white--text py-1"
+                    :class="group.color"
+                    >{{ group.text }}</v-card-title
                   >
-                    <v-card-text>
-                      <p>{{ slider.label }}</p>
-                      <v-slider
-                        v-model="$data[slider.model]"
-                        :track-color="slider.color"
-                        :color="slider.color"
-                        thumb-label
-                        hide-details
-                      ></v-slider>
-                    </v-card-text>
-                  </v-card>
-                </v-card-text>
-              </v-card>
-              <v-row align="center" justify="center" class="ma-0">
+                  <v-card-text class="pa-2">
+                    <v-card
+                      outlined
+                      v-for="slider in group.sliders"
+                      :key="slider.model"
+                      class="rounded-lg my-1"
+                    >
+                      <v-card-text>
+                        <p>{{ slider.label }}</p>
+                        <v-slider
+                          v-model="$data[slider.model]"
+                          :track-color="group.color"
+                          :color="group.color"
+                          thumb-label
+                          hide-details
+                        ></v-slider>
+                      </v-card-text>
+                    </v-card>
+                  </v-card-text>
+                </v-card>
+              </v-card-text>
+              <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn type="submit" color="primary">
                   <span class="font-weight-bold">Utwórz konfiguracje</span>
                 </v-btn>
-              </v-row>
+              </v-card-actions>
             </v-form>
-          </v-card-text>
-        </v-card>
-      </v-row>
-    </v-col>
-  </v-row>
+          </v-card>
+        </v-row>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -64,106 +128,96 @@ export default class BenchmarkConfigurations extends Vue {
       groups: [
         {
           text: 'Przejścia z procesu logowania',
+          color: 'yellow darken-2',
           sliders: [
             {
               model: 'loginAllStocks',
               label:
                 'Prawdopodobieństwo przejścia z procesu logowania do procesu pobrania wszystkich stocków',
-              color: 'yellow darken-2',
             },
             {
               model: 'loginOwnedStocks',
               label:
                 'Prawdopodobieństwo przejścia z procesu logowania do procesu pobrania posiadanych stocków',
-              color: 'yellow darken-2',
             },
             {
               model: 'loginUserOrders',
               label:
                 'Prawdopodobieństwo przejścia z procesu logowania do procesu pobrania posiadanych zleceń',
-              color: 'yellow darken-2',
             },
             {
               model: 'loginMakeOrder',
               label:
                 'Prawdopodobieństwo przejścia z procesu logowania do procesu tworzenia zlecenia',
-              color: 'yellow darken-2',
             },
           ],
         },
         {
           text: 'Przejścia z procesu pobrania wszystkich stocków',
+          color: 'green',
           sliders: [
             {
               model: 'allStocksMakeOrder',
               label:
                 'Prawdopodobieństwo przejścia z procesu pobrania wszystkch stocków do procesu tworzenia zlecenia',
-              color: 'green',
             },
             {
               model: 'allStocksEnd',
               label:
                 'Prawdopodobieństwo przejścia z procesu pobrania wszystkich stocków do zakończenia',
-              color: 'green',
             },
           ],
         },
         {
           text: 'Przejścia z procesu pobrania posiadanych stocków',
+          color: 'blue',
           sliders: [
             {
               model: 'ownedStocksMakeOrder',
               label:
                 'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do tworzenia zlecenia',
-              color: 'blue',
             },
             {
               model: 'ownedStocksEnd',
               label:
                 'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do zakończenia',
-              color: 'blue',
             },
           ],
         },
         {
           text: 'Przejścia z procesu pobrania posiadanych zleceń',
+          color: 'brown',
           sliders: [
             {
               model: 'userOrdersMakeOrder',
               label:
                 'Prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do stworzenia zlecenia',
-              color: 'brown',
             },
             {
               model: 'userOrdersEnd',
               label:
                 'Prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do zakończenia',
-              color: 'brown',
             },
             {
               model: 'userOrderDeleteOrder',
               label:
                 'Prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do usunięcia zlecenia',
-              color: 'brown',
             },
           ],
         },
         {
           text: 'Przejścia z procesu procesu stworzenia zlecenia',
+          color: 'red',
           sliders: [
             {
               model: 'makeOrderBuyOrder',
-              id: 12,
               label:
                 'Prawdopodobieństwo przejścia z procesu stworzenia zlecenia do stworzenia zlecenia kupna',
-              color: 'red',
             },
             {
               model: 'makeOrderSellOrder',
-              id: 13,
               label:
                 'Prawdopodobieństwo przejścia z procesu stworzenia zlecenia do stworzenia zlecenia sprzedaży',
-              color: 'red',
             },
           ],
         },
