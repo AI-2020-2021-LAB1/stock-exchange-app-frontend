@@ -89,14 +89,32 @@
                   >
                     <v-card-text>
                       <p>{{ slider.label }}</p>
-                      <v-slider
-                        v-model="$data[slider.model]"
-                        :track-color="group.color"
-                        :color="group.color"
-                        thumb-label
-                        hide-details
-                      >
-                      </v-slider>
+                      <v-row no-gutters>
+                        <v-col class="my-auto">
+                          <v-slider
+                            v-model="$data[slider.model]"
+                            :track-color="group.color"
+                            :color="group.color"
+                            thumb-label
+                            thumb-size="25"
+                            hide-details
+                            step="1"
+                          >
+                          </v-slider>
+                        </v-col>
+                        <v-col cols="auto" class="pl-2">
+                          <v-text-field
+                            :value="$data[slider.model]"
+                            class="mt-0 pt-0"
+                            hide-details
+                            single-line
+                            solo
+                            dense
+                            disabled
+                            style="width: 55px"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
                     </v-card-text>
                   </v-card>
                 </v-card-text>
