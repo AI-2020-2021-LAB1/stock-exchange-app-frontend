@@ -160,6 +160,7 @@ export default class BenchmarkConfigurationEditor extends Vue {
       makeOrderSellOrder: this.$data.makeOrderSellOrder,
       noOfOperations: parseInt(this.$data.numberOfOperations, 10),
       createdAt: new Date().toISOString(),
+      archived: false,
     });
   }
 
