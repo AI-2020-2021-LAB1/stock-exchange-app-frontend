@@ -119,11 +119,29 @@
                   </v-card>
                 </v-card-text>
               </v-card>
+              <v-card class="my-2">
+                <v-card-title
+                  class="text-h5 font-weight-bold white--text black py-1"
+                  >Liczba operacji</v-card-title
+                >
+                <v-card-text class="pa-2">
+                  <v-text-field
+                    v-model="numberOfOperations"
+                    class="mt-0 pt-0"
+                    hide-details
+                    single-line
+                    solo
+                    dense
+                    type="number"
+                  ></v-text-field>
+                </v-card-text>
+              </v-card>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn type="submit" color="primary">
                 <span class="font-weight-bold">Utwórz konfiguracje</span>
+                <v-icon right>mdi-database-plus</v-icon>
               </v-btn>
             </v-card-actions>
           </v-form>
@@ -221,7 +239,7 @@ export default class BenchmarkConfigurations extends Vue {
           ],
         },
         {
-          text: 'Przejścia z procesu procesu stworzenia zlecenia',
+          text: 'Przejścia z procesu stworzenia zlecenia',
           color: 'red',
           sliders: [
             {
@@ -251,6 +269,7 @@ export default class BenchmarkConfigurations extends Vue {
       userOrderDeleteOrder: 0,
       makeOrderBuyOrder: 0,
       makeOrderSellOrder: 0,
+      numberOfOperations: 0,
     };
   }
 }
