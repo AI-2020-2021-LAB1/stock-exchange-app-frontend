@@ -5,39 +5,43 @@
         <v-card class="elevation-12 ma-2" width="900">
           <v-toolbar color="primary">
             <v-toolbar-title class="white--text font-weight-bold"
-              >Konfiguracja</v-toolbar-title
+              >Nowa konfiguracja</v-toolbar-title
             >
           </v-toolbar>
           <v-card-text class="p-3">
             <v-form @submit.prevent="createConfiguration()">
               <v-text-field
                 outlined
+                dense
                 v-model="nameConfiguration"
                 label="Nazwa konfigurcji"
                 color="primary"
-                class="my-2"
+                class="my-0"
               ></v-text-field>
-              <div v-bind:key="slide.id" v-for="slide in sliders">
-                <v-card
-                  class="d-flex align-center justify-center pa-4 mx-auto"
-                  min-height="30"
-                >
-                  <div>
-                    {{ slide.label }}
-                  </div>
-                </v-card>
-
-                <v-slider
-                  class="mt-10"
-                  v-model="$data[slide.model]"
-                  :track-color="slide.color"
-                  :color="slide.color"
-                  thumb-label
-                ></v-slider>
-              </div>
+              <v-card v-for="group in groups" :key="group.text" class="my-2">
+                <v-card-title class="text-h5 font-weight-bold white--text secondary py-1">{{ group.text }}</v-card-title>
+                <v-card-text class="pa-2">
+                  <v-card
+                    outlined
+                    v-for="slider in group.sliders"
+                    :key="slider.model"
+                    class="rounded-lg my-1"
+                  >
+                    <v-card-text>
+                      <p>{{ slider.label }}</p>
+                      <v-slider
+                        v-model="$data[slider.model]"
+                        :track-color="slider.color"
+                        :color="slider.color"
+                        thumb-label
+                        hide-details
+                      ></v-slider>
+                    </v-card-text>
+                  </v-card>
+                </v-card-text>
+              </v-card>
               <v-row align="center" justify="center" class="ma-0">
                 <v-spacer></v-spacer>
-
                 <v-btn type="submit" color="primary">
                   <span class="font-weight-bold">Utwórz konfiguracje</span>
                 </v-btn>
@@ -57,113 +61,113 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class BenchmarkConfigurations extends Vue {
   private data() {
     return {
-      sliders: [
+      groups: [
         {
-          model: 'loginAllStocks',
-          id: 1,
-          label:
-            'prawdopodobieństwo przejścia z procesu logowania do procesu pobrania wszystkich stocków',
-          val: 0,
-          color: 'yellow darken-2',
+          text: 'Przejścia z procesu logowania',
+          sliders: [
+            {
+              model: 'loginAllStocks',
+              label:
+                'Prawdopodobieństwo przejścia z procesu logowania do procesu pobrania wszystkich stocków',
+              color: 'yellow darken-2',
+            },
+            {
+              model: 'loginOwnedStocks',
+              label:
+                'Prawdopodobieństwo przejścia z procesu logowania do procesu pobrania posiadanych stocków',
+              color: 'yellow darken-2',
+            },
+            {
+              model: 'loginUserOrders',
+              label:
+                'Prawdopodobieństwo przejścia z procesu logowania do procesu pobrania posiadanych zleceń',
+              color: 'yellow darken-2',
+            },
+            {
+              model: 'loginMakeOrder',
+              label:
+                'Prawdopodobieństwo przejścia z procesu logowania do procesu tworzenia zlecenia',
+              color: 'yellow darken-2',
+            },
+          ],
         },
         {
-          model: 'loginOwnedStocks',
-          id: 2,
-          label:
-            'prawdopodobieństwo przejścia z procesu logowania do procesu pobrania posiadanych stocków',
-          val: 0,
-          color: 'yellow darken-2',
+          text: 'Przejścia z procesu pobrania posiadanych stocków',
+          sliders: [
+            {
+              model: 'allStocksMakeOrder',
+              label:
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do procesu tworzenia zlecenia',
+              color: 'green',
+            },
+            {
+              model: 'allStocksEnd',
+              label:
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do zakończenia',
+              color: 'green',
+            },
+          ],
         },
         {
-          model: 'loginUserOrders',
-          id: 3,
-          label:
-            'prawdopodobieństwo przejścia z procesu logowania do procesu pobrania posiadanych zleceń',
-          val: 0,
-          color: 'yellow darken-2',
+          text: 'Przejścia z procesu pobrania posiadanych stocków',
+          sliders: [
+            {
+              model: 'ownedStocksMakeOrder',
+              label:
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do stworzenia zlecenia',
+              color: 'blue',
+            },
+            {
+              model: 'ownedStocksEnd',
+              label:
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do zakończenia',
+              color: 'blue',
+            },
+          ],
         },
         {
-          model: 'loginMakeOrder',
-          id: 4,
-          label:
-            'prawdopodobieństwo przejścia z procesu logowania do procesu tworzenia zlecenia',
-          val: 0,
-          color: 'yellow darken-2',
+          text: 'Przejścia z procesu pobrania posiadanych zleceń',
+          sliders: [
+            {
+              model: 'userOrdersMakeOrder',
+              label:
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do stworzenia zlecenia',
+              color: 'brown',
+            },
+            {
+              model: 'userOrdersEnd',
+              label:
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do zakończenia',
+              color: 'brown',
+            },
+            {
+              model: 'userOrderDeleteOrder',
+              label:
+                'Prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do usunięcia zlecenia',
+              color: 'brown',
+            },
+          ],
         },
         {
-          model: 'allStocksMakeOrder',
-          id: 5,
-          label:
-            'prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do procesu tworzenia zlecenia',
-          val: 0,
-          color: 'green',
-        },
-        {
-          model: 'allStocksEnd',
-          id: 6,
-          label:
-            'prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do zakończenia',
-          val: 0,
-          color: 'green',
-        },
-        {
-          model: 'ownedStocksMakeOrder',
-          id: 7,
-          label:
-            'prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do stworzenia zlecenia',
-          val: 0,
-          color: 'blue',
-        },
-        {
-          model: 'ownedStocksEnd',
-          id: 8,
-          label:
-            'prawdopodobieństwo przejścia z procesu pobrania posiadanych stocków do zakończenia',
-          val: 0,
-          color: 'blue',
-        },
-        {
-          model: 'userOrdersMakeOrder',
-          id: 9,
-          label:
-            'prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do stworzenia zlecenia',
-          val: 0,
-          color: 'brown',
-        },
-        {
-          model: 'userOrdersEnd',
-          id: 10,
-          label:
-            'prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do zakończenia',
-          val: 0,
-          color: 'brown',
-        },
-        {
-          model: 'userOrderDeleteOrder',
-          id: 11,
-          label:
-            'prawdopodobieństwo przejścia z procesu pobrania posiadanych zleceń do usunięcia zlecenia',
-          val: 0,
-          color: 'brown',
-        },
-        {
-          model: 'makeOrderBuyOrder',
-          id: 12,
-          label:
-            'prawdopodobieństwo przejścia z procesu zrobienia zlecenia do stworzenia zlecenia kupna',
-          val: 0,
-          color: 'red',
-        },
-        {
-          model: 'makeOrderSellOrder',
-          id: 13,
-          label:
-            'prawdopodobieństwo przejścia z procesu zrobienia zlecenia do stworzenia zlecenia sprzedaży',
-          val: 0,
-          color: 'red',
+          text: 'Przejścia z procesu procesu stworzenia zlecenia',
+          sliders: [
+            {
+              model: 'makeOrderBuyOrder',
+              id: 12,
+              label:
+                'Prawdopodobieństwo przejścia z procesu stworzenia zlecenia do stworzenia zlecenia kupna',
+              color: 'red',
+            },
+            {
+              model: 'makeOrderSellOrder',
+              id: 13,
+              label:
+                'Prawdopodobieństwo przejścia z procesu stworzenia zlecenia do stworzenia zlecenia sprzedaży',
+              color: 'red',
+            },
+          ],
         },
       ],
-
       nameConfiguration: '',
       loginAllStocks: 0,
       loginOwnedStocks: 0,
