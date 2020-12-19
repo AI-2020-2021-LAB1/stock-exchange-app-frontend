@@ -7,7 +7,7 @@
             <v-expansion-panel-header class="text-h6 font-weight-bold pa-4"
               >Instrukcja obsługi edytora</v-expansion-panel-header
             >
-            <v-expansion-panel-content>
+            <v-expansion-panel-content class="px-4 pb-4">
               <p>
                 <b>
                   Konfiguracja oparta jest o logikę drzewa decyzyjnego co
