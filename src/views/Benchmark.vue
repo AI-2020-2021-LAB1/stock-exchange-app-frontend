@@ -1,155 +1,157 @@
 <template>
-  <v-row class="fill-height" align="center">
-    <v-col cols="12" class="pa-0">
-      <v-row justify="center" class="mx-2">
-        <v-card class="elevation-12 ma-2" width="600">
-          <v-toolbar color="primary">
-            <v-toolbar-title class="white--text font-weight-bold"
-              >Konfiguracja</v-toolbar-title
-            >
-          </v-toolbar>
-          <v-form @submit.prevent="startTest()">
-            <v-card-text class="pb-0">
-              <v-row align="center" justify="center" class="mx-0 mb-2">
-                <v-col class="pl-0 pr-1 py-0">
-                  <v-menu
-                    ref="startDatePickerRef"
-                    v-model="startDatePicker"
-                    :close-on-content-click="false"
-                    :return-value.sync="startDate"
-                    transition="scale-transition"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
+  <v-row class="fill-height ma-1" align="center" justify="center">
+    <v-col cols="12" md="10" lg="8" xl="6">
+      <v-row no-gutters>
+        <v-col class="pa-0" cols="12">
+          <v-card class="elevation-12">
+            <v-toolbar color="primary">
+              <v-toolbar-title class="white--text font-weight-bold"
+                >Konfiguracja</v-toolbar-title
+              >
+            </v-toolbar>
+            <v-form @submit.prevent="startTest()">
+              <v-card-text class="pb-0">
+                <v-row align="center" justify="center" class="mx-0 mb-2">
+                  <v-col class="pl-0 pr-1 py-0">
+                    <v-menu
+                      ref="startDatePickerRef"
+                      v-model="startDatePicker"
+                      :close-on-content-click="false"
+                      :return-value.sync="startDate"
+                      transition="scale-transition"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="startDate"
+                          label="Wybierz datę"
+                          prepend-icon="mdi-calendar-edit"
+                          readonly
+                          hide-details
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-if="startDatePicker"
                         v-model="startDate"
-                        label="Wybierz datę"
-                        prepend-icon="mdi-calendar-edit"
-                        readonly
-                        hide-details
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-if="startDatePicker"
-                      v-model="startDate"
-                      full-width
-                      :min="new Date().toISOString()"
-                      @click:date="$refs.startDatePickerRef.save(startDate)"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-                <v-col class="pl-1 pr-0 py-0">
-                  <v-menu
-                    ref="startTimePickerRef"
-                    v-model="startTimePicker"
-                    :close-on-content-click="false"
-                    :return-value.sync="timeTest"
-                    transition="scale-transition"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
+                        full-width
+                        :min="new Date().toISOString()"
+                        @click:date="$refs.startDatePickerRef.save(startDate)"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <v-col class="pl-1 pr-0 py-0">
+                    <v-menu
+                      ref="startTimePickerRef"
+                      v-model="startTimePicker"
+                      :close-on-content-click="false"
+                      :return-value.sync="timeTest"
+                      transition="scale-transition"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="timeTest"
+                          label="Wybierz godzinę"
+                          prepend-icon="mdi-clock-time-four-outline"
+                          readonly
+                          hide-details
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
                         v-model="timeTest"
-                        label="Wybierz godzinę"
-                        prepend-icon="mdi-clock-time-four-outline"
-                        readonly
-                        hide-details
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-time-picker
-                      v-model="timeTest"
-                      class="mt-4"
-                      format="24hr"
-                      @click:minute="$refs.startTimePickerRef.save(timeTest)"
-                    ></v-time-picker>
-                  </v-menu>
-                </v-col>
-              </v-row>
-              <v-row align="center" justify="center" class="ma-0">
-                <v-col class="pa-1" cols="12" sm="6">
-                  <v-select
-                    outlined
-                    :items="configurationsArray"
-                    item-text="text"
-                    item-value="value"
-                    v-model="selectedConfiguration"
-                    color="primary"
-                    hide-details
-                    label="Wybierz konfiguracje"
-                  ></v-select>
-                </v-col>
-                <v-col class="pa-1" cols="12" sm="6">
-                  <v-text-field
-                    outlined
-                    hide-details
-                    v-model.number="numberOfIterations"
-                    label="Wybierz liczbę iteracji"
-                    color="primary"
-                    type="number"
-                    class="my-2"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row align="center" justify="center" class="ma-0">
-                <v-col class="pa-1" cols="12" sm="6">
-                  <v-text-field
-                    outlined
-                    hide-details
-                    v-model.number="numberOfStocks"
-                    label="Wybierz liczbę akcji"
-                    color="primary"
-                    type="number"
-                    class="my-2"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="pa-1" cols="12" sm="6">
-                  <v-text-field
-                    outlined
-                    hide-details
-                    v-model.number="numberOfUsers"
-                    label="Wybierz liczbę użytkowników"
-                    color="primary"
-                    type="number"
-                    class="my-2"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-card-text>
-            <v-card-actions class="pt-0">
-              <v-row align="center" justify="center" class="ma-0">
-                <v-col class="pa-1" cols="12" sm="6">
-                  <v-btn
-                    block
-                    link
-                    to="/admin/benchmark/configurations"
-                    color="primary"
-                  >
-                    <span class="font-weight-bold">Manager konfiguracji</span>
-                    <v-icon right>mdi-database</v-icon>
-                  </v-btn>
-                </v-col>
-                <v-col class="pa-1" cols="12" sm="6">
-                  <v-btn
-                    block
-                    color="primary"
-                    type="submit"
-                    :disabled="
-                      !selectedConfiguration > 0 ||
-                      !numberOfIterations > 0 ||
-                      !numberOfStocks > 0 ||
-                      !numberOfUsers > 0
-                    "
-                  >
-                    <span class="font-weight-bold">rozpocznij test</span>
-                    <v-icon right>mdi-database-check</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-actions>
-          </v-form>
-        </v-card>
+                        class="mt-4"
+                        format="24hr"
+                        @click:minute="$refs.startTimePickerRef.save(timeTest)"
+                      ></v-time-picker>
+                    </v-menu>
+                  </v-col>
+                </v-row>
+                <v-row align="center" justify="center" class="ma-0">
+                  <v-col class="pa-1" cols="12" sm="6">
+                    <v-select
+                      outlined
+                      :items="configurationsArray"
+                      item-text="text"
+                      item-value="value"
+                      v-model="selectedConfiguration"
+                      color="primary"
+                      hide-details
+                      label="Wybierz konfiguracje"
+                    ></v-select>
+                  </v-col>
+                  <v-col class="pa-1" cols="12" sm="6">
+                    <v-text-field
+                      outlined
+                      hide-details
+                      v-model.number="numberOfIterations"
+                      label="Wybierz liczbę iteracji"
+                      color="primary"
+                      type="number"
+                      class="my-2"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row align="center" justify="center" class="ma-0">
+                  <v-col class="pa-1" cols="12" sm="6">
+                    <v-text-field
+                      outlined
+                      hide-details
+                      v-model.number="numberOfStocks"
+                      label="Wybierz liczbę akcji"
+                      color="primary"
+                      type="number"
+                      class="my-2"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col class="pa-1" cols="12" sm="6">
+                    <v-text-field
+                      outlined
+                      hide-details
+                      v-model.number="numberOfUsers"
+                      label="Wybierz liczbę użytkowników"
+                      color="primary"
+                      type="number"
+                      class="my-2"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <v-card-actions class="pt-0">
+                <v-row align="center" justify="center" class="ma-0">
+                  <v-col class="pa-1" cols="12" sm="6">
+                    <v-btn
+                      block
+                      link
+                      to="/admin/benchmark/configurations"
+                      color="primary"
+                    >
+                      <span class="font-weight-bold">Manager konfiguracji</span>
+                      <v-icon right>mdi-database</v-icon>
+                    </v-btn>
+                  </v-col>
+                  <v-col class="pa-1" cols="12" sm="6">
+                    <v-btn
+                      block
+                      color="primary"
+                      type="submit"
+                      :disabled="
+                        !selectedConfiguration > 0 ||
+                        !numberOfIterations > 0 ||
+                        !numberOfStocks > 0 ||
+                        !numberOfUsers > 0
+                      "
+                    >
+                      <span class="font-weight-bold">rozpocznij test</span>
+                      <v-icon right>mdi-database-check</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-form>
+          </v-card>
+        </v-col>
       </v-row>
     </v-col>
   </v-row>
