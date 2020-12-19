@@ -229,6 +229,7 @@ export default class Benchmark extends Vue {
         this.$data.testStatus = res.data[0];
       })
       .catch((err) => {
+        this.$data.testStatus = undefined;
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -355,7 +356,7 @@ export default class Benchmark extends Vue {
       startTimePicker: false,
       selectConfiguration: null,
       configurations: [],
-      testStatus: {},
+      testStatus: undefined,
       links: [
         {
           text: 'Edytor konfiguracji',
