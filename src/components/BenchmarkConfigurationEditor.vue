@@ -20,8 +20,9 @@
                 <v-card-title
                   class="text-h5 font-weight-bold white--text py-1"
                   :class="group.color"
-                  >{{ group.text }}</v-card-title
-                >
+                  style="word-break: break-word"
+                  >{{ group.text }}
+                </v-card-title>
                 <v-card-text class="pa-2">
                   <v-card
                     outlined
@@ -94,6 +95,7 @@
                 </v-col>
                 <v-col cols="12" md="auto" class="pa-2">
                   <v-btn
+                    block
                     :disabled="!inputValidated || !anyEdits"
                     type="submit"
                     color="primary"
