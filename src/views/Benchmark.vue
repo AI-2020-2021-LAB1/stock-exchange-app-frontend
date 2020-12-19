@@ -3,6 +3,29 @@
     <v-col cols="12" md="10" lg="8" xl="6">
       <v-row no-gutters>
         <v-col class="pa-0" cols="12">
+          <v-alert prominent :type="status.type">
+            <v-row align="center">
+              <v-col cols="12" sm="">{{ status.text }}</v-col>
+              <v-col cols="12" sm="auto">
+                <v-btn outlined :block="!$vuetify.breakpoint.smAndUp" @click="getTestStatus()">
+                  <span>Odśwież</span>
+                  <v-icon right>mdi-reload</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-progress-linear
+              v-if="status.showProgress"
+              color="secondary"
+              class="rounded-xl"
+              height="20"
+              :value="status.progress"
+              striped
+            >
+              <strong> {{ Math.ceil(status.progress) }}%</strong>
+            </v-progress-linear>
+          </v-alert>
+        </v-col>
+        <v-col class="pa-0" cols="12">
           <v-card class="elevation-12">
             <v-toolbar color="primary">
               <v-toolbar-title class="white--text font-weight-bold"
@@ -143,7 +166,7 @@
                         !numberOfUsers > 0
                       "
                     >
-                      <span class="font-weight-bold">rozpocznij test</span>
+                      <span class="font-weight-bold">Zaplanuj test</span>
                       <v-icon right>mdi-database-check</v-icon>
                     </v-btn>
                   </v-col>
@@ -266,6 +289,46 @@ export default class Benchmark extends Vue {
     } else {
       return [];
     }
+  }
+
+  get status() {
+    let type;
+    let text;
+    let showProgress = false;
+    const progress = this.$data.testStatus.progress * 100;
+    const id = this.$data.testStatus.id;
+    if (
+      this.$data.testStatus.status === 'NEW' ||
+      this.$data.testStatus.status === 'INIT'
+    ) {
+      type = 'info';
+      if (this.$data.testStatus.status === 'NEW') {
+        text = 'Test ' + id + ' niedługo się rozpocznie.';
+      } else {
+        text =
+          'Uruchomiono test ' +
+          id +
+          '. Aktualnie trwa rejestracja użytkowników i tworzenie spółek.';
+      }
+    } else if (this.$data.testStatus.status === 'RUNNING') {
+      type = 'warning';
+      text =
+        'Test ' + id + ' jest w trakcie. Poniżej możesz sprawdzić jego postęp.';
+      showProgress = true;
+    } else if (this.$data.testStatus.status === 'ERROR') {
+      type = 'error';
+      text = 'Test ' + id + ' zakończył się niepowodzeniem!';
+    } else if (this.$data.testStatus.status === 'FINISHED') {
+      type = 'success';
+      text = 'Test ' + id + ' został zakończony.';
+    }
+
+    return {
+      type,
+      text,
+      showProgress,
+      progress,
+    };
   }
 
   private data() {
