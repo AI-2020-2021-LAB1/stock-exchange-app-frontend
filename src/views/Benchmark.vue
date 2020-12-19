@@ -119,22 +119,27 @@
             </v-card-text>
             <v-card-actions class="pt-0">
               <v-row align="center" justify="center" class="ma-0">
-                <v-spacer></v-spacer>
-
                 <v-col class="pa-1" cols="12" sm="6">
-                  <v-btn to="/admin/benchmark/configurations" color="primary">
-                    <span class="font-weight-bold">utwórz konfiguracje</span>
+                  <v-btn
+                    block
+                    link
+                    to="/admin/benchmark/configurations"
+                    color="primary"
+                  >
+                    <span class="font-weight-bold">Manager konfiguracji</span>
+                    <v-icon right>mdi-database</v-icon>
                   </v-btn>
                 </v-col>
                 <v-col class="pa-1" cols="12" sm="6">
                   <v-btn
+                    block
                     color="primary"
                     type="submit"
                     :disabled="
                       !selectedConfiguration > 0 ||
-                        !numberOfIterations > 0 ||
-                        !numberOfStocks > 0 ||
-                        !numberOfUsers > 0
+                      !numberOfIterations > 0 ||
+                      !numberOfStocks > 0 ||
+                      !numberOfUsers > 0
                     "
                   >
                     <span class="font-weight-bold">rozpocznij test</span>
@@ -168,7 +173,7 @@ export default class Benchmark extends Vue {
   }
 
   private created() {
-    this.getConfigurations({page: 0});
+    this.getConfigurations({ page: 0 });
   }
 
   private getConfigurations(params: object) {
