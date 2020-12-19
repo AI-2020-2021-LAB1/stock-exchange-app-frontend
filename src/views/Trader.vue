@@ -24,7 +24,7 @@
         :sm="$vuetify.breakpoint.md ? 9 : 12"
         lg="6"
         xl="4"
-        v-if="buyingOffers.length || sellingOffers.length"
+        v-if="selectedStock.stockInfo.id"
       >
         <v-row no-gutters align="center" class="pb-1">
           <v-col class="px-2">
@@ -364,7 +364,7 @@ export default class Trader extends Vue {
       buyingOffersTotalElements: 0,
       searchStocks: '',
       selectedStock: {
-        stockInfo: { amount: 0 },
+        stockInfo: { amount: 0, id: 0 },
         userPossession: { amountAvailableForSale: 0 },
       },
       chart: [],
