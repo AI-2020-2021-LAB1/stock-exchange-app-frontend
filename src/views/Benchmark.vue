@@ -7,7 +7,11 @@
             <v-row align="center">
               <v-col cols="12" sm="">{{ status.text }}</v-col>
               <v-col cols="12" sm="auto">
-                <v-btn outlined :block="!$vuetify.breakpoint.smAndUp" @click="getTestStatus()">
+                <v-btn
+                  outlined
+                  :block="!$vuetify.breakpoint.smAndUp"
+                  @click="getTestStatus()"
+                >
                   <span>Odśwież</span>
                   <v-icon right>mdi-reload</v-icon>
                 </v-btn>
@@ -292,6 +296,14 @@ export default class Benchmark extends Vue {
   }
 
   get status() {
+    if (!this.$data.testStatus) {
+      return {
+        type: 'error',
+        text: 'Brak danych o aktualnych testach',
+        showProgress: false,
+      };
+    }
+
     let type;
     let text;
     let showProgress = false;
