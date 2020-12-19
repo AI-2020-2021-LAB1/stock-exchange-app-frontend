@@ -11,4 +11,9 @@ export class TestsService {
         });
         return test;
     }
+
+    public async getTestStatus(): Promise<AxiosResponse> {
+        const test = await axios.get('api/test/progress');
+        return test;
+    }
 }

@@ -174,6 +174,7 @@ export default class Benchmark extends Vue {
 
   private created() {
     this.getConfigurations({ page: 0 });
+    this.getTestStatus();
   }
 
   private getConfigurations(params: object) {
@@ -181,6 +182,22 @@ export default class Benchmark extends Vue {
       .getConfigurations(params)
       .then((res) => {
         this.$data.configurations = res.data;
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private getTestStatus() {
+    this.testService
+      .getTestStatus()
+      .then((res) => {
+        this.$data.testStatus = res.data[0];
       })
       .catch((err) => {
         this.$store.dispatch('setSnackbarState', {
@@ -261,6 +278,7 @@ export default class Benchmark extends Vue {
       startTimePicker: false,
       selectConfiguration: null,
       configurations: [],
+      testStatus: {},
       links: [
         {
           text: 'Edytor konfiguracji',
