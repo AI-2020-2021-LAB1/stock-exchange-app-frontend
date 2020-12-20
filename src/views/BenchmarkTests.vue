@@ -5,6 +5,7 @@
     :headers="headersTests"
     :totalPages="totalPages"
     @pagination="paginationClicked($event)"
+    class="ma-2"
   ></tests-table>
 </template>
 

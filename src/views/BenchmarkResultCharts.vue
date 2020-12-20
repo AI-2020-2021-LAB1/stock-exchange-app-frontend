@@ -1,5 +1,5 @@
 <template>
-  <div id="chart">
+  <div class="ma-2">
     <apexchart
       ref="restEndpointResponses"
       type="bar"
@@ -70,7 +70,6 @@ export default class BenchmarkResultCharts extends Vue {
     this.chartsService
       .getEndpointRespones(Number(this.$route.params.id))
       .then((res) => {
-        console.log(res.data);
         const labels = res.data.label;
         const newLabels: string[] = [];
         labels.forEach((el: string) => {
@@ -194,8 +193,7 @@ export default class BenchmarkResultCharts extends Vue {
     this.chartsService
       .getMethodRespones(Number(this.$route.params.id))
       .then((res) => {
-        console.log(res.data);
-        const labels = ['DELETE', 'GET', 'POST'];
+        const labels = res.data.label;
         const endpointSeries: object[] = [];
         endpointSeries.push({
           name: 'operationTimeMin',
