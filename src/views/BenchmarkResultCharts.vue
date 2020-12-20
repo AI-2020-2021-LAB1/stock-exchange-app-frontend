@@ -41,121 +41,127 @@ export default class BenchmarkResultCharts extends Vue {
   }
 
   private created() {
-    this.chartsService.getEndpointRespones(1).then((res) => {
-      const labels = res.data.label;
-      const newLabels: string[] = [];
-      labels.forEach((el: string) => {
-        newLabels.push(el.slice(this.getPosition(el, '/', 3)));
-      });
-      const endpointSeries: object[] = [];
-      endpointSeries.push({
-        name: 'operationTimeMin',
-        data: res.data.operationTimeMin,
-      });
-      endpointSeries.push({
-        name: 'operationTimeAvg',
-        data: res.data.operationTimeAvg,
-      });
-      endpointSeries.push({
-        name: 'operationTimeMax',
-        data: res.data.operationTimeMax,
-      });
-      endpointSeries.push({
-        name: 'dbQueryTimeMin',
-        data: res.data.dbQueryTimeMin,
-      });
-      endpointSeries.push({
-        name: 'dbQueryTimeAvg',
-        data: res.data.dbQueryTimeAvg,
-      });
-      endpointSeries.push({
-        name: 'dbQueryTimeMax',
-        data: res.data.dbQueryTimeMax,
-      });
-      this.$refs.restendpointResponses.updateSeries(endpointSeries);
-      this.$refs.restendpointResponses.updateOptions({
-        title: {
-          text: 'Wyniki testów',
-          align: 'center',
-        },
-        xaxis: {
-          categories: newLabels,
-        },
-        yaxis: {
+    this.getEndpointResponses();
+  }
+
+  private getEndpointResponses() {
+    this.chartsService
+      .getEndpointRespones(Number(this.$route.params.id))
+      .then((res) => {
+        const labels = res.data.label;
+        const newLabels: string[] = [];
+        labels.forEach((el: string) => {
+          newLabels.push(el.slice(this.getPosition(el, '/', 3)));
+        });
+        const endpointSeries: object[] = [];
+        endpointSeries.push({
+          name: 'operationTimeMin',
+          data: res.data.operationTimeMin,
+        });
+        endpointSeries.push({
+          name: 'operationTimeAvg',
+          data: res.data.operationTimeAvg,
+        });
+        endpointSeries.push({
+          name: 'operationTimeMax',
+          data: res.data.operationTimeMax,
+        });
+        endpointSeries.push({
+          name: 'dbQueryTimeMin',
+          data: res.data.dbQueryTimeMin,
+        });
+        endpointSeries.push({
+          name: 'dbQueryTimeAvg',
+          data: res.data.dbQueryTimeAvg,
+        });
+        endpointSeries.push({
+          name: 'dbQueryTimeMax',
+          data: res.data.dbQueryTimeMax,
+        });
+        this.$refs.restendpointResponses.updateSeries(endpointSeries);
+        this.$refs.restendpointResponses.updateOptions({
           title: {
-            text: 'Średni czas odpowiedzi [ms]',
+            text: 'Wyniki testów',
+            align: 'center',
           },
-        },
-      });
-      const cpuSeries: object[] = [];
-      cpuSeries.push({
-        name: 'operationTimeMin',
-        data: res.data.cpuUsageMin,
-      });
-      cpuSeries.push({
-        name: 'operationTimeAvg',
-        data: res.data.cpuUsageAvg,
-      });
-      cpuSeries.push({
-        name: 'operationTimeMax',
-        data: res.data.cpuUsageMax,
-      });
-      this.$refs.restendpointCpu.updateSeries(cpuSeries);
-      this.$refs.restendpointCpu.updateOptions({
-        title: {
-          text: 'Wyniki testów',
-          align: 'center',
-        },
-        xaxis: {
-          categories: newLabels,
-        },
-        yaxis: {
+          xaxis: {
+            categories: newLabels,
+          },
+          yaxis: {
+            title: {
+              text: 'Średni czas odpowiedzi [ms]',
+            },
+          },
+        });
+        const cpuSeries: object[] = [];
+        cpuSeries.push({
+          name: 'cpuUsageMin',
+          data: res.data.cpuUsageMin,
+        });
+        cpuSeries.push({
+          name: 'cpuUsageAvg',
+          data: res.data.cpuUsageAvg,
+        });
+        cpuSeries.push({
+          name: 'cpuUsageMax',
+          data: res.data.cpuUsageMax,
+        });
+        this.$refs.restendpointCpu.updateSeries(cpuSeries);
+        this.$refs.restendpointCpu.updateOptions({
           title: {
-            text: 'Średnie użycie procesora [%]',
+            text: 'Wyniki testów',
+            align: 'center',
           },
-        },
-      });
-      const memorySeries: object[] = [];
-      cpuSeries.push({
-        name: 'memoryUsageMin',
-        data: res.data.memoryUsageMin,
-      });
-      memorySeries.push({
-        name: 'memoryUsageAvg',
-        data: res.data.memoryUsageAvg,
-      });
-      memorySeries.push({
-        name: 'memoryUsageMax',
-        data: res.data.memoryUsageMax,
-      });
-      memorySeries.push({
-        name: 'memoryUseMin',
-        data: res.data.memoryUsageMin,
-      });
-      memorySeries.push({
-        name: 'memoryUseAvg',
-        data: res.data.memoryUsageAvg,
-      });
-      memorySeries.push({
-        name: 'memoryUseMax',
-        data: res.data.memoryUsageMax,
-      });
-      this.$refs.restendpointMemory.updateSeries(memorySeries);
-      this.$refs.restendpointMemory.updateOptions({
-        title: {
-          text: 'Wyniki testów',
-          align: 'center',
-        },
-        xaxis: {
-          categories: newLabels,
-        },
-        yaxis: {
+          xaxis: {
+            categories: newLabels,
+          },
+          yaxis: {
+            title: {
+              text: 'Średnie użycie procesora [%]',
+            },
+          },
+        });
+        const memorySeries: object[] = [];
+        cpuSeries.push({
+          name: 'memoryUsageMin',
+          data: res.data.memoryUsageMin,
+        });
+        memorySeries.push({
+          name: 'memoryUsageAvg',
+          data: res.data.memoryUsageAvg,
+        });
+        memorySeries.push({
+          name: 'memoryUsageMax',
+          data: res.data.memoryUsageMax,
+        });
+        memorySeries.push({
+          name: 'memoryUseMin',
+          data: res.data.memoryUsageMin,
+        });
+        memorySeries.push({
+          name: 'memoryUseAvg',
+          data: res.data.memoryUsageAvg,
+        });
+        memorySeries.push({
+          name: 'memoryUseMax',
+          data: res.data.memoryUsageMax,
+        });
+        this.$refs.restendpointMemory.updateSeries(memorySeries);
+        this.$refs.restendpointMemory.updateOptions({
           title: {
-            text: 'Średnie użycie pamięci [MB]',
+            text: 'Wyniki testów',
+            align: 'center',
           },
-        },
+          xaxis: {
+            categories: newLabels,
+          },
+          yaxis: {
+            title: {
+              text: 'Średnie użycie pamięci [B]',
+            },
+          },
+        });
       });
-    });
   }
 
   private data() {
