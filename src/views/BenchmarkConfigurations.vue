@@ -128,7 +128,93 @@ export default class BenchmarkConfigurations extends Vue {
     this.$data.editedConfData = this.$data.configurations.content[panelId];
   }
 
-  private editConf(data: Content) {}
+  private editConf(data: Content) {
+    this.configurationsService
+      .editConfigurationById(
+        this.$data.configurations.content[this.$data.editedConf].id,
+        data,
+      )
+      .then((res) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Konfiguracja została zmieniona',
+          color: 'success',
+          timeout: 7500,
+        });
+        this.$data.editedConfData.nameConfiguration = data.name;
+        this.$data.editedConfData.loginAllStocks = data.loginAllStocks;
+        this.$data.editedConfData.loginOwnedStocks = data.loginOwnedStocks;
+        this.$data.editedConfData.loginUserOrders = data.loginUserOrders;
+        this.$data.editedConfData.loginMakeOrder = data.loginMakeOrder;
+        this.$data.editedConfData.allStocksMakeOrder = data.allStocksMakeOrder;
+        this.$data.editedConfData.allStocksEnd = data.allStocksEnd;
+        this.$data.editedConfData.ownedStocksMakeOrder =
+          data.ownedStocksMakeOrder;
+        this.$data.editedConfData.ownedStocksEnd = data.ownedStocksEnd;
+        this.$data.editedConfData.userOrdersMakeOrder =
+          data.userOrdersMakeOrder;
+        this.$data.editedConfData.userOrdersEnd = data.userOrdersEnd;
+        this.$data.editedConfData.userOrderDeleteOrder =
+          data.userOrderDeleteOrder;
+        this.$data.editedConfData.makeOrderBuyOrder = data.makeOrderBuyOrder;
+        this.$data.editedConfData.makeOrderSellOrder = data.makeOrderSellOrder;
+        this.$data.editedConfData.numberOfOperations = data.noOfOperations;
+        this.$data.editedConfData.isArchived = data.archived;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].nameConfiguration = data.name;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].loginAllStocks = data.loginAllStocks;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].loginOwnedStocks = data.loginOwnedStocks;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].loginUserOrders = data.loginUserOrders;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].loginMakeOrder = data.loginMakeOrder;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].allStocksMakeOrder = data.allStocksMakeOrder;
+        this.$data.configurations.content[this.$data.editedConf].allStocksEnd =
+          data.allStocksEnd;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].ownedStocksMakeOrder = data.ownedStocksMakeOrder;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].ownedStocksEnd = data.ownedStocksEnd;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].userOrdersMakeOrder = data.userOrdersMakeOrder;
+        this.$data.configurations.content[this.$data.editedConf].userOrdersEnd =
+          data.userOrdersEnd;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].userOrderDeleteOrder = data.userOrderDeleteOrder;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].makeOrderBuyOrder = data.makeOrderBuyOrder;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].makeOrderSellOrder = data.makeOrderSellOrder;
+        this.$data.configurations.content[
+          this.$data.editedConf
+        ].numberOfOperations = data.noOfOperations;
+        this.$data.configurations.content[this.$data.editedConf].isArchived =
+          data.archived;
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
 
   private data() {
     return {

@@ -14,4 +14,13 @@ export class ConfigurationsService {
 
         return configurations;
     }
+
+    public async editConfigurationById(id: number, body: object): Promise<AxiosResponse> {
+        const edit = await axios.patch('api/configuration/' + id, body, {
+            headers: {
+                Authorization: 'Bearer ' + store.getters.token,
+            },
+        });
+        return edit;
+    }
 }

@@ -160,7 +160,6 @@ export default class BenchmarkConfigurationEditor extends Vue {
 
   private editConf() {
     this.$emit('confEdited', {
-      id: this.confData.id,
       name: this.$data.nameConfiguration,
       loginAllStocks: this.$data.loginAllStocks,
       loginOwnedStocks: this.$data.loginOwnedStocks,
@@ -176,7 +175,6 @@ export default class BenchmarkConfigurationEditor extends Vue {
       makeOrderBuyOrder: this.$data.makeOrderBuyOrder,
       makeOrderSellOrder: this.$data.makeOrderSellOrder,
       noOfOperations: parseInt(this.$data.numberOfOperations, 10),
-      createdAt: new Date().toISOString(),
       archived: this.$data.archived,
     });
   }
