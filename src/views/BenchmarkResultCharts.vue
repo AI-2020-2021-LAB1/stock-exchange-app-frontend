@@ -1,21 +1,42 @@
 <template>
   <div id="chart">
     <apexchart
-      ref="restendpointResponses"
+      ref="restEndpointResponses"
       type="bar"
       height="350"
       :options="chartOptions"
       :series="[]"
     ></apexchart>
     <apexchart
-      ref="restendpointCpu"
+      ref="restEndpointCpu"
       type="bar"
       height="350"
       :options="chartOptions"
       :series="[]"
     ></apexchart>
     <apexchart
-      ref="restendpointMemory"
+      ref="restEndpointMemory"
+      type="bar"
+      height="350"
+      :options="chartOptions"
+      :series="[]"
+    ></apexchart>
+    <apexchart
+      ref="restMethodResponses"
+      type="bar"
+      height="350"
+      :options="chartOptions"
+      :series="[]"
+    ></apexchart>
+    <apexchart
+      ref="restMethodCpu"
+      type="bar"
+      height="350"
+      :options="chartOptions"
+      :series="[]"
+    ></apexchart>
+    <apexchart
+      ref="restMethodMemory"
       type="bar"
       height="350"
       :options="chartOptions"
@@ -42,12 +63,14 @@ export default class BenchmarkResultCharts extends Vue {
 
   private created() {
     this.getEndpointResponses();
+    this.getMethodsResponses();
   }
 
   private getEndpointResponses() {
     this.chartsService
       .getEndpointRespones(Number(this.$route.params.id))
       .then((res) => {
+        console.log(res.data);
         const labels = res.data.label;
         const newLabels: string[] = [];
         labels.forEach((el: string) => {
@@ -78,10 +101,11 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'dbQueryTimeMax',
           data: res.data.dbQueryTimeMax,
         });
-        this.$refs.restendpointResponses.updateSeries(endpointSeries);
-        this.$refs.restendpointResponses.updateOptions({
+        this.$refs.restMethodResponses.updateSeries(endpointSeries);
+        this.$refs.restMethodResponses.updateOptions({
           title: {
-            text: 'Wyniki testów',
+            text:
+              'Wykresy prezentujące czasy odpowiedzi uzyskane dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
@@ -106,10 +130,11 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'cpuUsageMax',
           data: res.data.cpuUsageMax,
         });
-        this.$refs.restendpointCpu.updateSeries(cpuSeries);
-        this.$refs.restendpointCpu.updateOptions({
+        this.$refs.restMethodCpu.updateSeries(cpuSeries);
+        this.$refs.restMethodCpu.updateOptions({
           title: {
-            text: 'Wyniki testów',
+            text:
+              'Wykresy prezentujące średnie zużycie zasobów CPU dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
@@ -146,14 +171,132 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'memoryUseMax',
           data: res.data.memoryUsageMax,
         });
-        this.$refs.restendpointMemory.updateSeries(memorySeries);
-        this.$refs.restendpointMemory.updateOptions({
+        this.$refs.restMethodMemory.updateSeries(memorySeries);
+        this.$refs.restMethodMemory.updateOptions({
           title: {
-            text: 'Wyniki testów',
+            text:
+              'Wykresy prezentujące średnie zużycie pamięci RAM dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
             categories: newLabels,
+          },
+          yaxis: {
+            title: {
+              text: 'Średnie użycie pamięci [B]',
+            },
+          },
+        });
+      });
+  }
+
+  private getMethodsResponses() {
+    this.chartsService
+      .getMethodRespones(Number(this.$route.params.id))
+      .then((res) => {
+        console.log(res.data);
+        const labels = ['DELETE', 'GET', 'POST'];
+        const endpointSeries: object[] = [];
+        endpointSeries.push({
+          name: 'operationTimeMin',
+          data: res.data.operationTimeMin,
+        });
+        endpointSeries.push({
+          name: 'operationTimeAvg',
+          data: res.data.operationTimeAvg,
+        });
+        endpointSeries.push({
+          name: 'operationTimeMax',
+          data: res.data.operationTimeMax,
+        });
+        endpointSeries.push({
+          name: 'dbQueryTimeMin',
+          data: res.data.dbQueryTimeMin,
+        });
+        endpointSeries.push({
+          name: 'dbQueryTimeAvg',
+          data: res.data.dbQueryTimeAvg,
+        });
+        endpointSeries.push({
+          name: 'dbQueryTimeMax',
+          data: res.data.dbQueryTimeMax,
+        });
+        this.$refs.restEndpointResponses.updateSeries(endpointSeries);
+        this.$refs.restEndpointResponses.updateOptions({
+          title: {
+            text: 'Wykresy prezentujące czasy odpowiedzi dla metod typu GET, POST, DELETE',
+            align: 'center',
+          },
+          xaxis: {
+            categories: labels,
+          },
+          yaxis: {
+            title: {
+              text: 'Średni czas odpowiedzi [ms]',
+            },
+          },
+        });
+        const cpuSeries: object[] = [];
+        cpuSeries.push({
+          name: 'cpuUsageMin',
+          data: res.data.cpuUsageMin,
+        });
+        cpuSeries.push({
+          name: 'cpuUsageAvg',
+          data: res.data.cpuUsageAvg,
+        });
+        cpuSeries.push({
+          name: 'cpuUsageMax',
+          data: res.data.cpuUsageMax,
+        });
+        this.$refs.restEndpointCpu.updateSeries(cpuSeries);
+        this.$refs.restEndpointCpu.updateOptions({
+          title: {
+            text: 'Wykresy prezentujące średnie zużycie CPU dla metod typu GET, POST, DELETE',
+            align: 'center',
+          },
+          xaxis: {
+            categories: labels,
+          },
+          yaxis: {
+            title: {
+              text: 'Średnie użycie procesora [%]',
+            },
+          },
+        });
+        const memorySeries: object[] = [];
+        cpuSeries.push({
+          name: 'memoryUsageMin',
+          data: res.data.memoryUsageMin,
+        });
+        memorySeries.push({
+          name: 'memoryUsageAvg',
+          data: res.data.memoryUsageAvg,
+        });
+        memorySeries.push({
+          name: 'memoryUsageMax',
+          data: res.data.memoryUsageMax,
+        });
+        memorySeries.push({
+          name: 'memoryUseMin',
+          data: res.data.memoryUsageMin,
+        });
+        memorySeries.push({
+          name: 'memoryUseAvg',
+          data: res.data.memoryUsageAvg,
+        });
+        memorySeries.push({
+          name: 'memoryUseMax',
+          data: res.data.memoryUsageMax,
+        });
+        this.$refs.restEndpointMemory.updateSeries(memorySeries);
+        this.$refs.restEndpointMemory.updateOptions({
+          title: {
+            text: 'Wykresy prezentujące średnie zużycie pamięci RAM dla metod typu GET, POST, DELETE',
+            align: 'center',
+          },
+          xaxis: {
+            categories: labels,
           },
           yaxis: {
             title: {
