@@ -157,6 +157,7 @@ export default class BenchmarkConfigurations extends Vue {
           color: 'success',
           timeout: 7500,
         });
+        this.getConfigurations({ page: 0 });
         this.$data.editedConfData.nameConfiguration = data.name;
         this.$data.editedConfData.loginAllStocks = data.loginAllStocks;
         this.$data.editedConfData.loginOwnedStocks = data.loginOwnedStocks;
