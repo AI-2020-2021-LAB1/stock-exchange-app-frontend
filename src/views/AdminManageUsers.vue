@@ -435,7 +435,7 @@ export default class AdminManageUsers extends Vue {
       .then((res) => {
         this.$store.dispatch('setSnackbarState', {
           state: true,
-          msg: 'Dane zostaly zmienione',
+          msg: 'Dane zostały zmienione',
           color: 'success',
           timeout: 7500,
         });
