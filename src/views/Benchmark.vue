@@ -176,6 +176,12 @@
             </v-form>
           </v-card>
         </v-col>
+        <v-col class="mt-4">
+          <v-btn large block link to="/admin/benchmark/charts" class="primary">
+            <span>Przejdź do wyników testów</span>
+            <v-icon right>mdi-chart-bar</v-icon>
+          </v-btn>
+        </v-col>
       </v-row>
     </v-col>
   </v-row>
@@ -365,7 +371,8 @@ export default class Benchmark extends Vue {
         },
       ],
       rules: {
-        integer: (value: number) => !value.toString().includes('.') || 'Liczba musi być całkowita',
+        integer: (value: number) =>
+          !value.toString().includes('.') || 'Liczba musi być całkowita',
       },
     };
   }
