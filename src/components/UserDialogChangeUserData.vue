@@ -1,15 +1,14 @@
 <template>
   <div class="text-center">
-    <v-dialog v-model="dialog">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="error" dark v-bind="attrs" v-on="on">
-          <span>Zmień swoje dane</span>
-          <v-icon right>mdi-account-edit</v-icon>
-        </v-btn>
-      </template>
-      <v-row no-gutters justify="center">
-        <v-col cols="auto" class="pa-0">
-          <v-card class="ma-2" width="600">
+    <v-row no-gutters justify="center">
+        <v-dialog v-model="dialog" max-width="600px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="error" dark v-bind="attrs" v-on="on">
+              <span>Zmień swoje dane</span>
+              <v-icon right>mdi-account-edit</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
             <v-card-title class="text-h5 font-weight-bold white--text primary"
               >Zmiana danych użytkownika</v-card-title
             >
@@ -126,9 +125,8 @@
               </v-card-actions>
             </v-form>
           </v-card>
-        </v-col>
-      </v-row>
-    </v-dialog>
+        </v-dialog>
+    </v-row>
   </div>
 </template>
 

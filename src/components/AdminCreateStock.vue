@@ -58,6 +58,7 @@
             rules.required,
             rules.minValue(amount, 1),
             rules.amountsEqual(amount, ownersAmountsSum),
+            rules.integer
           ]"
           label="Ilość"
           color="primary"
@@ -281,6 +282,7 @@ export default class AdminCreateStock extends Vue {
       fetchedUsers: [],
       search: '',
       rules: {
+        integer: (value: number) => !value.toString().includes('.') || 'Liczba musi być całkowita',
         required: (value: string) => !!value || 'Pole wymagane',
         counter: (value: string, num: number, end: string) =>
           value.length >= num || 'Minimum ' + num + ' znak' + end,

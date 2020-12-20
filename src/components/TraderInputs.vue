@@ -28,6 +28,7 @@
                 label="ilość"
                 color="primary"
                 type="number"
+                :rules="[rules.integer]"
               ></v-text-field>
             </v-col>
             <v-col class="px-1 pb-0">
@@ -160,6 +161,7 @@
                 label="ilość"
                 color="primary"
                 type="number"
+                :rules="[rules.integer]"
               ></v-text-field>
             </v-col>
             <v-col class="px-1 pb-0">
@@ -456,6 +458,10 @@ export default class TraderInputs extends Vue {
       sellDatePicker: false,
       sellDate: null,
       stock: this.selectedStock,
+      rules: {
+        integer: (value: number) =>
+          !value.toString().includes('.') || 'Liczba musi być całkowita',
+      },
     };
   }
   get buyValue() {

@@ -25,7 +25,7 @@
                   dense
                   outlined
                   v-model.number="obj.amount"
-                  :rules="[minValue(obj.amount, 1)]"
+                  :rules="[minValue(obj.amount, 1), rules.integer]"
                   label="Ilość akcji"
                   color="primary"
                   type="number"
@@ -68,6 +68,10 @@ export default class AdminCreateStockOwnerList extends Vue {
 
   private data() {
     return {
+      rules: {
+        integer: (value: number) =>
+          !value.toString().includes('.') || 'Liczba musi być całkowita',
+      },
       minValue: (value: number, min: number) =>
         value >= min || 'Minimalna wartość to ' + min,
     };
