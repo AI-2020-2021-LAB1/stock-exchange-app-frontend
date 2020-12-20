@@ -132,7 +132,24 @@ export default new Router({
       },
     },
     {
-      path: '/admin/benchmark/charts',
+      path: '/admin/benchmark/tests',
+      name: 'benchmark-tests',
+      component: () =>
+        import(/* webpackChunkName: "Benchmark" */ '../views/BenchmarkTests.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!store.getters.isAuthenticated) {
+          next('/login');
+        } else {
+          if (store.getters.user.role === 'ADMIN') {
+            next();
+          } else {
+            next('/403');
+          }
+        }
+      },
+    },
+    {
+      path: '/admin/benchmark/test/:id/result',
       name: 'benchmark-charts',
       component: () =>
         import(/* webpackChunkName: "Benchmark" */ '../views/BenchmarkResultCharts.vue'),

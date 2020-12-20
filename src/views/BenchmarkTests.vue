@@ -19,7 +19,7 @@ import { formatNumericDate } from '../helpers';
     TestsTable,
   },
 })
-export default class BenchmarkCharts extends Vue {
+export default class BenchmarkTests extends Vue {
   private testsService!: TestsService;
 
   public _formatNumericDate(date: number) {

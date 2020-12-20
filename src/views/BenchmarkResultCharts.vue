@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { ChartsService } from '../endpoint/charts';
+import { ChartsService } from '../API/charts';
 
 @Component
 export default class BenchmarkResultCharts extends Vue {

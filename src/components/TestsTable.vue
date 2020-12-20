@@ -16,7 +16,7 @@
           <div>
             <v-btn
               color="primary"
-              @click="goToCharts(item.id)"
+              @click="showResults(item.id)"
             >
               {{item.goToCharts}}
             </v-btn>
@@ -60,8 +60,8 @@ export default class UserTransactions extends Vue {
     };
   }
 
-  private goToTest(id: number) {
-    this.$emit('goToTest', id);
+  private showResults(id: number) {
+    this.$router.push('/admin/benchmark/test/' + id + '/result');
   }
 }
 </script>

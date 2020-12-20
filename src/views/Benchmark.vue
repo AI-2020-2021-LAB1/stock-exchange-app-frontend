@@ -177,8 +177,8 @@
           </v-card>
         </v-col>
         <v-col class="mt-4">
-          <v-btn large block link to="/admin/benchmark/charts" class="primary">
-            <span>Przejdź do wyników testów</span>
+          <v-btn large block link to="/admin/benchmark/tests" class="primary">
+            <span>Przejdź do historii testów</span>
             <v-icon right>mdi-chart-bar</v-icon>
           </v-btn>
         </v-col>
