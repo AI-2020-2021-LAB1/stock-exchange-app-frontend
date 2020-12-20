@@ -53,7 +53,6 @@
                           label="Wybierz datę"
                           prepend-icon="mdi-calendar-edit"
                           readonly
-                          hide-details
                           v-bind="attrs"
                           v-on="on"
                         ></v-text-field>
@@ -81,7 +80,6 @@
                           label="Wybierz godzinę"
                           prepend-icon="mdi-clock-time-four-outline"
                           readonly
-                          hide-details
                           v-bind="attrs"
                           v-on="on"
                         ></v-text-field>
@@ -104,19 +102,18 @@
                       item-value="value"
                       v-model="selectedConfiguration"
                       color="primary"
-                      hide-details
                       label="Wybierz konfiguracje"
                     ></v-select>
                   </v-col>
                   <v-col class="pa-1" cols="12" sm="6">
                     <v-text-field
                       outlined
-                      hide-details
                       v-model.number="numberOfIterations"
                       label="Wybierz liczbę iteracji"
                       color="primary"
                       type="number"
                       class="my-2"
+                      :rules="[rules.integer]"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -124,23 +121,23 @@
                   <v-col class="pa-1" cols="12" sm="6">
                     <v-text-field
                       outlined
-                      hide-details
                       v-model.number="numberOfStocks"
                       label="Wybierz liczbę akcji"
                       color="primary"
                       type="number"
                       class="my-2"
+                      :rules="[rules.integer]"
                     ></v-text-field>
                   </v-col>
                   <v-col class="pa-1" cols="12" sm="6">
                     <v-text-field
                       outlined
-                      hide-details
                       v-model.number="numberOfUsers"
                       label="Wybierz liczbę użytkowników"
                       color="primary"
                       type="number"
                       class="my-2"
+                      :rules="[rules.integer]"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -367,6 +364,9 @@ export default class Benchmark extends Vue {
           link: '/admin/benchmark/charts',
         },
       ],
+      rules: {
+        integer: (value: number) => !value.toString().includes('.') || 'Liczba musi być całkowita',
+      },
     };
   }
 }
