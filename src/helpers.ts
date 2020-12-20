@@ -6,6 +6,10 @@ export function formatDate(date: string): string {
     // )} ${date.substring(11, 19)}`;
 }
 
+export function formatNumericDate(date: number): string {
+    return new Date(date).toLocaleString();
+}
+
 export function formatTime(): string {
     const time = new Date();
     return `${time.getHours()}:${time.getMinutes()}`;
