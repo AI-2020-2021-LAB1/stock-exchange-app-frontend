@@ -57,6 +57,21 @@
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+          <v-expansion-panels>
+            <v-expansion-panel class="success">
+              <v-expansion-panel-header
+                class="text-h6 white--text font-weight-bold pa-4"
+                >Dodaj konfiguracje</v-expansion-panel-header
+              >
+              <v-expansion-panel-content class="px-4 pb-4">
+                <configuration-editor
+                  name="Dodaj konfigurację"
+                  @confAdd="addConf($event)"
+                >
+                </configuration-editor>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-col>
       </v-row>
       <v-row no-gutters justify="center" class="mx-1">
@@ -70,6 +85,7 @@
             @panelChanged="panelChanged($event)"
           >
             <configuration-editor
+              name="Edytuj konfigurację"
               :confData="editedConfData"
               @confEdited="editConf($event)"
             >
@@ -215,6 +231,8 @@ export default class BenchmarkConfigurations extends Vue {
         });
       });
   }
+
+  private addConf(data: Content) {}
 
   private data() {
     return {

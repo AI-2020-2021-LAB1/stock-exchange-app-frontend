@@ -3,10 +3,13 @@
     <v-row class="mx-1 my-2" justify="center">
       <v-col class="pa-0">
         <v-card>
-          <v-card-title class="text-h6 white--text font-weight-bold primary"
-            >Edytuj konfigurację</v-card-title
+          <v-card-title class="text-h6 white--text font-weight-bold primary">{{
+            name
+          }}</v-card-title>
+          <v-form
+            v-model="inputValidated"
+            @submit.prevent="confData === undefined ? addConf() : editConf()"
           >
-          <v-form v-model="inputValidated" @submit.prevent="editConf()">
             <v-card-text class="pt-1 pb-0 px-2">
               <v-text-field
                 outlined
@@ -133,29 +136,69 @@ import { Content } from '../models/ConfigurationModel';
 
 @Component
 export default class BenchmarkConfigurationEditor extends Vue {
-  @Prop({ required: true }) private confData!: Content;
+  @Prop({ required: false }) private confData!: Content;
+  @Prop({ required: true }) private name!: string;
 
   private mounted() {
     this.resetForm();
   }
 
   private resetForm() {
-    this.$data.nameConfiguration = this.confData.name;
-    this.$data.loginAllStocks = this.confData.loginAllStocks;
-    this.$data.loginOwnedStocks = this.confData.loginOwnedStocks;
-    this.$data.loginUserOrders = this.confData.loginUserOrders;
-    this.$data.loginMakeOrder = this.confData.loginMakeOrder;
-    this.$data.allStocksMakeOrder = this.confData.allStocksMakeOrder;
-    this.$data.allStocksEnd = this.confData.allStocksEnd;
-    this.$data.ownedStocksMakeOrder = this.confData.ownedStocksMakeOrder;
-    this.$data.ownedStocksEnd = this.confData.ownedStocksEnd;
-    this.$data.userOrdersMakeOrder = this.confData.userOrdersMakeOrder;
-    this.$data.userOrdersEnd = this.confData.userOrdersEnd;
-    this.$data.userOrderDeleteOrder = this.confData.userOrderDeleteOrder;
-    this.$data.makeOrderBuyOrder = this.confData.makeOrderBuyOrder;
-    this.$data.makeOrderSellOrder = this.confData.makeOrderSellOrder;
-    this.$data.numberOfOperations = this.confData.noOfOperations;
-    this.$data.isArchived = this.confData.archived;
+    if (this.confData === undefined) {
+      this.$data.nameConfiguration = 'Konfiguracja';
+      this.$data.loginAllStocks = 100;
+      this.$data.loginOwnedStocks = 100;
+      this.$data.loginUserOrders = 100;
+      this.$data.loginMakeOrder = 100;
+      this.$data.allStocksMakeOrder = 100;
+      this.$data.allStocksEnd = 100;
+      this.$data.ownedStocksMakeOrder = 100;
+      this.$data.ownedStocksEnd = 100;
+      this.$data.userOrdersMakeOrder = 100;
+      this.$data.userOrdersEnd = 100;
+      this.$data.userOrderDeleteOrder = 100;
+      this.$data.makeOrderBuyOrder = 100;
+      this.$data.makeOrderSellOrder = 100;
+      this.$data.numberOfOperations = 10;
+    } else {
+      this.$data.nameConfiguration = this.confData.name;
+      this.$data.loginAllStocks = this.confData.loginAllStocks;
+      this.$data.loginOwnedStocks = this.confData.loginOwnedStocks;
+      this.$data.loginUserOrders = this.confData.loginUserOrders;
+      this.$data.loginMakeOrder = this.confData.loginMakeOrder;
+      this.$data.allStocksMakeOrder = this.confData.allStocksMakeOrder;
+      this.$data.allStocksEnd = this.confData.allStocksEnd;
+      this.$data.ownedStocksMakeOrder = this.confData.ownedStocksMakeOrder;
+      this.$data.ownedStocksEnd = this.confData.ownedStocksEnd;
+      this.$data.userOrdersMakeOrder = this.confData.userOrdersMakeOrder;
+      this.$data.userOrdersEnd = this.confData.userOrdersEnd;
+      this.$data.userOrderDeleteOrder = this.confData.userOrderDeleteOrder;
+      this.$data.makeOrderBuyOrder = this.confData.makeOrderBuyOrder;
+      this.$data.makeOrderSellOrder = this.confData.makeOrderSellOrder;
+      this.$data.numberOfOperations = this.confData.noOfOperations;
+    }
+  }
+
+  private addConf() {
+    this.$emit('confAdd', {
+      name: this.$data.nameConfiguration,
+      loginAllStocks: this.$data.loginAllStocks,
+      loginOwnedStocks: this.$data.loginOwnedStocks,
+      loginUserOrders: this.$data.loginUserOrders,
+      loginMakeOrder: this.$data.loginMakeOrder,
+      allStocksMakeOrder: this.$data.allStocksMakeOrder,
+      allStocksEnd: this.$data.allStocksEnd,
+      ownedStocksMakeOrder: this.$data.ownedStocksMakeOrder,
+      ownedStocksEnd: this.$data.ownedStocksEnd,
+      userOrdersMakeOrder: this.$data.userOrdersMakeOrder,
+      userOrdersEnd: this.$data.userOrdersEnd,
+      userOrderDeleteOrder: this.$data.userOrderDeleteOrder,
+      makeOrderBuyOrder: this.$data.makeOrderBuyOrder,
+      makeOrderSellOrder: this.$data.makeOrderSellOrder,
+      noOfOperations: parseInt(this.$data.numberOfOperations, 10),
+      createdAt: new Date().toISOString(),
+      archived: false,
+    });
   }
 
   private editConf() {
@@ -180,24 +223,29 @@ export default class BenchmarkConfigurationEditor extends Vue {
   }
 
   get anyEdits() {
-    return (
-      this.$data.nameConfiguration !== this.confData.name ||
-      this.$data.loginAllStocks !== this.confData.loginAllStocks ||
-      this.$data.loginOwnedStocks !== this.confData.loginOwnedStocks ||
-      this.$data.loginUserOrders !== this.confData.loginUserOrders ||
-      this.$data.loginMakeOrder !== this.confData.loginMakeOrder ||
-      this.$data.allStocksMakeOrder !== this.confData.allStocksMakeOrder ||
-      this.$data.allStocksEnd !== this.confData.allStocksEnd ||
-      this.$data.ownedStocksMakeOrder !== this.confData.ownedStocksMakeOrder ||
-      this.$data.ownedStocksEnd !== this.confData.ownedStocksEnd ||
-      this.$data.userOrdersMakeOrder !== this.confData.userOrdersMakeOrder ||
-      this.$data.userOrdersEnd !== this.confData.userOrdersEnd ||
-      this.$data.userOrderDeleteOrder !== this.confData.userOrderDeleteOrder ||
-      this.$data.makeOrderBuyOrder !== this.confData.makeOrderBuyOrder ||
-      this.$data.makeOrderSellOrder !== this.confData.makeOrderSellOrder ||
-      this.$data.numberOfOperations !== this.confData.noOfOperations ||
-      this.$data.isArchived !== this.confData.archived
-    );
+    if (this.confData !== undefined) {
+      return (
+        this.$data.nameConfiguration !== this.confData.name ||
+        this.$data.loginAllStocks !== this.confData.loginAllStocks ||
+        this.$data.loginOwnedStocks !== this.confData.loginOwnedStocks ||
+        this.$data.loginUserOrders !== this.confData.loginUserOrders ||
+        this.$data.loginMakeOrder !== this.confData.loginMakeOrder ||
+        this.$data.allStocksMakeOrder !== this.confData.allStocksMakeOrder ||
+        this.$data.allStocksEnd !== this.confData.allStocksEnd ||
+        this.$data.ownedStocksMakeOrder !==
+          this.confData.ownedStocksMakeOrder ||
+        this.$data.ownedStocksEnd !== this.confData.ownedStocksEnd ||
+        this.$data.userOrdersMakeOrder !== this.confData.userOrdersMakeOrder ||
+        this.$data.userOrdersEnd !== this.confData.userOrdersEnd ||
+        this.$data.userOrderDeleteOrder !==
+          this.confData.userOrderDeleteOrder ||
+        this.$data.makeOrderBuyOrder !== this.confData.makeOrderBuyOrder ||
+        this.$data.makeOrderSellOrder !== this.confData.makeOrderSellOrder ||
+        this.$data.numberOfOperations !== this.confData.noOfOperations
+      );
+    } else {
+      return true;
+    }
   }
 
   @Watch('confData', { deep: true })
