@@ -91,6 +91,20 @@
               <v-spacer></v-spacer>
               <v-row justify="end" no-gutters>
                 <v-col cols="12" md="auto" class="pa-2">
+                  <v-btn
+                    block
+                    :class="isArchived ? 'warning' : 'error'"
+                    @click="isArchived = !isArchived"
+                  >
+                    <span>{{
+                      isArchived ? 'Confnij archiwizację' : 'Archiwizuj'
+                    }}</span>
+                    <v-icon right>{{
+                      isArchived ? 'mdi-package-down' : 'mdi-package-up'
+                    }}</v-icon>
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" md="auto" class="pa-2">
                   <v-btn block class="error" @click="resetForm()">
                     <span>Resetuj formularz</span>
                     <v-icon right>mdi-reload</v-icon>
@@ -206,7 +220,7 @@ export default class BenchmarkConfigurationEditor extends Vue {
       makeOrderSellOrder: this.$data.makeOrderSellOrder,
       noOfOperations: parseInt(this.$data.numberOfOperations, 10),
       createdAt: new Date().toISOString(),
-      archived: false,
+      archived: this.$data.archived,
     });
   }
 
@@ -253,6 +267,7 @@ export default class BenchmarkConfigurationEditor extends Vue {
     this.$data.makeOrderBuyOrder = data.makeOrderBuyOrder;
     this.$data.makeOrderSellOrder = data.makeOrderSellOrder;
     this.$data.numberOfOperations = data.noOfOperations;
+    this.$data.isArchived = data.archived;
   }
 
   private getValidationArray(model: string): number[] {
@@ -403,6 +418,7 @@ export default class BenchmarkConfigurationEditor extends Vue {
       makeOrderBuyOrder: 0,
       makeOrderSellOrder: 0,
       numberOfOperations: 0,
+      isArchived: false,
       inputValidated: false,
       rules: {
         percentegesCounter: (values: number[]) => {
