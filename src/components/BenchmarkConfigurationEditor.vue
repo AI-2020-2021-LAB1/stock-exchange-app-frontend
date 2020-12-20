@@ -48,6 +48,7 @@
                               rules.percentegesCounter(
                                 getValidationArray(slider.model),
                               ),
+                              rules.moreThanOne($data[slider.model]),
                             ]"
                           >
                           </v-slider>
@@ -401,6 +402,7 @@ export default class BenchmarkConfigurationEditor extends Vue {
       numberOfOperations: 0,
       inputValidated: false,
       rules: {
+        moreThanOne: (value: number) => value > 0 || 'Musi być większę od 0',
         percentegesCounter: (values: number[]) => {
           let percentege = 0;
 

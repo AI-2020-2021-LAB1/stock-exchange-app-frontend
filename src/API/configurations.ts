@@ -23,4 +23,13 @@ export class ConfigurationsService {
         });
         return edit;
     }
+
+    public async createConfiguration(body: object): Promise<AxiosResponse> {
+        const create = await axios.post('api/configuration/', body, {
+            headers: {
+                Authorization: 'Bearer ' + store.getters.token,
+            },
+        });
+        return create;
+    }
 }

@@ -66,7 +66,7 @@
               <v-expansion-panel-content class="px-4 pb-4">
                 <configuration-editor
                   name="Dodaj konfigurację"
-                  @confAdd="addConf($event)"
+                  @confAdd="createConf($event)"
                 >
                 </configuration-editor>
               </v-expansion-panel-content>
@@ -232,7 +232,27 @@ export default class BenchmarkConfigurations extends Vue {
       });
   }
 
-  private addConf(data: Content) {}
+  private createConf(data: Content) {
+    this.configurationsService
+      .createConfiguration(data)
+      .then((res) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Konfiguracja została dodana',
+          color: 'success',
+          timeout: 7500,
+        });
+        this.getConfigurations({ page: 0 });
+      })
+      .catch((err) => {
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
 
   private data() {
     return {
