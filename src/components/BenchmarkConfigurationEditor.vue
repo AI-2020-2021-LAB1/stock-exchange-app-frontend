@@ -15,9 +15,10 @@
                 outlined
                 dense
                 v-model="nameConfiguration"
-                label="Nazwa konfigurcji"
+                label="Nazwa konfiguracji"
                 color="primary"
                 class="mt-2 mb-0"
+                :rules="[rules.isEmpty]"
               ></v-text-field>
               <v-card v-for="group in groups" :key="group.text" class="my-2">
                 <v-card-title
@@ -79,11 +80,11 @@
                   <v-text-field
                     v-model="numberOfOperations"
                     class="mt-0 pt-0"
-                    hide-details
                     single-line
                     solo
                     dense
                     type="number"
+                    :rules="[rules.integer]"
                   ></v-text-field>
                 </v-card-text>
               </v-card>
@@ -104,7 +105,7 @@
                     type="submit"
                     color="primary"
                   >
-                    <span class="font-weight-bold">Edytuj konfiguracje</span>
+                    <span class="font-weight-bold">{{confData === undefined ? 'Dodaj konfigurację' : 'Edytuj konfigurację'}}</span>
                     <v-icon right>mdi-database-edit</v-icon>
                   </v-btn>
                 </v-col>
@@ -402,6 +403,8 @@ export default class BenchmarkConfigurationEditor extends Vue {
       numberOfOperations: 0,
       inputValidated: false,
       rules: {
+        integer: (value: number) => !value.toString().includes('.') || 'Liczba musi być całkowita',
+        isEmpty: (value: string) => value !== '' || 'Nazwa nie może być pusta',
         moreThanOne: (value: number) => value > 0 || 'Musi być większę od 0',
         percentegesCounter: (values: number[]) => {
           let percentege = 0;
