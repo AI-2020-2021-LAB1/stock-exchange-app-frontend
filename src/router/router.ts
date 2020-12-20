@@ -135,7 +135,7 @@ export default new Router({
       path: '/admin/benchmark/charts',
       name: 'benchmark-charts',
       component: () =>
-        import(/* webpackChunkName: "Benchmark" */ '../views/BenchmarkCharts.vue'),
+        import(/* webpackChunkName: "Benchmark" */ '../views/BenchmarkResultCharts.vue'),
       beforeEnter: (to, from, next) => {
         if (!store.getters.isAuthenticated) {
           next('/login');
