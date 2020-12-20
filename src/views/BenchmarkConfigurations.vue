@@ -58,7 +58,7 @@
             </v-expansion-panel>
           </v-expansion-panels>
           <v-expansion-panels>
-            <v-expansion-panel class="success">
+            <v-expansion-panel class="success white--text">
               <v-expansion-panel-header
                 class="text-h6 white--text font-weight-bold pa-4"
                 >Dodaj konfiguracje</v-expansion-panel-header
