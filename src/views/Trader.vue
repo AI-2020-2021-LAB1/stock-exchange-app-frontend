@@ -24,9 +24,9 @@
         :sm="$vuetify.breakpoint.md ? 9 : 12"
         lg="6"
         xl="4"
-        v-if="buyingOffers.length || sellingOffers.length"
+        v-if="selectedStock.stockInfo.id"
       >
-        <v-row no-gutters align="center">
+        <v-row no-gutters align="center" class="pb-1">
           <v-col class="px-2">
             <chart-view
               :options="chartOptions"
@@ -36,13 +36,19 @@
             ></chart-view>
           </v-col>
         </v-row>
-        <v-row no-gutters align="center">
+        <v-row
+          no-gutters
+          align="center"
+          v-if="
+            user.role === 'USER' && user.tag === selectedStock.stockInfo.tag
+          "
+        >
           <trader-inputs
             :selectedStock="selectedStock"
             @reload="getSelectedStockInfo($event)"
           ></trader-inputs>
         </v-row>
-        <v-row no-gutters>
+        <v-row no-gutters class="pa-1">
           <v-col :sm="$vuetify.breakpoint.mdAndUp ? 6 : 12">
             <v-row align="start">
               <v-col class="py-0">
@@ -143,6 +149,9 @@ export default class Trader extends Vue {
         this.$data.stocks = res.data;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -155,15 +164,19 @@ export default class Trader extends Vue {
   private stockSelectionChanged(name: string) {
     this.$data.stockName = name;
     this.getSelectedStockInfo(name);
-    this.getUserStocks(name);
+    if (this.user.role === 'USER') {
+      this.getUserStocks(name);
+    }
     this.getBuyingOrders({
       page: 0,
       orderType: OrderType.BuyingOrder,
+      active: true,
       name,
     });
     this.getSellingOrders({
       page: 0,
       orderType: OrderType.SellingOrder,
+      active: true,
       name,
     });
   }
@@ -181,6 +194,9 @@ export default class Trader extends Vue {
         this.getStockChart();
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -219,6 +235,9 @@ export default class Trader extends Vue {
         };
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Błąd ' + err.response.status + ' podczas pobierania wykresu!',
@@ -243,6 +262,9 @@ export default class Trader extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -261,12 +283,15 @@ export default class Trader extends Vue {
         for (const offer of res.data.content) {
           this.$data.buyingOffers.push({
             price: offer.price,
-            amount: offer.amount,
+            remainingAmount: offer.remainingAmount,
             sum: (offer.price * offer.amount).toFixed(2),
           });
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -285,12 +310,15 @@ export default class Trader extends Vue {
         for (const offer of res.data.content) {
           this.$data.sellingOffers.push({
             price: offer.price,
-            amount: offer.amount,
+            remainingAmount: offer.remainingAmount,
             sum: (offer.price * offer.amount).toFixed(2),
           });
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -311,6 +339,7 @@ export default class Trader extends Vue {
       this.getSellingOrders({
         page: 0,
         orderType: OrderType.SellingOrder,
+        active: true,
         size: newVal,
         name: this.$data.stockName,
       });
@@ -323,6 +352,7 @@ export default class Trader extends Vue {
       this.getBuyingOrders({
         page: 0,
         orderType: OrderType.BuyingOrder,
+        active: true,
         size: newVal,
         name: this.$data.stockName,
       });
@@ -338,6 +368,10 @@ export default class Trader extends Vue {
     }
   }
 
+  get user() {
+    return this.$store.getters.user;
+  }
+
   private data() {
     return {
       stocks: [],
@@ -348,7 +382,7 @@ export default class Trader extends Vue {
       buyingOffersTotalElements: 0,
       searchStocks: '',
       selectedStock: {
-        stockInfo: { amount: 0 },
+        stockInfo: { amount: 0, id: 0 },
         userPossession: { amountAvailableForSale: 0 },
       },
       chart: [],

@@ -1,22 +1,29 @@
 <template>
-  <div>
-    <p class="text-h6 white--text text-center font-weight-bold primary ma-0">
-      {{ title }}
-    </p>
-    <v-container class="pa-0">
-      <v-data-table
-        dense
-        :headers="headers"
-        :items="offers"
-        :items-per-page="$vuetify.breakpoint.mdAndUp ? 20 : 10"
-        :footer-props="footer"
-      >
-        <template v-slot:[`item.sum`]="{ item }">
-          <div :class="colorClass" class="font-weight-bold">{{ item.sum }}</div>
-        </template>
-      </v-data-table>
-    </v-container>
-  </div>
+  <v-row no-gutters>
+    <v-col>
+      <v-card class="rounded-0">
+        <v-card-title
+          class="text-h6 white--text justify-center font-weight-bold primary pa-0"
+          >{{ title }}</v-card-title
+        >
+        <v-card-text class="pa-0">
+          <v-data-table
+            dense
+            :headers="headers"
+            :items="offers"
+            :items-per-page="$vuetify.breakpoint.mdAndUp ? 20 : 10"
+            :footer-props="footer"
+          >
+            <template v-slot:[`item.sum`]="{ item }">
+              <div :class="colorClass" class="font-weight-bold">
+                {{ item.sum }}
+              </div>
+            </template>
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -42,7 +49,7 @@ export default class TraderOffers extends Vue {
         },
         {
           text: 'Ilość',
-          value: 'amount',
+          value: 'remainingAmount',
           class: this.colorClass,
         },
         {
