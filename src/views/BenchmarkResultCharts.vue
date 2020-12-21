@@ -139,7 +139,7 @@ export default class BenchmarkResultCharts extends Vue {
         (this as any).$refs.restMethodCpu.updateSeries(cpuSeries);
         (this as any).$refs.restMethodCpu.updateOptions({
           title: {
-            text: 'Wykresy prezentujące zasobów CPU dla Rest API giełdy',
+            text: 'Wykresy prezentujące zużycie zasobów CPU dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
