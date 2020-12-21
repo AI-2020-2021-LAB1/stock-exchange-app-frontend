@@ -107,8 +107,8 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'dbQueryTimeMax',
           data: res.data.dbQueryTimeMax,
         });
-        this.$refs.restMethodResponses.updateSeries(endpointSeries);
-        this.$refs.restMethodResponses.updateOptions({
+        (this as any).$refs.restMethodResponses.updateSeries(endpointSeries);
+        (this as any).$refs.restMethodResponses.updateOptions({
           title: {
             text:
               'Wykresy prezentujące czasy odpowiedzi uzyskane dla Rest API giełdy',
@@ -136,11 +136,11 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'cpuUsageMax',
           data: res.data.cpuUsageMax,
         });
-        this.$refs.restMethodCpu.updateSeries(cpuSeries);
-        this.$refs.restMethodCpu.updateOptions({
+        (this as any).$refs.restMethodCpu.updateSeries(cpuSeries);
+        (this as any).$refs.restMethodCpu.updateOptions({
           title: {
             text:
-              'Wykresy prezentujące średnie zużycie zasobów CPU dla Rest API giełdy',
+              'Wykresy prezentujące zasobów CPU dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
@@ -177,11 +177,11 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'memoryUseMax',
           data: res.data.memoryUsageMax,
         });
-        this.$refs.restMethodMemory.updateSeries(memorySeries);
-        this.$refs.restMethodMemory.updateOptions({
+        (this as any).$refs.restMethodMemory.updateSeries(memorySeries);
+        (this as any).$refs.restMethodMemory.updateOptions({
           title: {
             text:
-              'Wykresy prezentujące średnie zużycie pamięci RAM dla Rest API giełdy',
+              'Wykresy prezentujące zużycie pamięci RAM dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
@@ -226,8 +226,8 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'dbQueryTimeMax',
           data: res.data.dbQueryTimeMax,
         });
-        this.$refs.restEndpointResponses.updateSeries(endpointSeries);
-        this.$refs.restEndpointResponses.updateOptions({
+        (this as any).$refs.restEndpointResponses.updateSeries(endpointSeries);
+        (this as any).$refs.restEndpointResponses.updateOptions({
           title: {
             text:
               'Wykresy prezentujące czasy odpowiedzi dla metod typu GET, POST, DELETE',
@@ -255,11 +255,11 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'cpuUsageMax',
           data: res.data.cpuUsageMax,
         });
-        this.$refs.restEndpointCpu.updateSeries(cpuSeries);
-        this.$refs.restEndpointCpu.updateOptions({
+        (this as any).$refs.restEndpointCpu.updateSeries(cpuSeries);
+        (this as any).$refs.restEndpointCpu.updateOptions({
           title: {
             text:
-              'Wykresy prezentujące średnie zużycie CPU dla metod typu GET, POST, DELETE',
+              'Wykresy prezentujące zużycie CPU dla metod typu GET, POST, DELETE',
             align: 'center',
           },
           xaxis: {
@@ -296,11 +296,11 @@ export default class BenchmarkResultCharts extends Vue {
           name: 'memoryUseMax',
           data: res.data.memoryUsageMax,
         });
-        this.$refs.restEndpointMemory.updateSeries(memorySeries);
-        this.$refs.restEndpointMemory.updateOptions({
+        (this as any).$refs.restEndpointMemory.updateSeries(memorySeries);
+        (this as any).$refs.restEndpointMemory.updateOptions({
           title: {
             text:
-              'Wykresy prezentujące średnie zużycie pamięci RAM dla metod typu GET, POST, DELETE',
+              'Wykresy prezentujące zużycie pamięci RAM dla metod typu GET, POST, DELETE',
             align: 'center',
           },
           xaxis: {
