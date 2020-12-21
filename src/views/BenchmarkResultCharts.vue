@@ -139,8 +139,7 @@ export default class BenchmarkResultCharts extends Vue {
         (this as any).$refs.restMethodCpu.updateSeries(cpuSeries);
         (this as any).$refs.restMethodCpu.updateOptions({
           title: {
-            text:
-              'Wykresy prezentujące zasobów CPU dla Rest API giełdy',
+            text: 'Wykresy prezentujące zasobów CPU dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
@@ -189,7 +188,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie pamięci [B]',
+              text: 'Średnie użycie pamięci [MiB]',
             },
           },
         });
@@ -272,18 +271,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
         });
         const memorySeries: object[] = [];
-        cpuSeries.push({
-          name: 'memoryUsageMin',
-          data: res.data.memoryUsageMin,
-        });
-        memorySeries.push({
-          name: 'memoryUsageAvg',
-          data: res.data.memoryUsageAvg,
-        });
-        memorySeries.push({
-          name: 'memoryUsageMax',
-          data: res.data.memoryUsageMax,
-        });
+
         memorySeries.push({
           name: 'memoryUseMin',
           data: res.data.memoryUsageMin,
@@ -308,7 +296,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie pamięci [B]',
+              text: 'Średnie użycie pamięci [MiB]',
             },
           },
         });
