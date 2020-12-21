@@ -1,47 +1,54 @@
 <template>
-  <div class="ma-2">
-    <apexchart
-      ref="restEndpointResponses"
-      type="bar"
-      height="350"
-      :options="chartOptions"
-      :series="[]"
-    ></apexchart>
-    <apexchart
-      ref="restEndpointCpu"
-      type="bar"
-      height="350"
-      :options="chartOptions"
-      :series="[]"
-    ></apexchart>
-    <apexchart
-      ref="restEndpointMemory"
-      type="bar"
-      height="350"
-      :options="chartOptions"
-      :series="[]"
-    ></apexchart>
-    <apexchart
-      ref="restMethodResponses"
-      type="bar"
-      height="350"
-      :options="chartOptions"
-      :series="[]"
-    ></apexchart>
-    <apexchart
-      ref="restMethodCpu"
-      type="bar"
-      height="350"
-      :options="chartOptions"
-      :series="[]"
-    ></apexchart>
-    <apexchart
-      ref="restMethodMemory"
-      type="bar"
-      height="350"
-      :options="chartOptions"
-      :series="[]"
-    ></apexchart>
+  <div>
+    <div class="ma-2">
+      <v-btn large block link to="/admin/benchmark/tests" class="primary">
+        <span>Powróć do listy testów</span>
+      </v-btn>
+    </div>
+    <div class="ma-2">
+      <apexchart
+        ref="restEndpointResponses"
+        type="bar"
+        height="350"
+        :options="chartOptions"
+        :series="[]"
+      ></apexchart>
+      <apexchart
+        ref="restEndpointCpu"
+        type="bar"
+        height="350"
+        :options="chartOptions"
+        :series="[]"
+      ></apexchart>
+      <apexchart
+        ref="restEndpointMemory"
+        type="bar"
+        height="350"
+        :options="chartOptions"
+        :series="[]"
+      ></apexchart>
+      <apexchart
+        ref="restMethodResponses"
+        type="bar"
+        height="350"
+        :options="chartOptions"
+        :series="[]"
+      ></apexchart>
+      <apexchart
+        ref="restMethodCpu"
+        type="bar"
+        height="350"
+        :options="chartOptions"
+        :series="[]"
+      ></apexchart>
+      <apexchart
+        ref="restMethodMemory"
+        type="bar"
+        height="350"
+        :options="chartOptions"
+        :series="[]"
+      ></apexchart>
+    </div>
   </div>
 </template>
 
@@ -222,7 +229,8 @@ export default class BenchmarkResultCharts extends Vue {
         this.$refs.restEndpointResponses.updateSeries(endpointSeries);
         this.$refs.restEndpointResponses.updateOptions({
           title: {
-            text: 'Wykresy prezentujące czasy odpowiedzi dla metod typu GET, POST, DELETE',
+            text:
+              'Wykresy prezentujące czasy odpowiedzi dla metod typu GET, POST, DELETE',
             align: 'center',
           },
           xaxis: {
@@ -250,7 +258,8 @@ export default class BenchmarkResultCharts extends Vue {
         this.$refs.restEndpointCpu.updateSeries(cpuSeries);
         this.$refs.restEndpointCpu.updateOptions({
           title: {
-            text: 'Wykresy prezentujące średnie zużycie CPU dla metod typu GET, POST, DELETE',
+            text:
+              'Wykresy prezentujące średnie zużycie CPU dla metod typu GET, POST, DELETE',
             align: 'center',
           },
           xaxis: {
@@ -290,7 +299,8 @@ export default class BenchmarkResultCharts extends Vue {
         this.$refs.restEndpointMemory.updateSeries(memorySeries);
         this.$refs.restEndpointMemory.updateOptions({
           title: {
-            text: 'Wykresy prezentujące średnie zużycie pamięci RAM dla metod typu GET, POST, DELETE',
+            text:
+              'Wykresy prezentujące średnie zużycie pamięci RAM dla metod typu GET, POST, DELETE',
             align: 'center',
           },
           xaxis: {
