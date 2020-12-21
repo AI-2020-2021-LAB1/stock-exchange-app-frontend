@@ -6,6 +6,7 @@
     >
     <v-card-text class="pt-2 pb-0">
       <v-text-field
+        v-if="searchLabel"
         solo-inverted
         text
         clearable
@@ -75,8 +76,8 @@ export default class DetailedList extends Vue {
   @Prop({ required: true }) private title!: string;
   @Prop({ required: true }) private list!: object;
   @Prop({ required: true }) private listElements!: object[];
-  @Prop({ required: true }) private search!: string;
-  @Prop({ default: 'Wyszukaj' }) private searchLabel!: string;
+  @Prop({ required: false }) private search!: string;
+  @Prop({ required: false }) private searchLabel!: string;
   @Prop({ default: undefined }) private objIcon!: string;
 
   get Search() {
