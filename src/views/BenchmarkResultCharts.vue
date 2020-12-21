@@ -119,7 +119,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średni czas odpowiedzi [ms]',
+              text: 'Czasy odpowiedzi [ms]',
             },
           },
         });
@@ -147,7 +147,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie procesora [%]',
+              text: 'Użycie procesora [%]',
             },
           },
         });
@@ -176,7 +176,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie pamięci [MiB]',
+              text: 'Użycie pamięci [MiB]',
             },
           },
         });
@@ -225,7 +225,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średni czas odpowiedzi [ms]',
+              text: 'Czasy odpowiedzi [ms]',
             },
           },
         });
@@ -254,7 +254,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie procesora [%]',
+              text: 'Użycie procesora [%]',
             },
           },
         });
@@ -284,7 +284,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie pamięci [MiB]',
+              text: 'Użycie pamięci [MiB]',
             },
           },
         });
