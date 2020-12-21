@@ -8,7 +8,7 @@
               <v-avatar>
                 <v-icon class="white--text">mdi-account-circle</v-icon>
               </v-avatar>
-              <p class="my-auto">John Doe</p>
+              <p class="my-auto">{{ user.firstName }} {{ user.lastName }}</p>
             </v-card-title>
           </v-img>
         </v-card>
@@ -21,13 +21,25 @@
     </v-row>
     <v-row no-gutters>
       <v-col cols="12" class="my-1">
-        <user-stocks-list
-          :stocks="stocks"
+        <detailed-list
+          title="Lista posiadanych akcji"
+          :list="stocks"
+          :listElements="stockElems"
           :search="searchStocks"
+          searchLabel="Wyszukaj akcje po nazwie"
+          objIcon="mdi-wallet"
           @search="searchStocks = $event"
           @pagination="paginationClicked($event)"
-          @selected="stockSelectionChanged($event)"
-        ></user-stocks-list>
+          @panelChanged="panelOpened($event)"
+        >
+          <chart-view
+            class="mt-2"
+            :options="chartOptions"
+            :series="chart"
+            :length="length"
+            @lengthChanged="lengthChanged($event)"
+          ></chart-view>
+        </detailed-list>
       </v-col>
     </v-row>
     <v-row no-gutters>
@@ -86,7 +98,6 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import UserStocksList from '../components/UserStocksList.vue';
 import UserTransactions from '../components/UserTransactions.vue';
 import UserDialogChangeUserData from '../components/UserDialogChangeUserData.vue';
 import { StocksService } from '../API/stocks';
@@ -94,6 +105,7 @@ import { TransactionsService } from '../API/transactions';
 import { OrdersService } from '../API/orders';
 import { OrderType } from '../models/OrderModel';
 import { formatDate } from '../helpers';
+import { ChartData, Content } from '@/models/StockModel';
 
 enum PaginationEnum {
   SellingTrans = 1,
@@ -104,7 +116,6 @@ enum PaginationEnum {
 
 @Component({
   components: {
-    UserStocksList,
     UserTransactions,
     UserDialogChangeUserData,
   },
@@ -215,6 +226,9 @@ export default class User extends Vue {
         this.$data.stocks = res.data;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -226,7 +240,7 @@ export default class User extends Vue {
 
   private getUserSellingTransactions(params: object) {
     this.transactionsService
-      .getTransactions(params)
+      .getUserTransactions(params)
       .then((res) => {
         this.$data.sellingTransactions = [];
         this.$data.pagesSellingTrans = res.data.totalPages;
@@ -251,6 +265,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -262,7 +279,7 @@ export default class User extends Vue {
 
   private getUserBuyingTransactions(params: object) {
     this.transactionsService
-      .getTransactions(params)
+      .getUserTransactions(params)
       .then((res) => {
         this.$data.buyingTransactions = [];
         this.$data.pagesBuyingTrans = res.data.totalPages;
@@ -285,6 +302,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -305,6 +325,8 @@ export default class User extends Vue {
             id: order.id,
             price: order.price,
             amount: order.amount,
+            traded: order.amount - order.remainingAmount,
+            remainingAmount: order.remainingAmount,
             sum: (order.price * order.amount).toFixed(2),
             dateCreated: this._formatDate(order.dateCreation),
             dateExpiring: this._formatDate(order.dateExpiration),
@@ -317,6 +339,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -337,6 +362,8 @@ export default class User extends Vue {
             this.$data.closedOrders.push({
               price: order.price,
               amount: order.amount,
+              traded: order.amount - order.remainingAmount,
+              remainingAmount: order.remainingAmount,
               sum: (order.price * order.amount).toFixed(2),
               dateCreated: this._formatDate(order.dateCreation),
               dateExpiring: this._formatDate(order.dateExpiration),
@@ -351,6 +378,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -380,9 +410,70 @@ export default class User extends Vue {
         });
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
+          color: 'error',
+          timeout: 7500,
+        });
+      });
+  }
+
+  private lengthChanged(val: number) {
+    this.$data.length = val;
+    const stock: Content = this.$data.stocks.content.find(
+      (stock: Content) => stock.id === this.$data.openedPanel,
+    );
+    this.getStockChart(stock.id, stock.name);
+  }
+
+  private panelOpened(val: number) {
+    this.$data.openedPanel = val;
+    const stock: Content = this.$data.stocks.content.find(
+      (stock: Content) => stock.id === val,
+    );
+    this.getStockChart(stock.id, stock.name);
+  }
+
+  private getStockChart(id: number, name: string) {
+    this.stocksService
+      .getStockChart(id, {
+        interval: this.$data.length,
+      })
+      .then((resp) => {
+        const candles = resp.data.map((el: ChartData) => {
+          return [
+            new Date(el.timestamp),
+            el.open.toFixed(2),
+            el.max.toFixed(2),
+            el.min.toFixed(2),
+            el.close.toFixed(2),
+          ];
+        });
+        const min = new Date();
+        min.setHours(min.getHours() - 1);
+        this.$data.chart = [{ data: candles }];
+        this.$data.chartOptions = {
+          ...this.$data.chartOptions,
+          ...{
+            title: {
+              text:
+                'Akcje spółki ' + name,
+              align: 'center',
+            },
+          },
+        };
+      })
+      .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
+        this.$store.dispatch('setSnackbarState', {
+          state: true,
+          msg: 'Błąd ' + err.response.status + ' podczas pobierania wykresu!',
           color: 'error',
           timeout: 7500,
         });
@@ -405,6 +496,10 @@ export default class User extends Vue {
     }
   }
 
+  get user() {
+    return this.$store.getters.user;
+  }
+
   private data() {
     return {
       stocks: [],
@@ -419,6 +514,44 @@ export default class User extends Vue {
       activeOrders: [],
       sellingTransactions: [],
       buyingTransactions: [],
+      chart: [],
+      length: 5,
+      openedPanel: undefined,
+      stockElems: [
+        {
+          text: 'Nazwa',
+          value: 'name',
+        },
+        {
+          text: 'Skrót',
+          value: 'abbreviation',
+        },
+        {
+          text: 'Aktualna cena',
+          value: 'currentPrice',
+        },
+        {
+          text: 'Posiadane akcje',
+          value: 'amount',
+        },
+      ],
+      chartOptions: {
+        chart: {
+          type: 'candlestick',
+        },
+        title: {
+          text: '',
+          align: 'center',
+        },
+        xaxis: {
+          type: 'datetime',
+        },
+        yaxis: {
+          tooltip: {
+            enabled: true,
+          },
+        },
+      },
       headersSellingTransactions: [
         {
           text: 'Suma',
@@ -505,6 +638,16 @@ export default class User extends Vue {
           class: 'primary--text',
         },
         {
+          text: 'Skonsumowane',
+          value: 'traded',
+          class: 'primary--text',
+        },
+        {
+          text: 'Pozostałe',
+          value: 'remainingAmount',
+          class: 'primary--text',
+        },
+        {
           text: 'Cena',
           value: 'price',
           class: 'primary--text',
@@ -544,6 +687,16 @@ export default class User extends Vue {
         {
           text: 'Ilość',
           value: 'amount',
+          class: 'primary--text',
+        },
+        {
+          text: 'Skonsumowane',
+          value: 'traded',
+          class: 'primary--text',
+        },
+        {
+          text: 'Pozostałe',
+          value: 'remainingAmount',
           class: 'primary--text',
         },
         {

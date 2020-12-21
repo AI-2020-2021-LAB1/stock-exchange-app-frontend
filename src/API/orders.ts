@@ -25,6 +25,17 @@ export class OrdersService {
     return orders;
   }
 
+  public async getUserOrdersById(id: number, body: object): Promise<AxiosResponse<Orders>> {
+    const orders = await axios.get('api/user/' + id + '/order', {
+      headers: {
+        Authorization: 'Bearer ' + store.getters.token,
+      },
+      params: body,
+    });
+
+    return orders;
+  }
+
   public async placeOrder(body: object): Promise<AxiosResponse<Orders>> {
     const order = await axios.post('api/order', body, {
       headers: {

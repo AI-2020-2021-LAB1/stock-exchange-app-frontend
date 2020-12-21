@@ -28,6 +28,7 @@
                 label="ilość"
                 color="primary"
                 type="number"
+                :rules="[rules.integer]"
               ></v-text-field>
             </v-col>
             <v-col class="px-1 pb-0">
@@ -160,6 +161,7 @@
                 label="ilość"
                 color="primary"
                 type="number"
+                :rules="[rules.integer]"
               ></v-text-field>
             </v-col>
             <v-col class="px-1 pb-0">
@@ -308,6 +310,9 @@ export default class TraderInputs extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -349,6 +354,9 @@ export default class TraderInputs extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -456,6 +464,10 @@ export default class TraderInputs extends Vue {
       sellDatePicker: false,
       sellDate: null,
       stock: this.selectedStock,
+      rules: {
+        integer: (value: number) =>
+          !value.toString().includes('.') || 'Liczba musi być całkowita',
+      },
     };
   }
   get buyValue() {
