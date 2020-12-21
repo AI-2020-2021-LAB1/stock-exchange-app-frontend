@@ -176,7 +176,7 @@ export default class AdminManageUsers extends Vue {
         });
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -195,7 +195,7 @@ export default class AdminManageUsers extends Vue {
         this.$data.users = res.data;
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -214,7 +214,7 @@ export default class AdminManageUsers extends Vue {
         this.$data.userStocks = res.data;
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -253,7 +253,7 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -290,7 +290,7 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -328,7 +328,7 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -368,7 +368,7 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -382,7 +382,9 @@ export default class AdminManageUsers extends Vue {
 
   private panelChanged(panelId: number) {
     this.$data.editedUser = panelId;
-    this.$data.editedUserData = this.$data.users.content.find((user: Content) => user.id === panelId);
+    this.$data.editedUserData = this.$data.users.content.find(
+      (user: Content) => user.id === panelId,
+    );
     this.getUserStocksById({
       page: 0,
       size: this.$data.stocksPageSize,
@@ -474,7 +476,7 @@ export default class AdminManageUsers extends Vue {
           data.isActive;
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {

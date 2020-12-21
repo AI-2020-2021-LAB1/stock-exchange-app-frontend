@@ -149,7 +149,7 @@ export default class Trader extends Vue {
         this.$data.stocks = res.data;
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -194,7 +194,7 @@ export default class Trader extends Vue {
         this.getStockChart();
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -235,7 +235,7 @@ export default class Trader extends Vue {
         };
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -262,7 +262,7 @@ export default class Trader extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -289,7 +289,7 @@ export default class Trader extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -316,7 +316,7 @@ export default class Trader extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {

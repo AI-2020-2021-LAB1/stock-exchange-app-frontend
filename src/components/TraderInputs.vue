@@ -310,7 +310,7 @@ export default class TraderInputs extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -354,7 +354,7 @@ export default class TraderInputs extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {

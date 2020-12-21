@@ -216,7 +216,7 @@ export default class Benchmark extends Vue {
         this.$data.configurations = res.data;
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -279,7 +279,7 @@ export default class Benchmark extends Vue {
         });
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
