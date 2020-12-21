@@ -152,29 +152,17 @@ export default class BenchmarkResultCharts extends Vue {
           },
         });
         const memorySeries: object[] = [];
-        cpuSeries.push({
-          name: 'memoryUsageMin',
-          data: res.data.memoryUsageMin,
+        memorySeries.push({
+          name: 'memoryUsedMin',
+          data: res.data.memoryUsedMin,
         });
         memorySeries.push({
-          name: 'memoryUsageAvg',
-          data: res.data.memoryUsageAvg,
+          name: 'memoryUsedAvg',
+          data: res.data.memoryUsedAvg,
         });
         memorySeries.push({
-          name: 'memoryUsageMax',
-          data: res.data.memoryUsageMax,
-        });
-        memorySeries.push({
-          name: 'memoryUseMin',
-          data: res.data.memoryUsageMin,
-        });
-        memorySeries.push({
-          name: 'memoryUseAvg',
-          data: res.data.memoryUsageAvg,
-        });
-        memorySeries.push({
-          name: 'memoryUseMax',
-          data: res.data.memoryUsageMax,
+          name: 'memoryUsedMax',
+          data: res.data.memoryUsedMax,
         });
         (this as any).$refs.restMethodMemory.updateSeries(memorySeries);
         (this as any).$refs.restMethodMemory.updateOptions({
@@ -273,16 +261,16 @@ export default class BenchmarkResultCharts extends Vue {
         const memorySeries: object[] = [];
 
         memorySeries.push({
-          name: 'memoryUseMin',
-          data: res.data.memoryUsageMin,
+          name: 'memoryUsedMin',
+          data: res.data.memoryUsedMin,
         });
         memorySeries.push({
           name: 'memoryUseAvg',
-          data: res.data.memoryUsageAvg,
+          data: res.data.memoryUsedAvg,
         });
         memorySeries.push({
           name: 'memoryUseMax',
-          data: res.data.memoryUsageMax,
+          data: res.data.memoryUsedMax,
         });
         (this as any).$refs.restEndpointMemory.updateSeries(memorySeries);
         (this as any).$refs.restEndpointMemory.updateOptions({
