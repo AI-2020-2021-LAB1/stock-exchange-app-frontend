@@ -1,12 +1,19 @@
 <template>
-  <tests-table
-    title="Lista testów"
-    :tests="tests"
-    :headers="headersTests"
-    :totalPages="totalPages"
-    @pagination="paginationClicked($event)"
-    class="ma-2"
-  ></tests-table>
+  <div>
+    <div class="ma-2">
+      <v-btn large block link to="/admin/benchmark" class="primary">
+        <span>Przejdź do panelu benchmarka</span>
+      </v-btn>
+    </div>
+    <tests-table
+      title="Lista testów"
+      :tests="tests"
+      :headers="headersTests"
+      :totalPages="totalPages"
+      @pagination="paginationClicked($event)"
+      class="ma-2"
+    ></tests-table>
+  </div>
 </template>
 
 <script lang="ts">
