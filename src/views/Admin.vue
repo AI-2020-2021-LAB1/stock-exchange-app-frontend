@@ -4,6 +4,7 @@
       <v-row no-gutters>
         <v-col
           :sm="$vuetify.breakpoint.lgAndUp ? 4 : 12"
+          lg="3"
           class="pa-2"
           v-for="el in links"
           :key="el.name"
