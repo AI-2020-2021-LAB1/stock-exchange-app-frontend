@@ -105,7 +105,7 @@ import { TransactionsService } from '../API/transactions';
 import { OrdersService } from '../API/orders';
 import { OrderType } from '../models/OrderModel';
 import { formatDate } from '../helpers';
-import { ChartData } from '@/models/StockModel';
+import { ChartData, Content } from '@/models/StockModel';
 
 enum PaginationEnum {
   SellingTrans = 1,
@@ -226,6 +226,9 @@ export default class User extends Vue {
         this.$data.stocks = res.data;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -262,6 +265,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -296,6 +302,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -330,6 +339,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -366,6 +378,9 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -395,6 +410,9 @@ export default class User extends Vue {
         });
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -406,15 +424,21 @@ export default class User extends Vue {
 
   private lengthChanged(val: number) {
     this.$data.length = val;
-    this.getStockChart(this.$data.stocks.content[this.$data.openedPanel].id);
+    const stock: Content = this.$data.stocks.content.find(
+      (stock: Content) => stock.id === this.$data.openedPanel,
+    );
+    this.getStockChart(stock.id, stock.name);
   }
 
   private panelOpened(val: number) {
     this.$data.openedPanel = val;
-    this.getStockChart(this.$data.stocks.content[val].id);
+    const stock: Content = this.$data.stocks.content.find(
+      (stock: Content) => stock.id === val,
+    );
+    this.getStockChart(stock.id, stock.name);
   }
 
-  private getStockChart(id: number) {
+  private getStockChart(id: number, name: string) {
     this.stocksService
       .getStockChart(id, {
         interval: this.$data.length,
@@ -437,14 +461,16 @@ export default class User extends Vue {
           ...{
             title: {
               text:
-                'Akcje spółki ' +
-                this.$data.stocks.content[this.$data.openedPanel].name,
+                'Akcje spółki ' + name,
               align: 'center',
             },
           },
         };
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Błąd ' + err.response.status + ' podczas pobierania wykresu!',

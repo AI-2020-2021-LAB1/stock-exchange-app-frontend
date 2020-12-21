@@ -20,6 +20,7 @@
           <v-expansion-panel-header
             :class="!$vuetify.breakpoint.smAndUp ? 'pa-0' : ''"
             :hide-actions="!$vuetify.breakpoint.smAndUp"
+            @click="openPanel(obj.id)"
           >
             <v-row no-gutters align="center" justify="start">
               <v-col cols="auto" v-if="objIcon && $vuetify.breakpoint.smAndUp">
@@ -91,11 +92,8 @@ export default class DetailedList extends Vue {
     this.$emit('pagination', page);
   }
 
-  @Watch('openedPanel')
   private openPanel(val: number) {
-    if (val !== undefined) {
-      this.$emit('panelChanged', val);
-    }
+    this.$emit('panelChanged', val);
   }
 
   private data() {

@@ -97,6 +97,7 @@ import { OrdersService } from '../API/orders';
 import { OrderType } from '../models/OrderModel';
 import { Role, User } from '../models/UserModel';
 import { formatDate } from '../helpers';
+import { Content } from '@/models/StockModel';
 
 enum PaginationEnum {
   SellingTrans = 1,
@@ -175,6 +176,9 @@ export default class AdminManageUsers extends Vue {
         });
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -188,10 +192,12 @@ export default class AdminManageUsers extends Vue {
     this.usersService
       .getUsers({ ...params })
       .then((res) => {
-        this.$data.users = [];
         this.$data.users = res.data;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -208,6 +214,9 @@ export default class AdminManageUsers extends Vue {
         this.$data.userStocks = res.data;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -244,6 +253,9 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -278,6 +290,9 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -313,6 +328,9 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -350,6 +368,9 @@ export default class AdminManageUsers extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -361,7 +382,7 @@ export default class AdminManageUsers extends Vue {
 
   private panelChanged(panelId: number) {
     this.$data.editedUser = panelId;
-    this.$data.editedUserData = this.$data.users.content[panelId];
+    this.$data.editedUserData = this.$data.users.content.find((user: Content) => user.id === panelId);
     this.getUserStocksById({
       page: 0,
       size: this.$data.stocksPageSize,
@@ -431,7 +452,7 @@ export default class AdminManageUsers extends Vue {
 
   private editUser(data: User) {
     this.usersService
-      .editUserById(this.$data.users.content[this.$data.editedUser].id, data)
+      .editUserById(this.$data.editedUser, data)
       .then((res) => {
         this.$store.dispatch('setSnackbarState', {
           state: true,
@@ -453,6 +474,9 @@ export default class AdminManageUsers extends Vue {
           data.isActive;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,

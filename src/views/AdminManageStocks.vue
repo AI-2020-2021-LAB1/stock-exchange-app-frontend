@@ -150,6 +150,9 @@ export default class AdminManageStocks extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -187,6 +190,9 @@ export default class AdminManageStocks extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -223,6 +229,9 @@ export default class AdminManageStocks extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -261,6 +270,9 @@ export default class AdminManageStocks extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -294,6 +306,9 @@ export default class AdminManageStocks extends Vue {
         this.$data.stocks = res.data;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -325,6 +340,9 @@ export default class AdminManageStocks extends Vue {
         this.$data.stocks.content[this.$data.editedStock].amount = data.amount;
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -357,6 +375,9 @@ export default class AdminManageStocks extends Vue {
         }
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -383,6 +404,9 @@ export default class AdminManageStocks extends Vue {
         });
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -412,6 +436,9 @@ export default class AdminManageStocks extends Vue {
         });
       })
       .catch((err) => {
+        if(err.response.status === 403){
+          this.$store.dispatch('logout');
+        }
         this.$store.dispatch('setSnackbarState', {
           state: true,
           msg: 'Error ' + err.response.status,
@@ -423,7 +450,7 @@ export default class AdminManageStocks extends Vue {
 
   private panelChanged(panelId: number) {
     this.$data.editedStock = panelId;
-    this.$data.editedStockData = this.$data.stocks.content[panelId];
+    this.$data.editedStockData = this.$data.stocks.content.find((stock: Content) => stock.id === panelId);
     this.getUserSellingTransactions({
       page: 0,
       size: this.$data.pageSizeTrans,
