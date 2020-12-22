@@ -226,7 +226,7 @@ export default class User extends Vue {
         this.$data.stocks = res.data;
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -265,7 +265,7 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -302,7 +302,7 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -339,7 +339,7 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -378,7 +378,7 @@ export default class User extends Vue {
         }
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -410,7 +410,7 @@ export default class User extends Vue {
         });
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -425,7 +425,7 @@ export default class User extends Vue {
   private lengthChanged(val: number) {
     this.$data.length = val;
     const stock: Content = this.$data.stocks.content.find(
-      (stock: Content) => stock.id === this.$data.openedPanel,
+      (el: Content) => el.id === this.$data.openedPanel,
     );
     this.getStockChart(stock.id, stock.name);
   }
@@ -433,7 +433,7 @@ export default class User extends Vue {
   private panelOpened(val: number) {
     this.$data.openedPanel = val;
     const stock: Content = this.$data.stocks.content.find(
-      (stock: Content) => stock.id === val,
+      (el: Content) => el.id === val,
     );
     this.getStockChart(stock.id, stock.name);
   }
@@ -460,15 +460,14 @@ export default class User extends Vue {
           ...this.$data.chartOptions,
           ...{
             title: {
-              text:
-                'Akcje spółki ' + name,
+              text: 'Akcje spółki ' + name,
               align: 'center',
             },
           },
         };
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {

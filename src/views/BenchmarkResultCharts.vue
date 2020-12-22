@@ -119,7 +119,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średni czas odpowiedzi [ms]',
+              text: 'Czasy odpowiedzi [ms]',
             },
           },
         });
@@ -139,7 +139,7 @@ export default class BenchmarkResultCharts extends Vue {
         (this as any).$refs.restMethodCpu.updateSeries(cpuSeries);
         (this as any).$refs.restMethodCpu.updateOptions({
           title: {
-            text: 'Wykresy prezentujące zasobów CPU dla Rest API giełdy',
+            text: 'Wykresy prezentujące zużycie zasobów CPU dla Rest API giełdy',
             align: 'center',
           },
           xaxis: {
@@ -147,34 +147,22 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie procesora [%]',
+              text: 'Użycie procesora [%]',
             },
           },
         });
         const memorySeries: object[] = [];
-        cpuSeries.push({
-          name: 'memoryUsageMin',
-          data: res.data.memoryUsageMin,
+        memorySeries.push({
+          name: 'memoryUsedMin',
+          data: res.data.memoryUsedMin,
         });
         memorySeries.push({
-          name: 'memoryUsageAvg',
-          data: res.data.memoryUsageAvg,
+          name: 'memoryUsedAvg',
+          data: res.data.memoryUsedAvg,
         });
         memorySeries.push({
-          name: 'memoryUsageMax',
-          data: res.data.memoryUsageMax,
-        });
-        memorySeries.push({
-          name: 'memoryUseMin',
-          data: res.data.memoryUsageMin,
-        });
-        memorySeries.push({
-          name: 'memoryUseAvg',
-          data: res.data.memoryUsageAvg,
-        });
-        memorySeries.push({
-          name: 'memoryUseMax',
-          data: res.data.memoryUsageMax,
+          name: 'memoryUsedMax',
+          data: res.data.memoryUsedMax,
         });
         (this as any).$refs.restMethodMemory.updateSeries(memorySeries);
         (this as any).$refs.restMethodMemory.updateOptions({
@@ -188,7 +176,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie pamięci [MiB]',
+              text: 'Użycie pamięci [MiB]',
             },
           },
         });
@@ -237,7 +225,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średni czas odpowiedzi [ms]',
+              text: 'Czasy odpowiedzi [ms]',
             },
           },
         });
@@ -266,23 +254,23 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie procesora [%]',
+              text: 'Użycie procesora [%]',
             },
           },
         });
         const memorySeries: object[] = [];
 
         memorySeries.push({
-          name: 'memoryUseMin',
-          data: res.data.memoryUsageMin,
+          name: 'memoryUsedMin',
+          data: res.data.memoryUsedMin,
         });
         memorySeries.push({
           name: 'memoryUseAvg',
-          data: res.data.memoryUsageAvg,
+          data: res.data.memoryUsedAvg,
         });
         memorySeries.push({
           name: 'memoryUseMax',
-          data: res.data.memoryUsageMax,
+          data: res.data.memoryUsedMax,
         });
         (this as any).$refs.restEndpointMemory.updateSeries(memorySeries);
         (this as any).$refs.restEndpointMemory.updateOptions({
@@ -296,7 +284,7 @@ export default class BenchmarkResultCharts extends Vue {
           },
           yaxis: {
             title: {
-              text: 'Średnie użycie pamięci [MiB]',
+              text: 'Użycie pamięci [MiB]',
             },
           },
         });

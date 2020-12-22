@@ -87,7 +87,7 @@ export default class AdminManageTags extends Vue {
         this.$data.tags = res.data;
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         this.$store.dispatch('setSnackbarState', {
@@ -116,7 +116,7 @@ export default class AdminManageTags extends Vue {
         });
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         if (err.response.status === 400) {
@@ -150,7 +150,7 @@ export default class AdminManageTags extends Vue {
         });
       })
       .catch((err) => {
-        if(err.response.status === 403){
+        if (err.response.status === 403) {
           this.$store.dispatch('logout');
         }
         if (err.response.status === 409) {
