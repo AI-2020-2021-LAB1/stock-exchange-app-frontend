@@ -27,13 +27,16 @@
         v-if="selectedStock.stockInfo.id"
       >
         <v-row no-gutters align="center" class="pb-1">
-          <v-col class="px-2">
+          <v-col class="px-2" ref="chart-col">
             <chart-view
               :options="chartOptions"
               :series="chart"
               :length="length"
               @lengthChanged="lengthChanged($event)"
             ></chart-view>
+          </v-col>
+          <v-col class="ma-5 px-2 text-center" ref="chart-col-loading" style="display: none">
+            Trwa generowanie wykresów - Proszę czekać
           </v-col>
         </v-row>
         <v-row
@@ -207,6 +210,8 @@ export default class Trader extends Vue {
   }
 
   private getStockChart() {
+    this.$refs["chart-col"].style.display = "none";
+    this.$refs["chart-col-loading"].style.display = "block";
     this.stocksService
       .getStockChart(this.$data.selectedStock.stockInfo.id, {
         interval: this.$data.length,
@@ -233,6 +238,8 @@ export default class Trader extends Vue {
             },
           },
         };
+        this.$refs["chart-col"].style.display = "block";
+        this.$refs["chart-col-loading"].style.display = "none";
       })
       .catch((err) => {
         if (err.response.status === 403) {
